@@ -21,6 +21,8 @@
     <InformationalVersion>0.2.0-dev</InformationalVersion>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- packaging/make_icon.ps1 이 Theme/AppIcon.xaml 에서 생성 -->
+    <ApplicationIcon>ohmyZip.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
