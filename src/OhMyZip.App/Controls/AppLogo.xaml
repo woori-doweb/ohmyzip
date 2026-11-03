@@ -1,0 +1,18 @@
+<UserControl x:Class="OhMyZip.App.Controls.AppLogo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="64" Height="64" Focusable="False" AutomationProperties.Name="ohmyZip 로고">
+    <!-- ohmyZip 벡터 로고: 둥근 상자 + 지퍼. -->
+    <Viewbox>
+        <Canvas Width="64" Height="64">
+            <Rectangle Canvas.Left="6" Canvas.Top="6" Width="52" Height="52" RadiusX="12" RadiusY="12" Fill="{DynamicResource Oz.Accent}" />
+            <Rectangle Canvas.Left="29" Canvas.Top="6" Width="6" Height="30" Fill="{DynamicResource Oz.OnAccent}" />
+            <Rectangle Canvas.Left="26" Canvas.Top="10" Width="5" Height="3" Fill="{DynamicResource Oz.Accent}" />
+            <Rectangle Canvas.Left="33" Canvas.Top="15" Width="5" Height="3" Fill="{DynamicResource Oz.Accent}" />
+            <Rectangle Canvas.Left="26" Canvas.Top="20" Width="5" Height="3" Fill="{DynamicResource Oz.Accent}" />
+            <Rectangle Canvas.Left="33" Canvas.Top="25" Width="5" Height="3" Fill="{DynamicResource Oz.Accent}" />
+            <Rectangle Canvas.Left="25" Canvas.Top="34" Width="14" Height="14" RadiusX="3" RadiusY="3" Fill="{DynamicResource Oz.OnAccent}" />
+            <Ellipse Canvas.Left="29" Canvas.Top="39" Width="6" Height="6" Fill="{DynamicResource Oz.Accent}" />
+        </Canvas>
+    </Viewbox>
+</UserControl>

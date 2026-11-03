@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\OhMyZip.Core\OhMyZip.Core.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>ohmyZip</AssemblyName>
+    <RootNamespace>OhMyZip.App</RootNamespace>
+    <Product>ohmyZip</Product>
+    <AssemblyTitle>ohmyZip</AssemblyTitle>
+    <Description>ohmyZip 압축파일 관리자</Description>
+    <Version>0.2.0</Version>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+    <FileVersion>0.2.0.0</FileVersion>
+    <InformationalVersion>0.2.0-dev</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="HELP.md" Condition="Exists('HELP.md')" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

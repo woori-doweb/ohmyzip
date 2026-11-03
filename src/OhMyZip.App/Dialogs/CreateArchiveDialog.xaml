@@ -1,0 +1,116 @@
+<Window x:Class="OhMyZip.App.Dialogs.CreateArchiveDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Style="{StaticResource Oz.WindowStyle}"
+        Title="새로 압축" Width="600" SizeToContent="Height"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        AutomationProperties.AutomationId="OZ-CreateDialog">
+    <StackPanel Margin="20,18,20,16">
+        <!-- 압축할 항목 -->
+        <DockPanel>
+            <TextBlock x:Name="SourcesLabel" Text="압축할 항목:" VerticalAlignment="Center" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="파일 추가…" Style="{StaticResource Oz.Button}" Click="OnAddFiles" AutomationProperties.AutomationId="OZ-Create-AddFiles" />
+                <Button Content="폴더 추가…" Style="{StaticResource Oz.Button}" Click="OnAddFolder" AutomationProperties.AutomationId="OZ-Create-AddFolder" />
+                <Button x:Name="RemoveButton" Content="빼기" Style="{StaticResource Oz.Button}" Margin="4,0,0,0" Click="OnRemove" IsEnabled="False"
+                        AutomationProperties.AutomationId="OZ-Create-Remove" />
+            </StackPanel>
+        </DockPanel>
+        <ListBox x:Name="SourceList" Height="96" Margin="0,6,0,0" SelectionMode="Extended" SelectionChanged="OnSourceSelectionChanged"
+                 Background="{DynamicResource Oz.Background}" Foreground="{DynamicResource Oz.Text}" BorderBrush="{DynamicResource Oz.Border}"
+                 AutomationProperties.LabeledBy="{Binding ElementName=SourcesLabel}" AutomationProperties.AutomationId="OZ-Create-Sources" />
+
+        <!-- 대상 -->
+        <TextBlock x:Name="TargetLabel" Text="압축 파일 경로:" Margin="0,14,0,4" />
+        <DockPanel>
+            <Button DockPanel.Dock="Right" Content="찾아보기…" Style="{StaticResource Oz.Button}" Margin="6,0,0,0" Click="OnBrowse"
+                    AutomationProperties.AutomationId="OZ-Create-Browse" />
+            <TextBox x:Name="TargetBox" Style="{StaticResource Oz.TextBox}" AutomationProperties.LabeledBy="{Binding ElementName=TargetLabel}"
+                     AutomationProperties.AutomationId="OZ-Create-Target" />
+        </DockPanel>
+
+        <Grid Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock x:Name="FormatLabel" Text="형식:" Margin="0,0,0,4" />
+                <ComboBox x:Name="FormatBox" MinHeight="30" SelectionChanged="OnFormatChanged"
+                          AutomationProperties.LabeledBy="{Binding ElementName=FormatLabel}" AutomationProperties.AutomationId="OZ-Create-Format" />
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <TextBlock x:Name="LevelLabel" Text="압축 레벨:" Margin="0,0,0,4" />
+                <ComboBox x:Name="LevelBox" MinHeight="30"
+                          AutomationProperties.LabeledBy="{Binding ElementName=LevelLabel}" AutomationProperties.AutomationId="OZ-Create-Level" />
+            </StackPanel>
+        </Grid>
+        <TextBlock x:Name="FormatStatus" Margin="0,6,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Oz.SecondaryText}" FontSize="{StaticResource Oz.SecondarySize}"
+                   AutomationProperties.AutomationId="OZ-Create-Status" />
+
+        <!-- 암호 -->
+        <GroupBox x:Name="EncryptGroup" Header="암호" Margin="0,12,0,0" Padding="8,6" Foreground="{DynamicResource Oz.Text}" BorderBrush="{DynamicResource Oz.Border}">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="6" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="PasswordLabel" Text="암호:" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <Grid Grid.Column="1">
+                        <PasswordBox x:Name="PasswordMasked" MinHeight="30" VerticalContentAlignment="Center" Padding="6,0" PasswordChanged="OnPasswordChanged"
+                                     Background="{DynamicResource Oz.Background}" Foreground="{DynamicResource Oz.Text}" BorderBrush="{DynamicResource Oz.Border}" CaretBrush="{DynamicResource Oz.Text}"
+                                     AutomationProperties.Name="암호" AutomationProperties.AutomationId="OZ-Create-Password" />
+                        <TextBox x:Name="PasswordPlain" Style="{StaticResource Oz.TextBox}" Visibility="Collapsed" TextChanged="OnPasswordChanged"
+                                 AutomationProperties.Name="암호(표시됨)" AutomationProperties.AutomationId="OZ-Create-PasswordPlain" />
+                    </Grid>
+                    <TextBlock x:Name="ConfirmLabel" Grid.Row="2" Text="암호 확인:" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <PasswordBox x:Name="ConfirmMasked" MinHeight="30" VerticalContentAlignment="Center" Padding="6,0" PasswordChanged="OnPasswordChanged"
+                                     Background="{DynamicResource Oz.Background}" Foreground="{DynamicResource Oz.Text}" BorderBrush="{DynamicResource Oz.Border}" CaretBrush="{DynamicResource Oz.Text}"
+                                     AutomationProperties.Name="암호 확인" AutomationProperties.AutomationId="OZ-Create-PasswordConfirm" />
+                        <TextBox x:Name="ConfirmPlain" Style="{StaticResource Oz.TextBox}" Visibility="Collapsed" TextChanged="OnPasswordChanged"
+                                 AutomationProperties.Name="암호 확인(표시됨)" AutomationProperties.AutomationId="OZ-Create-PasswordConfirmPlain" />
+                    </Grid>
+                </Grid>
+                <CheckBox x:Name="ShowPasswordBox" Content="암호 표시" Margin="0,8,0,0" Foreground="{DynamicResource Oz.Text}"
+                          Checked="OnShowPasswordChanged" Unchecked="OnShowPasswordChanged" AutomationProperties.AutomationId="OZ-Create-ShowPassword" />
+                <TextBlock x:Name="PasswordError" Margin="0,6,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Oz.Error}" Visibility="Collapsed"
+                           AutomationProperties.AutomationId="OZ-Create-PasswordError" />
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <TextBlock x:Name="MethodLabel" Text="암호화 방식:" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ComboBox x:Name="MethodBox" MinWidth="140" MinHeight="30" SelectedIndex="0"
+                              AutomationProperties.LabeledBy="{Binding ElementName=MethodLabel}" AutomationProperties.AutomationId="OZ-Create-Encryption">
+                        <ComboBoxItem Content="AES-256" />
+                    </ComboBox>
+                </StackPanel>
+                <CheckBox x:Name="EncryptNamesBox" Content="파일 이름도 암호화 (7Z 만)" Margin="0,8,0,0" Foreground="{DynamicResource Oz.Text}"
+                          AutomationProperties.AutomationId="OZ-Create-EncryptNames" />
+            </StackPanel>
+        </GroupBox>
+
+        <!-- 분할 -->
+        <StackPanel x:Name="SplitPanel" Orientation="Horizontal" Margin="0,12,0,0">
+            <TextBlock x:Name="SplitLabel" Text="분할 압축:" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <ComboBox x:Name="SplitBox" MinWidth="200" MinHeight="30" SelectionChanged="OnSplitChanged"
+                      AutomationProperties.LabeledBy="{Binding ElementName=SplitLabel}" AutomationProperties.AutomationId="OZ-Create-Split" />
+            <TextBox x:Name="SplitCustomBox" Style="{StaticResource Oz.TextBox}" Width="90" Margin="8,0,0,0" IsEnabled="False"
+                     AutomationProperties.Name="분할 크기(MB)" AutomationProperties.AutomationId="OZ-Create-SplitCustom" />
+            <TextBlock Text="MB" VerticalAlignment="Center" Margin="6,0,0,0" />
+        </StackPanel>
+
+        <TextBlock x:Name="ErrorText" Margin="0,12,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Oz.Error}" Visibility="Collapsed"
+                   AutomationProperties.AutomationId="OZ-Create-Error" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+            <Button x:Name="OkButton" Content="압축" IsDefault="True" Style="{StaticResource Oz.Button}" Click="OnOk" AutomationProperties.AutomationId="OZ-Create-Ok" />
+            <Button Content="취소" IsCancel="True" Style="{StaticResource Oz.Button}" AutomationProperties.AutomationId="OZ-Create-Cancel" />
+        </StackPanel>
+    </StackPanel>
+</Window>

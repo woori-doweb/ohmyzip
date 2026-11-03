@@ -1,0 +1,23 @@
+<Window x:Class="OhMyZip.App.Dialogs.ProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Style="{StaticResource Oz.WindowStyle}"
+        Width="500" SizeToContent="Height"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        AutomationProperties.AutomationId="OZ-ProgressWindow">
+    <StackPanel Margin="20,18,20,16">
+        <TextBlock x:Name="HeadingText" FontSize="15" FontWeight="SemiBold" AutomationProperties.AutomationId="OZ-ProgressHeading" />
+        <TextBlock x:Name="CurrentText" Margin="0,10,0,0" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource Oz.SecondaryText}"
+                   FontSize="{StaticResource Oz.SecondarySize}" AutomationProperties.HelpText="현재 파일" AutomationProperties.AutomationId="OZ-ProgressCurrent" />
+        <ProgressBar x:Name="Bar" Height="6" Margin="0,8,0,0" Minimum="0" Maximum="100"
+                     Foreground="{DynamicResource Oz.Accent}" Background="{DynamicResource Oz.Hover}" BorderThickness="0"
+                     AutomationProperties.Name="진행률" AutomationProperties.AutomationId="OZ-Progress" />
+        <!-- 처리량/전체, 백분율, 속도, 남은 시간. 전체 크기를 모르면 '진행률을 알 수 없음'. -->
+        <TextBlock x:Name="AmountText" Margin="0,6,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Oz.SecondaryText}" FontSize="{StaticResource Oz.SecondarySize}"
+                   AutomationProperties.HelpText="진행 상태" AutomationProperties.AutomationId="OZ-ProgressText" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button x:Name="CancelButton" Content="취소" IsCancel="True" Style="{StaticResource Oz.Button}" Click="OnCancel"
+                    AutomationProperties.AutomationId="OZ-ProgressCancel" ToolTip="작업 취소 (Esc)" />
+        </StackPanel>
+    </StackPanel>
+</Window>
