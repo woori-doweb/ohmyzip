@@ -92,12 +92,15 @@ public static class CommandCatalog
     ];
 
     /// <summary>
-    /// 메뉴 명령 58개(OZ-C 행) 밖에서 기능 행(OZ-F0xx)이 명령을 요구하는 항목. AfterKey 메뉴 항목 바로 뒤에 둔다.
+    /// 메뉴 명령 58개(OZ-C 행) 밖에서 기능 행(OZ-F0xx)이 명령을 요구하는 항목과 원본 메뉴에 없는 앱 고유 항목(OZ-App*).
+    /// AfterKey 메뉴 항목 바로 뒤에 둔다.
     /// OZ-F027 알아서 풀기(ui_location: 풀기 드롭다운) → 파일 메뉴 + 툴바 풀기 드롭다운.
+    /// OZ-AppUpdate 업데이트 확인 → 도움말 메뉴 정보 뒤(같은 묶음).
     /// </summary>
     public static readonly IReadOnlyList<(string AfterKey, MenuSpec Spec)> FeatureItems =
     [
         ("archive.extract", new("OZ-F027", "파일", null, "알아서 풀기", null, "archive.extract.smart")),
+        ("help.about", new("OZ-AppUpdate", "도움말", null, "업데이트 확인…", null, "app.update")),
     ];
 
     /// <summary>
@@ -121,7 +124,7 @@ public static class CommandCatalog
         "entry.rename", "entry.add", "entry.delete", "entry.copy", "entry.paste", "entry.copy-path",
         "view.find", "view.start", "view.sidebar", "view.comment", "view.statusbar", "view.toolbar", "view.listmode",
         "view.columns", "view.topmost", "view.theme",
-        "help.about", "help.install-folder", "help.docs",
+        "help.about", "help.install-folder", "help.docs", "app.update",
     };
 
     /// <summary>툴바 3묶음. 모든 키는 <see cref="Items"/> 에 있어야 한다(OZ-A06).</summary>

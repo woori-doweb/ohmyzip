@@ -26,6 +26,10 @@ public sealed class AppSettings
     public bool ShowStartScreen { get; set; } = true;
     public AppTheme Theme { get; set; } = AppTheme.System;
     public bool ReduceMotion { get; set; }
+    /// <summary>창이 뜨면 새 버전을 확인·내려받고, 프로그램을 닫을 때 설치한다.</summary>
+    public bool AutoUpdate { get; set; } = true;
+    /// <summary>자동 확인을 끝낸 마지막 시각(하루 한 번만 확인). 새 버전을 찾은 확인은 기록하지 않는다(다음 실행에서 다시 받도록).</summary>
+    public DateTimeOffset? LastUpdateCheck { get; set; }
 
     // 압축 풀기
     public ExtractDestination ExtractDestination { get; set; } = ExtractDestination.ArchiveNameFolder;

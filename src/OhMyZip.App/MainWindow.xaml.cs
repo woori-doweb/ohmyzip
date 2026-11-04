@@ -73,6 +73,7 @@ public partial class MainWindow : Window
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         if (_notice is not null) AnnounceStatus();
+        StartAutoUpdate();
         if (_startupPath is not null) await OpenArchiveAsync(_startupPath);
         if (_archive is null) EmptyOpenButton.Focus();
     }
@@ -259,6 +260,7 @@ public partial class MainWindow : Window
                 or "view.start" or "view.sidebar" or "view.statusbar" or "view.comment" or "view.toolbar" or "view.listmode" or "view.columns"
                 or "view.topmost" or "view.theme" => true,
             "view.find" => Browsing,
+            "app.update" => CanCheckUpdate,
             "archive.close" or "archive.reveal" or "archive.save-as" or "archive.delete-file" => _archive is not null,
             "archive.test" => caps is { Test: true },
             "archive.extract" or "archive.extract.smart" => caps is { Extract: true },
@@ -324,6 +326,7 @@ public partial class MainWindow : Window
             case "help.about": new AboutWindow { Owner = this }.ShowDialog(); break;
             case "help.install-folder": OpenFolderInExplorer(AppContext.BaseDirectory); break;
             case "help.docs": OpenHelp(); break;
+            case "app.update": return CheckForUpdateAsync();
         }
         return Task.CompletedTask;
     }
@@ -457,6 +460,8 @@ public partial class MainWindow : Window
                 return "목록에서 항목을 선택하세요.";
             case "entry.rename" when SelectionCount != 1:
                 return "목록에서 이름을 바꿀 항목 하나를 선택하세요.";
+            case "app.update" when !CanCheckUpdate:
+                return "업데이트를 확인하거나 내려받는 중입니다. 끝나면 다시 누르세요.";
             default:
                 return null;
         }

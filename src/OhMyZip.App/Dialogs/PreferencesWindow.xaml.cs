@@ -86,6 +86,7 @@ public partial class PreferencesWindow : Window
         ShowStartScreenBox.IsChecked = s.ShowStartScreen;
         ThemeBox.SelectedIndex = Index(Themes, s.Theme);
         ReduceMotionBox.IsChecked = s.ReduceMotion;
+        AutoUpdateBox.IsChecked = s.AutoUpdate;
         DestinationBox.SelectedIndex = Index(Destinations, s.ExtractDestination);
         ConflictBox.SelectedIndex = Index(Conflicts, s.ExtractConflict);
         OpenAfterBox.IsChecked = s.OpenFolderAfterExtract;
@@ -102,6 +103,7 @@ public partial class PreferencesWindow : Window
         s.ShowStartScreen = ShowStartScreenBox.IsChecked == true;
         s.Theme = Themes[Math.Max(0, ThemeBox.SelectedIndex)].Value;
         s.ReduceMotion = ReduceMotionBox.IsChecked == true;
+        s.AutoUpdate = AutoUpdateBox.IsChecked == true;
         s.ExtractDestination = Destinations[Math.Max(0, DestinationBox.SelectedIndex)].Value;
         s.ExtractConflict = Conflicts[Math.Max(0, ConflictBox.SelectedIndex)].Value;
         s.OpenFolderAfterExtract = OpenAfterBox.IsChecked == true;

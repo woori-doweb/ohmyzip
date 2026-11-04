@@ -65,6 +65,8 @@
                     <TextBlock Style="{StaticResource Pref.Note}" Text="Windows 설정은 바꾸지 않습니다. 고대비 테마가 켜져 있으면 항상 시스템 색을 씁니다." />
                     <CheckBox x:Name="ReduceMotionBox" Content="동작 줄이기 (앱 내부 설정)" Margin="0,14,0,0" AutomationProperties.AutomationId="OZ-Pref-ReduceMotion" />
                     <TextBlock Style="{StaticResource Pref.Note}" Text="진행 창의 움직이는 막대를 쓰지 않습니다. Windows 의 '애니메이션 표시' 끔도 같은 효과입니다." />
+                    <CheckBox x:Name="AutoUpdateBox" Content="새 버전을 자동으로 받고 프로그램을 닫을 때 설치" Margin="0,14,0,0" AutomationProperties.AutomationId="OZ-Pref-AutoUpdate" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="하루에 한 번 GitHub 에서 새 버전을 확인합니다. 끄면 도움말 &gt; 업데이트 확인으로만 업데이트합니다." />
                 </StackPanel>
 
                 <!-- 1 파일 연결 -->

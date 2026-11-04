@@ -1,13 +1,19 @@
 """ohmyZip 배포 후보를 만든다.
 
 1. dotnet publish (Release, win-x64, framework-dependent, 디버그 심볼 없음) → releases/ohmyZip-<버전>/
+   어셈블리 버전(Version·AssemblyVersion·FileVersion·InformationalVersion)을 <버전>으로 맞춘다.
 2. README.txt(버전 채움)와 THIRD-PARTY-NOTICES.txt 를 넣는다.
-3. SHA256SUMS.txt 와 releases/ohmyZip-<버전>-win-x64.zip 을 만든다.
-기존 releases/ohmyZip-<버전>/ 이 있으면 덮어쓰지 않고 실패한다.
+3. SHA256SUMS.txt, releases/ohmyZip-<버전>-win-x64.zip, releases/ohmyZip-<버전>-win-x64.zip.sha256 을 만든다.
+기존 releases/ohmyZip-<버전>/ 이나 같은 이름의 zip·sha256 이 있으면 덮어쓰지 않고 실패한다.
+<버전>은 major.minor.patch 숫자 세 개(예 0.2.7)만 받는다.
+dotnet 은 PATH 의 것을 먼저 쓰고, 없으면 C:\\Program Files\\dotnet\\dotnet.exe 를 쓴다.
+NuGet 패키지 폴더는 NUGET_PACKAGES 환경 변수를 먼저 쓰고, 없으면 ~/.nuget/packages 를 쓴다.
 실행: python -X utf8 ohmyzip/packaging/package.py <버전>
 """
 import hashlib
+import os
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -15,8 +21,9 @@ import zipfile
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
-NUGET = pathlib.Path.home() / ".nuget" / "packages"
-DOTNET = r"C:\Program Files\dotnet\dotnet.exe"
+NUGET = pathlib.Path(os.environ.get("NUGET_PACKAGES") or pathlib.Path.home() / ".nuget" / "packages")
+DOTNET = shutil.which("dotnet") or r"C:\Program Files\dotnet\dotnet.exe"
+VERSION_RE = re.compile(r"\d+\.\d+\.\d+")
 
 NOTICES = [
     ("SharpCompress 1.0.0", "https://github.com/adamhathcock/sharpcompress (commit b6cc95af73950c914e0c6ce7ea3511528ede1121)",
@@ -33,11 +40,18 @@ def sha(p):
 
 
 def main(version):
+    if not VERSION_RE.fullmatch(version):
+        raise SystemExit(f"버전 형식이 아님: {version!r} (예: 0.2.7)")
     out = ROOT / "releases" / f"ohmyZip-{version}"
-    if out.exists():
-        raise SystemExit(f"이미 있음: {out}")
+    pkg = ROOT / "releases" / f"ohmyZip-{version}-win-x64.zip"
+    pkg_sha = pkg.with_name(pkg.name + ".sha256")
+    for p in (out, pkg, pkg_sha):
+        if p.exists():
+            raise SystemExit(f"이미 있음: {p}")
     cmd = [DOTNET, "publish", str(ROOT / "src" / "OhMyZip.App"), "-c", "Release", "-r", "win-x64", "--self-contained", "false",
-           "-o", str(out), "-nologo", "-p:DebugType=None", "-p:DebugSymbols=false", f"-p:InformationalVersion={version}"]
+           "-o", str(out), "-nologo", "-p:DebugType=None", "-p:DebugSymbols=false",
+           f"-p:Version={version}", f"-p:AssemblyVersion={version}.0", f"-p:FileVersion={version}.0",
+           f"-p:InformationalVersion={version}"]
     print("$", " ".join(cmd), flush=True)
     rc = subprocess.run(cmd).returncode
     if rc != 0:
@@ -53,12 +67,13 @@ def main(version):
         raise SystemExit(f"디버그 심볼이 남음: {leftovers}")
     files = sorted(p for p in out.iterdir() if p.is_file())
     (out / "SHA256SUMS.txt").write_text("".join(f"{sha(p)} *{p.name}\n" for p in files), encoding="utf-8")
-    pkg = ROOT / "releases" / f"ohmyZip-{version}-win-x64.zip"
     with zipfile.ZipFile(pkg, "w", zipfile.ZIP_DEFLATED) as z:
         for p in sorted(out.iterdir()):
             z.write(p, f"ohmyZip-{version}/{p.name}")
+    line = f"{sha(pkg)} *{pkg.name}\n"
+    pkg_sha.write_bytes(line.encode("ascii"))
     print((out / "SHA256SUMS.txt").read_text(encoding="utf-8"), end="")
-    print(f"{sha(pkg)} *{pkg.name}")
+    print(line, end="")
 
 
 if __name__ == "__main__":
