@@ -12,7 +12,7 @@ namespace OhMyZip.Core.Tests;
 /// <summary>자동 업데이트(확인·내려받기·검증·설치·잔여 정리) 시험. 실제 GitHub 시험은 토큰을 줄 때만 돈다.</summary>
 public sealed class AppUpdaterTests
 {
-    private const string LiveTokenVariable = "OHMYZIP_LIVE_UPDATE_TOKEN";
+    private const string LiveVariable = "OHMYZIP_LIVE_UPDATE";
     private const string Notes = "- 압축 파일 목록 정렬 고침\n- 새 창 열기 개선";
     private static readonly Version Current = new(0, 2, 0);
     private readonly ITestOutputHelper output;
@@ -357,7 +357,6 @@ public sealed class AppUpdaterTests
     {
         using var temp = new TempDir();
         using var http = new HttpClient();
-        http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable(LiveTokenVariable));
         string install = temp.Combine("install");
         byte[] placeholder = Util.Text("placeholder for an older ohmyZip.exe");
         Directory.CreateDirectory(install);
@@ -536,8 +535,8 @@ public sealed class AppUpdaterTests
     {
         public LiveUpdateFactAttribute()
         {
-            if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(LiveTokenVariable)))
-                Skip = $"Live update test not run; set {LiveTokenVariable} to a GitHub token that can read {AppUpdater.Repository} releases.";
+            if (Environment.GetEnvironmentVariable(LiveVariable) != "1")
+                Skip = $"Live update test not run; set {LiveVariable}=1 to update from the public {AppUpdater.Repository} releases without a token.";
         }
     }
 }
