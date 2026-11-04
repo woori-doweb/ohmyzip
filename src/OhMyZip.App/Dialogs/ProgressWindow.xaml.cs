@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Threading;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App.Dialogs;
@@ -77,13 +78,13 @@ public partial class ProgressWindow : Window
         var text = string.Format(CultureInfo.CurrentCulture, "{0} / {1} ({2:0}%)", FormatBytes(p.ProcessedBytes), FormatBytes(p.TotalBytes), Math.Floor(percent));
         if (speed > 0)
         {
-            text += $" · {FormatBytes((long)speed)}/초";
+            text += " · " + string.Format(DialogText.Progress_Speed, FormatBytes((long)speed));
             long remaining = Math.Max(0, p.TotalBytes - p.ProcessedBytes);
-            text += $" · 남은 시간 약 {FormatDuration(TimeSpan.FromSeconds(remaining / speed))}";
+            text += " · " + string.Format(DialogText.Progress_TimeLeft, FormatDuration(TimeSpan.FromSeconds(remaining / speed)));
         }
         else
         {
-            text += " · 속도 계산 중";
+            text += " · " + DialogText.Progress_MeasuringSpeed;
         }
         AmountText.Text = text;
     }
@@ -93,26 +94,27 @@ public partial class ProgressWindow : Window
     {
         Bar.IsIndeterminate = Theme.ThemeManager.AnimationsEnabled;
         Bar.Value = 0;
-        AmountText.Text = processed > 0 ? $"진행률을 알 수 없음 · 처리 {FormatBytes(processed)}" : "진행률을 알 수 없음";
+        AmountText.Text = processed > 0 ? string.Format(DialogText.Progress_UnknownProcessed, FormatBytes(processed)) : DialogText.Progress_Unknown;
     }
 
     public static string FormatBytes(long bytes)
     {
-        string[] units = ["바이트", "KB", "MB", "GB", "TB"];
+        // 0 번(바이트)은 아래 문구로 따로 만든다.
+        string[] units = ["", "KB", "MB", "GB", "TB"];
         double v = bytes;
         int u = 0;
         while (v >= 1024 && u < units.Length - 1) { v /= 1024; u++; }
         return u == 0
-            ? string.Format(CultureInfo.CurrentCulture, "{0:N0}바이트", bytes)
+            ? string.Format(CultureInfo.CurrentCulture, DialogText.Progress_Bytes, bytes)
             : string.Format(CultureInfo.CurrentCulture, "{0:0.0} {1}", v, units[u]);
     }
 
     private static string FormatDuration(TimeSpan t)
     {
-        if (t.TotalSeconds < 1) return "1초 미만";
-        if (t.TotalMinutes < 1) return $"{(int)t.TotalSeconds}초";
-        if (t.TotalHours < 1) return $"{(int)t.TotalMinutes}분 {t.Seconds}초";
-        return $"{(int)t.TotalHours}시간 {t.Minutes}분";
+        if (t.TotalSeconds < 1) return DialogText.Duration_UnderSecond;
+        if (t.TotalMinutes < 1) return string.Format(DialogText.Duration_Seconds, (int)t.TotalSeconds);
+        if (t.TotalHours < 1) return string.Format(DialogText.Duration_MinutesSeconds, (int)t.TotalMinutes, t.Seconds);
+        return string.Format(DialogText.Duration_HoursMinutes, (int)t.TotalHours, t.Minutes);
     }
 
     private void OnCancel(object sender, RoutedEventArgs e) => RequestCancel();
@@ -122,8 +124,8 @@ public partial class ProgressWindow : Window
         if (_cts.IsCancellationRequested) return;
         _cts.Cancel();
         CancelButton.IsEnabled = false;
-        CancelButton.Content = "취소하는 중…";
-        HeadingText.Text = $"{_heading} — 취소하는 중…";
+        CancelButton.Content = DialogText.Progress_Canceling_Button;
+        HeadingText.Text = string.Format(DialogText.Progress_Canceling_Title, _heading);
         Title = HeadingText.Text;
     }
 

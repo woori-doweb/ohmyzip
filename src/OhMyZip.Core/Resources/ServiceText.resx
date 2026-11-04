@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common_Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Scan_EngineName" xml:space="preserve">
+    <value>Windows AMSI (registered antivirus)</value>
+  </data>
+  <data name="Scan_CannotScan" xml:space="preserve">
+    <value>Not scanned — this doesn't mean it's safe</value>
+  </data>
+  <data name="Scan_CannotScanDetail" xml:space="preserve">
+    <value>Not scanned — this doesn't mean it's safe: {0}</value>
+  </data>
+  <data name="Scan_CannotScanItems" xml:space="preserve">
+    <value>Not scanned — this doesn't mean it's safe. Items not scanned: {0}</value>
+  </data>
+  <data name="Scan_Completed" xml:space="preserve">
+    <value>Scan complete</value>
+  </data>
+  <data name="Scan_Detected" xml:space="preserve">
+    <value>Malicious items detected: {0}</value>
+  </data>
+  <data name="Scan_Canceled" xml:space="preserve">
+    <value>Scan canceled</value>
+  </data>
+  <data name="Scan_InvalidSizeLimit" xml:space="preserve">
+    <value>The item size limit for scanning isn't valid.</value>
+  </data>
+  <data name="Scan_PasswordRequired" xml:space="preserve">
+    <value>Not scanned because a password is required</value>
+  </data>
+  <data name="Scan_EntrySizeUnknown" xml:space="preserve">
+    <value>The item size can't be determined</value>
+  </data>
+  <data name="Scan_EntryTooLarge" xml:space="preserve">
+    <value>The item exceeds the size limit ({0:N0} bytes)</value>
+  </data>
+  <data name="Scan_EntryOverLimit" xml:space="preserve">
+    <value>The item exceeds the size limit</value>
+  </data>
+  <data name="Scan_EntryTempReadFailed" xml:space="preserve">
+    <value>Couldn't read the item from the temporary folder</value>
+  </data>
+  <data name="Scan_ExtractedTooLarge" xml:space="preserve">
+    <value>The extracted item exceeds the size limit ({0:N0} bytes)</value>
+  </data>
+  <data name="Scan_TempFileNotDeleted" xml:space="preserve">
+    <value>Couldn't delete the temporary scan files: {0}</value>
+  </data>
+  <data name="Scan_TempFolderNotDeleted" xml:space="preserve">
+    <value>Couldn't delete the temporary scan folder: {0}</value>
+  </data>
+  <data name="Scan_UnsafeEntryPath" xml:space="preserve">
+    <value>Unsafe item path: {0}</value>
+  </data>
+  <data name="Scan_DuplicatePath" xml:space="preserve">
+    <value>Duplicate normalized item path not scanned</value>
+  </data>
+  <data name="Scan_DuplicatePathNamed" xml:space="preserve">
+    <value>Duplicate normalized item path not scanned: {0}</value>
+  </data>
+  <data name="Scan_EntryNotInSnapshot" xml:space="preserve">
+    <value>The item wasn't found in the snapshot</value>
+  </data>
+  <data name="Scan_SizeMismatch" xml:space="preserve">
+    <value>Extracted size mismatch (expected {0}, actual {1})</value>
+  </data>
+  <data name="Scan_CrcMismatch" xml:space="preserve">
+    <value>CRC mismatch (expected {0:X8}, actual {1:X8})</value>
+  </data>
+  <data name="Scan_AmsiUnavailable" xml:space="preserve">
+    <value>Not scanned because Windows AMSI isn't available</value>
+  </data>
+  <data name="Scan_SplitArchive" xml:space="preserve">
+    <value>Split archives aren't scanned because a single stable snapshot can't be made</value>
+  </data>
+  <data name="Scan_ArchivePathReparse" xml:space="preserve">
+    <value>Archive paths that contain reparse points aren't scanned</value>
+  </data>
+  <data name="Scan_ArchiveOpenFailed" xml:space="preserve">
+    <value>Couldn't open the archive reliably</value>
+  </data>
+  <data name="Scan_SnapshotTooLarge" xml:space="preserve">
+    <value>The archive exceeds the snapshot limit ({0:N0} bytes)</value>
+  </data>
+  <data name="Scan_SnapshotOpenFailed" xml:space="preserve">
+    <value>Couldn't open the scan snapshot reliably</value>
+  </data>
+  <data name="Scan_NoFollowWindowsOnly" xml:space="preserve">
+    <value>Opening files without following reparse points is supported only on Windows</value>
+  </data>
+  <data name="Scan_FolderSkipped" xml:space="preserve">
+    <value>Folders aren't scanned</value>
+  </data>
+  <data name="Scan_ReparseFileSkipped" xml:space="preserve">
+    <value>Reparse point files aren't scanned</value>
+  </data>
+  <data name="Scan_HardLinkSkipped" xml:space="preserve">
+    <value>Files with multiple hard links aren't scanned</value>
+  </data>
+  <data name="Scan_PathValidationFailed" xml:space="preserve">
+    <value>Not scanned because item paths couldn't be verified: {0}</value>
+  </data>
+  <data name="Scan_AmsiInitError" xml:space="preserve">
+    <value>AMSI initialization error (0x{0:X8})</value>
+  </data>
+  <data name="Scan_AmsiSessionError" xml:space="preserve">
+    <value>AMSI session error (0x{0:X8})</value>
+  </data>
+  <data name="Scan_AmsiScanError" xml:space="preserve">
+    <value>AMSI scan error (0x{0:X8})</value>
+  </data>
+  <data name="Scan_AmsiResult" xml:space="preserve">
+    <value>AMSI result {0}</value>
+  </data>
+  <data name="Scan_AmsiAdminBlocked" xml:space="preserve">
+    <value>AMSI result {0} (blocked by an administrator)</value>
+  </data>
+  <data name="Scan_EntryOutsideTemp" xml:space="preserve">
+    <value>The item points outside the temporary scan folder</value>
+  </data>
+  <data name="Scan_TempPathReparse" xml:space="preserve">
+    <value>The temporary scan path contains a reparse point</value>
+  </data>
+  <data name="Scan_EntryFileMissing" xml:space="preserve">
+    <value>The item file is missing</value>
+  </data>
+  <data name="Recovery_InvalidArchivePath" xml:space="preserve">
+    <value>The archive path isn't valid.</value>
+  </data>
+  <data name="Recovery_NotFound" xml:space="preserve">
+    <value>Password not found within the limits (attempts: {0})</value>
+  </data>
+  <data name="Recovery_CannotTestArchive" xml:space="preserve">
+    <value>Couldn't test the archive.</value>
+  </data>
+  <data name="Recovery_NotEncrypted" xml:space="preserve">
+    <value>This archive isn't password-protected.</value>
+  </data>
+  <data name="Recovery_CannotTestCandidate" xml:space="preserve">
+    <value>Couldn't test a password candidate.</value>
+  </data>
+  <data name="Recovery_InvalidChecker" xml:space="preserve">
+    <value>The password checker isn't valid.</value>
+  </data>
+  <data name="Recovery_CheckError" xml:space="preserve">
+    <value>An error occurred while testing passwords.</value>
+  </data>
+  <data name="Recovery_Found" xml:space="preserve">
+    <value>Password found.</value>
+  </data>
+  <data name="Recovery_DictionaryReadFailed" xml:space="preserve">
+    <value>Couldn't read a dictionary entry.</value>
+  </data>
+  <data name="Recovery_DictionaryInvalid" xml:space="preserve">
+    <value>A dictionary entry isn't valid.</value>
+  </data>
+  <data name="Recovery_NoOptions" xml:space="preserve">
+    <value>Password recovery options are missing.</value>
+  </data>
+  <data name="Recovery_EmptyCharset" xml:space="preserve">
+    <value>The character set is empty. Enter at least one character.</value>
+  </data>
+  <data name="Recovery_InvalidLength" xml:space="preserve">
+    <value>The password length limits aren't valid.</value>
+  </data>
+  <data name="Recovery_InvalidAttempts" xml:space="preserve">
+    <value>The attempt limit isn't valid.</value>
+  </data>
+  <data name="Recovery_InvalidDuration" xml:space="preserve">
+    <value>The time limit isn't valid.</value>
+  </data>
+  <data name="Recovery_CharsetTooLarge" xml:space="preserve">
+    <value>The character set can contain at most 100 different characters.</value>
+  </data>
+  <data name="Shred_InvalidPath" xml:space="preserve">
+    <value>The path of the file to delete isn't valid.</value>
+  </data>
+  <data name="Shred_WindowsOnly" xml:space="preserve">
+    <value>Secure Delete is supported only on Windows.</value>
+  </data>
+  <data name="Shred_FolderNotAllowed" xml:space="preserve">
+    <value>Folders can't be securely deleted.</value>
+  </data>
+  <data name="Shred_FileMissing" xml:space="preserve">
+    <value>The file to delete doesn't exist.</value>
+  </data>
+  <data name="Shred_CannotCheck" xml:space="preserve">
+    <value>Couldn't check the file to delete.</value>
+  </data>
+  <data name="Shred_ReparsePoint" xml:space="preserve">
+    <value>Reparse points (links) aren't securely deleted.</value>
+  </data>
+  <data name="Shred_ReadOnly" xml:space="preserve">
+    <value>Read-only files aren't securely deleted.</value>
+  </data>
+  <data name="Shred_HardLinks" xml:space="preserve">
+    <value>Files with multiple hard links aren't securely deleted.</value>
+  </data>
+  <data name="Shred_RenameFailed" xml:space="preserve">
+    <value>Couldn't rename the file, so it wasn't securely deleted.</value>
+  </data>
+  <data name="Shred_DeleteAfterRenameFailed" xml:space="preserve">
+    <value>The file was renamed but couldn't be deleted.</value>
+  </data>
+  <data name="Shred_RenamedPath" xml:space="preserve">
+    <value>Renamed path: {0}</value>
+  </data>
+  <data name="Shred_Done" xml:space="preserve">
+    <value>The file was overwritten and deleted. Complete erasure can't be guaranteed on SSDs.</value>
+  </data>
+  <data name="Shred_PartialOverwrite" xml:space="preserve">
+    <value>The contents may have been partly overwritten.</value>
+  </data>
+  <data name="Shred_FailedPartial" xml:space="preserve">
+    <value>Couldn't completely delete the file — the contents may have been partly overwritten.</value>
+  </data>
+  <data name="Shred_Failed" xml:space="preserve">
+    <value>Couldn't completely delete the file.</value>
+  </data>
+  <data name="Shred_CannotReadInfo" xml:space="preserve">
+    <value>Couldn't read information about the file to delete.</value>
+  </data>
+  <data name="Shred_CannotOpen" xml:space="preserve">
+    <value>Couldn't open the file to delete.</value>
+  </data>
+  <data name="Shred_CanceledPartial" xml:space="preserve">
+    <value>Canceled — the contents may have been partly overwritten.</value>
+  </data>
+  <data name="Vault_PathEmpty" xml:space="preserve">
+    <value>The password vault file path is empty.</value>
+  </data>
+  <data name="Vault_PathInvalid" xml:space="preserve">
+    <value>The password vault file path isn't valid.</value>
+  </data>
+  <data name="Vault_AppDataMissing" xml:space="preserve">
+    <value>Couldn't find the user AppData folder.</value>
+  </data>
+  <data name="Vault_LabelEmpty" xml:space="preserve">
+    <value>The label is empty. Enter a label.</value>
+  </data>
+  <data name="Vault_WindowsOnly" xml:space="preserve">
+    <value>The password vault is supported only with Windows DPAPI (CurrentUser).</value>
+  </data>
+  <data name="Vault_Corrupt" xml:space="preserve">
+    <value>The password vault file is damaged or belongs to a different user.</value>
+  </data>
+  <data name="Vault_LockTimeout" xml:space="preserve">
+    <value>Timed out waiting for the password vault lock. Try again.</value>
+  </data>
+  <data name="Assoc_TypeName" xml:space="preserve">
+    <value>ohmyZip Archive</value>
+  </data>
+  <data name="Assoc_AppDescription" xml:space="preserve">
+    <value>ohmyZip archive manager</value>
+  </data>
+  <data name="Assoc_ExePathNotFull" xml:space="preserve">
+    <value>The executable path must be a full path.</value>
+  </data>
+  <data name="Assoc_ExePathQuote" xml:space="preserve">
+    <value>The executable path can't contain double quotation marks.</value>
+  </data>
+  <data name="Update_NoneYet" xml:space="preserve">
+    <value>No updates are available yet. Check again later.</value>
+  </data>
+  <data name="Update_ServerBusy" xml:space="preserve">
+    <value>The update server isn't accepting requests right now. Check again in a little while.</value>
+  </data>
+  <data name="Update_InfoHttpError" xml:space="preserve">
+    <value>Couldn't get update information (HTTP {0}). Check again in a little while.</value>
+  </data>
+  <data name="Update_CheckConnectFailed" xml:space="preserve">
+    <value>Couldn't connect to the update server. Check your internet connection, then check again.</value>
+  </data>
+  <data name="Update_CheckTimeout" xml:space="preserve">
+    <value>The update server is taking too long to respond. Check your internet connection, then check again.</value>
+  </data>
+  <data name="Update_CheckConnectionLost" xml:space="preserve">
+    <value>The connection was lost while getting update information. Check your internet connection, then check again.</value>
+  </data>
+  <data name="Update_InfoUnreadable" xml:space="preserve">
+    <value>Couldn't read the update information. Check again in a little while.</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>A new version is available: {0} (current version {1}).</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>You're using the latest version ({0}).</value>
+  </data>
+  <data name="Update_TagUnreadable" xml:space="preserve">
+    <value>Couldn't read the version of the latest release. Check again in a little while.</value>
+  </data>
+  <data name="Update_PackageMissing" xml:space="preserve">
+    <value>The latest release {0} doesn't have an installation file yet. Check again in a little while.</value>
+  </data>
+  <data name="Update_ChecksumMismatch" xml:space="preserve">
+    <value>The downloaded update file is damaged (SHA-256 mismatch). Try downloading it again.</value>
+  </data>
+  <data name="Update_DownloadFailed" xml:space="preserve">
+    <value>Couldn't download the update. Check your internet connection and disk space, then try again.</value>
+  </data>
+  <data name="Update_StagedMissing" xml:space="preserve">
+    <value>The update files to install are missing. Download the update again.</value>
+  </data>
+  <data name="Update_InstallFolderMissing" xml:space="preserve">
+    <value>Couldn't find the ohmyZip installation folder. Reinstall ohmyZip, then update.</value>
+  </data>
+  <data name="Update_FileOutsideInstall" xml:space="preserve">
+    <value>The update file '{0}' points outside the installation folder. Download the update again.</value>
+  </data>
+  <data name="Update_TargetIsFolder" xml:space="preserve">
+    <value>'{0}' in the installation folder is a folder, so it can't be replaced with a file. Move that folder, then try again.</value>
+  </data>
+  <data name="Update_RollbackIncomplete" xml:space="preserve">
+    <value>The update stopped partway and some files couldn't be restored. Download ohmyZip again and extract it to the installation folder.</value>
+  </data>
+  <data name="Update_RolledBackDetail" xml:space="preserve">
+    <value>Couldn't install the update, so the original files were restored. {0}</value>
+  </data>
+  <data name="Update_AccessDenied" xml:space="preserve">
+    <value>Couldn't install the update because you don't have permission to write to the installation folder (the original files were restored). Move ohmyZip to a folder you can write to, or run it as an administrator, then try again.</value>
+  </data>
+  <data name="Update_RolledBack" xml:space="preserve">
+    <value>Couldn't install the update, so the original files were restored. Make sure no other app is using ohmyZip files, then try again.</value>
+  </data>
+  <data name="Update_ConnectFailed" xml:space="preserve">
+    <value>Couldn't connect to the update server. Check your internet connection, then try again.</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>The update server is taking too long to respond. Check your internet connection, then try again.</value>
+  </data>
+  <data name="Update_FileHttpError" xml:space="preserve">
+    <value>Couldn't download the update file (HTTP {0}). Try again in a little while.</value>
+  </data>
+  <data name="Update_ChecksumFormat" xml:space="preserve">
+    <value>The update verification information isn't in the expected format. Try again in a little while.</value>
+  </data>
+  <data name="Update_ChecksumWrongFile" xml:space="preserve">
+    <value>The update verification information doesn't match the installation file. Try again in a little while.</value>
+  </data>
+  <data name="Update_PackageBadPath" xml:space="preserve">
+    <value>The update file contains a path that isn't allowed. Download the update again.</value>
+  </data>
+  <data name="Update_PackageBadLayout" xml:space="preserve">
+    <value>The update file isn't structured correctly. Download the update again.</value>
+  </data>
+  <data name="Update_PackageNoExe" xml:space="preserve">
+    <value>The update file doesn't contain ohmyZip.exe. Download the update again.</value>
+  </data>
+  <data name="Update_PackageUnreadable" xml:space="preserve">
+    <value>Couldn't extract the downloaded update file. Download the update again.</value>
+  </data>
+</root>

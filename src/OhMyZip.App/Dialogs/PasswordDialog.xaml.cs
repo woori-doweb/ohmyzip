@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
+using OhMyZip.App.Text;
 
 namespace OhMyZip.App.Dialogs;
 
@@ -13,10 +14,10 @@ public partial class PasswordDialog : Window
     private PasswordDialog(string archiveName, bool wrong)
     {
         InitializeComponent();
-        MessageText.Text = wrong ? "암호가 올바르지 않습니다. 다시 입력하세요." : "암호가 필요합니다.";
+        MessageText.Text = wrong ? DialogText.Password_Wrong : DialogText.Password_Required;
         MessageGlyph.Text = wrong ? "\uE7BA" : "\uE72E";
         MessageGlyph.SetResourceReference(TextBlock.ForegroundProperty, wrong ? Theme.ThemeManager.Error : Theme.ThemeManager.Text);
-        AutomationProperties.SetName(MessageGlyph, wrong ? "경고" : "암호");
+        AutomationProperties.SetName(MessageGlyph, wrong ? DialogText.Message_KindWarning : DialogText.Password_Name);
         ArchiveText.Text = archiveName;
         Loaded += (_, _) => Masked.Focus();
         SourceInitialized += (_, _) => NativeMethods.ApplyDarkTitleBar(this);
@@ -48,7 +49,7 @@ public partial class PasswordDialog : Window
     {
         if (Value.Length == 0)
         {
-            MessageText.Text = "암호를 입력하세요.";
+            MessageText.Text = DialogText.Password_Enter;
             return;
         }
         DialogResult = true;

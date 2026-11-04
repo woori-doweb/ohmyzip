@@ -4,7 +4,7 @@
 
 1. `../wiki/ohmyzip-plan.md` — 현재 단계(M0~M6)·엔진·위험. **계획에 없는 일을 하려면 먼저 계획을 고치고 이유를 run 기록에 남긴다.**
 2. `../wiki/ohmyzip-acceptance-tests.md` — 지금 단계의 OZ-* 시험. 시험이 통과하기 전에는 다음 단계로 가지 않는다.
-3. `../wiki/ohmyzip-design.md` — UI 를 바꿀 때만. 결정 ID(D01~D41)를 커밋 메시지·코드 주석이 아니라 traceability 에 적는다.
+3. `../wiki/ohmyzip-design.md` — UI 를 바꿀 때만. 결정 ID(D01~D45)를 커밋 메시지·코드 주석이 아니라 traceability 에 적는다.
 4. `../data/ohmyzip/traceability.json` — 기능·명령 96행. `plan_status` 는 `build_traceability.py` 의 MAP 에서만, `result` 는 시험 실행 뒤에만 바꾼다.
 5. 실행 기록: `../runs/2026-10-26-ohmyzip/README.md` (명령·종료코드·해시·캡처·실패·복구).
 

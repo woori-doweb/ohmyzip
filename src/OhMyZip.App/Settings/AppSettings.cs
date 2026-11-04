@@ -1,11 +1,15 @@
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App.Settings;
 
 public enum AppTheme { System, Light, Dark }
+
+/// <summary>화면 언어. System = Windows 표시 언어가 한국어면 한국어, 그 밖은 영어.</summary>
+public enum AppLanguage { System, Korean, English }
 
 public enum ExtractDestination { ArchiveFolder, ArchiveNameFolder, LastUsed }
 
@@ -26,6 +30,8 @@ public sealed class AppSettings
     public bool ShowStartScreen { get; set; } = true;
     public AppTheme Theme { get; set; } = AppTheme.System;
     public bool ReduceMotion { get; set; }
+    /// <summary>다음 실행부터 적용한다(시작할 때 한 번 정해진다).</summary>
+    public AppLanguage Language { get; set; } = AppLanguage.System;
     /// <summary>창이 뜨면 새 버전을 확인·내려받고, 프로그램을 닫을 때 설치한다.</summary>
     public bool AutoUpdate { get; set; } = true;
     /// <summary>자동 확인을 끝낸 마지막 시각(하루 한 번만 확인). 새 버전을 찾은 확인은 기록하지 않는다(다음 실행에서 다시 받도록).</summary>
@@ -54,19 +60,22 @@ public sealed class AppSettings
     public bool ShowComment { get; set; }
     public bool Topmost { get; set; }
 
-    /// <summary>보기 &gt; 칼럼 설정 10개(메뉴 순서). Id 는 traceability 행, Header 는 메뉴 문구 = 칼럼 머리글.</summary>
-    public static readonly IReadOnlyList<(string Key, string Id, string Header, bool Default)> ColumnKeys =
+    /// <summary>
+    /// 보기 &gt; 칼럼 설정 10개(메뉴 순서). Id 는 traceability 행, Header 는 메뉴 문구 = 칼럼 머리글.
+    /// 읽을 때마다 만든다: 이 형식은 화면 언어를 정하기 전(설정 읽기)에 초기화되므로 머리글을 정적 필드에 담으면 언어가 어긋난다.
+    /// </summary>
+    public static IReadOnlyList<(string Key, string Id, string Header, bool Default)> ColumnKeys =>
     [
-        ("compressed", "OZ-C040", "압축 크기", true),
-        ("size", "OZ-C041", "원본 크기", true),
-        ("type", "OZ-C042", "파일 종류", true),
-        ("modified", "OZ-C043", "수정한 날짜", true),
-        ("method", "OZ-C044", "압축 방식", false),
-        ("encryption", "OZ-C045", "암호 방식", false),
+        ("compressed", "OZ-C040", DialogText.Column_PackedSize, true),
+        ("size", "OZ-C041", DialogText.Column_Size, true),
+        ("type", "OZ-C042", DialogText.Column_Type, true),
+        ("modified", "OZ-C043", DialogText.Column_Modified, true),
+        ("method", "OZ-C044", DialogText.Column_Method, false),
+        ("encryption", "OZ-C045", DialogText.Column_Encryption, false),
         ("crc", "OZ-C046", "CRC", true),
-        ("attributes", "OZ-C047", "속성", false),
-        ("description", "OZ-C048", "파일 설명", false),
-        ("extra", "OZ-C049", "부가 정보", false),
+        ("attributes", "OZ-C047", DialogText.Column_Attributes, false),
+        ("description", "OZ-C048", DialogText.Column_Description, false),
+        ("extra", "OZ-C049", DialogText.Column_Extra, false),
     ];
 
     public static Dictionary<string, bool> DefaultColumns() => ColumnKeys.ToDictionary(c => c.Key, c => c.Default, StringComparer.Ordinal);
@@ -107,7 +116,7 @@ public sealed class AppSettings
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException or NotSupportedException)
         {
             Current = new AppSettings();
-            return $"설정 파일을 읽지 못해 기본값으로 시작합니다: {ex.Message}";
+            return string.Format(DialogText.Settings_LoadFailed, ex.Message);
         }
     }
 
@@ -125,7 +134,7 @@ public sealed class AppSettings
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException)
         {
-            return $"설정을 저장하지 못했습니다({FilePath}): {ex.Message}";
+            return string.Format(DialogText.Settings_SaveFailed, FilePath, ex.Message);
         }
     }
 
@@ -140,6 +149,7 @@ public sealed class AppSettings
         Columns ??= DefaultColumns();
         HiddenToolbarButtons ??= [];
         if (!Enum.IsDefined(Theme)) Theme = AppTheme.System;
+        if (!Enum.IsDefined(Language)) Language = AppLanguage.System;
         if (!Enum.IsDefined(ExtractDestination)) ExtractDestination = ExtractDestination.ArchiveNameFolder;
         if (!Enum.IsDefined(ExtractConflict)) ExtractConflict = ConflictChoice.Ask;
         if (!Enum.IsDefined(ListMode)) ListMode = ListMode.Details;

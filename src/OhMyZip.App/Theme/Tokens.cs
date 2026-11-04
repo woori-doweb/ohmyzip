@@ -100,7 +100,7 @@ public static class Tokens
     public static (byte R, byte G, byte B) Parse(string hex)
     {
         var h = hex.TrimStart('#');
-        if (h.Length != 6) throw new FormatException($"#RRGGBB 형식이 아님: {hex}");
+        if (h.Length != 6) throw new FormatException(string.Format(OhMyZip.App.Text.MainText.Token_InvalidHex, hex));
         return (Convert.ToByte(h[..2], 16), Convert.ToByte(h[2..4], 16), Convert.ToByte(h[4..6], 16));
     }
 }

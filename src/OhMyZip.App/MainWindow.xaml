@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:models="clr-namespace:OhMyZip.App.Models"
         xmlns:controls="clr-namespace:OhMyZip.App.Controls"
+        xmlns:res="clr-namespace:OhMyZip.App.Text;assembly=OhMyZip.App.Text"
         Style="{StaticResource Oz.WindowStyle}"
         Title="ohmyZip" Width="1040" Height="660" MinWidth="720" MinHeight="380"
         WindowStartupLocation="CenterScreen"
@@ -36,7 +37,7 @@
     </Window.Resources>
     <DockPanel>
         <!-- 1. Windows 메뉴 막대: 메뉴 7개·58항목(+ 기능 행 명령). CommandCatalog 에서 생성. -->
-        <Menu x:Name="MainMenu" DockPanel.Dock="Top" Style="{StaticResource Oz.Menu}" AutomationProperties.Name="메뉴 막대" />
+        <Menu x:Name="MainMenu" DockPanel.Dock="Top" Style="{StaticResource Oz.Menu}" AutomationProperties.Name="{x:Static res:MainText.MenuBar_Name}" />
 
         <!-- 2. 툴바: 단색 표면, 3묶음 + 검색. 버튼은 CommandCatalog.ToolbarGroups 에서 생성. -->
         <Border x:Name="ToolbarHost" DockPanel.Dock="Top" Background="{DynamicResource Oz.Chrome}" BorderBrush="{DynamicResource Oz.Border}" BorderThickness="0,0,0,1" Padding="8,6">
@@ -45,27 +46,27 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel x:Name="ToolbarPanel" Orientation="Horizontal" KeyboardNavigation.TabNavigation="Continue" AutomationProperties.Name="툴바" />
+                <StackPanel x:Name="ToolbarPanel" Orientation="Horizontal" KeyboardNavigation.TabNavigation="Continue" AutomationProperties.Name="{x:Static res:MainText.Toolbar_Name}" />
                 <Grid Grid.Column="1" Width="260" Margin="12,0,4,0" VerticalAlignment="Center">
                     <TextBox x:Name="SearchBox" Style="{StaticResource Oz.TextBox}" Padding="28,0,6,0"
-                             AutomationProperties.Name="파일 찾기" AutomationProperties.AutomationId="OZ-FindBox"
-                             ToolTip="압축 파일 전체에서 이름으로 찾기 (Ctrl+F) — * ? 와일드카드, Esc 지우기, Enter 로 결과로 이동"
+                             AutomationProperties.Name="{x:Static res:MainText.FindBox_Name}" AutomationProperties.AutomationId="OZ-FindBox"
+                             ToolTip="{x:Static res:MainText.FindBox_ToolTip}"
                              TextChanged="OnSearchChanged" PreviewKeyDown="OnSearchKeyDown" />
                     <TextBlock Text="&#xE721;" FontFamily="{StaticResource Oz.IconFont}" FontSize="13" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Foreground="{DynamicResource Oz.SecondaryText}" IsHitTestVisible="False" />
-                    <TextBlock x:Name="SearchPlaceholder" Text="파일 찾기" Margin="30,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"
+                    <TextBlock x:Name="SearchPlaceholder" Text="{x:Static res:MainText.FindBox_Name}" Margin="30,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"
                                Foreground="{DynamicResource Oz.SecondaryText}" />
                 </Grid>
             </Grid>
         </Border>
 
         <!-- 4. 상태줄: 정보만, 조작 버튼 없음. 알림 문장이 바뀌면 화면 읽기 프로그램이 읽는다(LiveSetting). -->
-        <StatusBar x:Name="StatusBarHost" DockPanel.Dock="Bottom" Style="{StaticResource Oz.StatusBar}" AutomationProperties.Name="상태 표시줄">
+        <StatusBar x:Name="StatusBarHost" DockPanel.Dock="Bottom" Style="{StaticResource Oz.StatusBar}" AutomationProperties.Name="{x:Static res:MainText.StatusBar_Name}">
             <StatusBarItem>
                 <TextBlock x:Name="StatusText" Foreground="{DynamicResource Oz.ChromeText}" AutomationProperties.AutomationId="OZ-StatusText"
                            AutomationProperties.LiveSetting="Polite"
-                           ToolTip="폴더: 압축 파일에 기록된 폴더 항목 수(경로로만 생기는 폴더는 트리에 보이지만 세지 않음)"
-                           AutomationProperties.HelpText="폴더: 압축 파일에 기록된 폴더 항목 수(경로로만 생기는 폴더는 트리에 보이지만 세지 않음)" />
+                           ToolTip="{x:Static res:MainText.Status_FolderHelp}"
+                           AutomationProperties.HelpText="{x:Static res:MainText.Status_FolderHelp}" />
             </StatusBarItem>
         </StatusBar>
 
@@ -79,7 +80,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Border x:Name="SidebarHost" Background="{DynamicResource Oz.Sidebar}" BorderBrush="{DynamicResource Oz.Border}" BorderThickness="0,0,1,0">
-                    <TreeView x:Name="FolderTree" Style="{StaticResource Oz.TreeView}" AutomationProperties.Name="폴더 트리"
+                    <TreeView x:Name="FolderTree" Style="{StaticResource Oz.TreeView}" AutomationProperties.Name="{x:Static res:MainText.FolderTree_Name}"
                               SelectedItemChanged="OnTreeSelectionChanged" PreviewKeyDown="OnBrowseKeyDown">
                         <TreeView.ItemContainerStyle>
                             <Style TargetType="TreeViewItem">
@@ -109,9 +110,9 @@
                     <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Oz.Border}" BorderThickness="0,0,0,1" Padding="6,4">
                         <DockPanel>
                             <Button x:Name="UpButton" DockPanel.Dock="Left" Style="{StaticResource Oz.IconButton}" Content="&#xE74A;" IsTabStop="False"
-                                    AutomationProperties.Name="상위 폴더로" ToolTip="상위 폴더로 (Backspace)" Click="OnUpClick" />
+                                    AutomationProperties.Name="{x:Static res:MainText.Up_Name}" ToolTip="{x:Static res:MainText.Up_ToolTip}" Click="OnUpClick" />
                             <TextBlock x:Name="PathText" Margin="6,0,0,0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
-                                       AutomationProperties.Name="현재 폴더 경로" />
+                                       AutomationProperties.Name="{x:Static res:MainText.PathText_Name}" />
                         </DockPanel>
                     </Border>
 
@@ -119,20 +120,20 @@
                     <Border x:Name="CommentPane" DockPanel.Dock="Bottom" Visibility="Collapsed" MaxHeight="160"
                             Background="{DynamicResource Oz.Chrome}" BorderBrush="{DynamicResource Oz.Border}" BorderThickness="0,1,0,0" Padding="8,6">
                         <DockPanel>
-                            <TextBlock DockPanel.Dock="Top" Text="압축 파일 설명" FontWeight="SemiBold" Margin="0,0,0,4" />
+                            <TextBlock DockPanel.Dock="Top" Text="{x:Static res:MainText.CommentPane_Heading}" FontWeight="SemiBold" Margin="0,0,0,4" />
                             <TextBox x:Name="CommentText" IsReadOnly="True" TextWrapping="Wrap" BorderThickness="0" Background="Transparent"
                                      Foreground="{DynamicResource Oz.Text}" VerticalScrollBarVisibility="Auto"
-                                     AutomationProperties.Name="압축 파일 설명" AutomationProperties.AutomationId="OZ-CommentPane" />
+                                     AutomationProperties.Name="{x:Static res:MainText.CommentPane_Heading}" AutomationProperties.AutomationId="OZ-CommentPane" />
                         </DockPanel>
                     </Border>
 
                     <Grid>
-                        <DataGrid x:Name="EntryGrid" Style="{StaticResource Oz.DataGrid}" AutomationProperties.Name="파일 목록" AutomationProperties.AutomationId="OZ-EntryGrid"
+                        <DataGrid x:Name="EntryGrid" Style="{StaticResource Oz.DataGrid}" AutomationProperties.Name="{x:Static res:MainText.FileList_Name}" AutomationProperties.AutomationId="OZ-EntryGrid"
                                   Sorting="OnGridSorting" MouseDoubleClick="OnGridDoubleClick" PreviewKeyDown="OnBrowseKeyDown"
                                   SelectionChanged="OnGridSelectionChanged" GotKeyboardFocus="OnGridGotKeyboardFocus"
                                   PreviewMouseRightButtonUp="OnGridHeaderRightClick">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="이름" SortMemberPath="Name" Width="2*" MinWidth="160" CanUserSort="True">
+                                <DataGridTemplateColumn Header="{x:Static res:MainText.Column_Name}" SortMemberPath="Name" Width="2*" MinWidth="160" CanUserSort="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate DataType="{x:Type models:EntryRow}">
                                             <StackPanel Orientation="Horizontal">
@@ -142,16 +143,16 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn x:Name="ColCompressed" Header="압축 크기" Binding="{Binding CompressedSizeText}" SortMemberPath="CompressedSize" Width="100" ElementStyle="{StaticResource Oz.RightCell}" />
-                                <DataGridTextColumn x:Name="ColSize" Header="원본 크기" Binding="{Binding SizeText}" SortMemberPath="Size" Width="100" ElementStyle="{StaticResource Oz.RightCell}" />
-                                <DataGridTextColumn x:Name="ColType" Header="파일 종류" Binding="{Binding TypeName}" SortMemberPath="TypeName" Width="140" />
-                                <DataGridTextColumn x:Name="ColModified" Header="수정한 날짜" Binding="{Binding ModifiedText}" SortMemberPath="Modified" Width="150" />
-                                <DataGridTextColumn x:Name="ColMethod" Header="압축 방식" Binding="{Binding MethodText}" SortMemberPath="MethodText" Width="100" />
-                                <DataGridTextColumn x:Name="ColEncryption" Header="암호 방식" Binding="{Binding EncryptionText}" SortMemberPath="EncryptionText" Width="130" />
+                                <DataGridTextColumn x:Name="ColCompressed" Header="{x:Static res:MainText.Column_PackedSize}" Binding="{Binding CompressedSizeText}" SortMemberPath="CompressedSize" Width="100" ElementStyle="{StaticResource Oz.RightCell}" />
+                                <DataGridTextColumn x:Name="ColSize" Header="{x:Static res:MainText.Column_Size}" Binding="{Binding SizeText}" SortMemberPath="Size" Width="100" ElementStyle="{StaticResource Oz.RightCell}" />
+                                <DataGridTextColumn x:Name="ColType" Header="{x:Static res:MainText.Column_Type}" Binding="{Binding TypeName}" SortMemberPath="TypeName" Width="140" />
+                                <DataGridTextColumn x:Name="ColModified" Header="{x:Static res:MainText.Column_Modified}" Binding="{Binding ModifiedText}" SortMemberPath="Modified" Width="150" />
+                                <DataGridTextColumn x:Name="ColMethod" Header="{x:Static res:MainText.Column_Method}" Binding="{Binding MethodText}" SortMemberPath="MethodText" Width="100" />
+                                <DataGridTextColumn x:Name="ColEncryption" Header="{x:Static res:MainText.Column_Encryption}" Binding="{Binding EncryptionText}" SortMemberPath="EncryptionText" Width="130" />
                                 <DataGridTextColumn x:Name="ColCrc" Header="CRC" Binding="{Binding CrcText}" SortMemberPath="Crc32" Width="90" />
-                                <DataGridTextColumn x:Name="ColAttributes" Header="속성" Binding="{Binding AttributesText}" CanUserSort="False" Width="70" />
-                                <DataGridTextColumn x:Name="ColDescription" Header="파일 설명" Binding="{Binding DescriptionText}" CanUserSort="False" Width="120" />
-                                <DataGridTextColumn x:Name="ColExtra" Header="부가 정보" Binding="{Binding ExtraText}" CanUserSort="False" Width="120" />
+                                <DataGridTextColumn x:Name="ColAttributes" Header="{x:Static res:MainText.Column_Attributes}" Binding="{Binding AttributesText}" CanUserSort="False" Width="70" />
+                                <DataGridTextColumn x:Name="ColDescription" Header="{x:Static res:MainText.Column_Description}" Binding="{Binding DescriptionText}" CanUserSort="False" Width="120" />
+                                <DataGridTextColumn x:Name="ColExtra" Header="{x:Static res:MainText.Column_ExtraInfo}" Binding="{Binding ExtraText}" CanUserSort="False" Width="120" />
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -159,7 +160,7 @@
                         <ListBox x:Name="EntryList" Visibility="Collapsed" SelectionMode="Extended" IsSynchronizedWithCurrentItem="False"
                                  Background="{DynamicResource Oz.Background}" Foreground="{DynamicResource Oz.Text}" BorderThickness="0" Padding="4"
                                  ItemContainerStyle="{StaticResource Oz.EntryListItem}"
-                                 AutomationProperties.Name="파일 목록" AutomationProperties.AutomationId="OZ-EntryList"
+                                 AutomationProperties.Name="{x:Static res:MainText.FileList_Name}" AutomationProperties.AutomationId="OZ-EntryList"
                                  MouseDoubleClick="OnGridDoubleClick" PreviewKeyDown="OnBrowseKeyDown" SelectionChanged="OnGridSelectionChanged" />
 
                         <!-- 찾기 결과(Ctrl+F): 압축 파일 전체에서 이름이 맞는 항목의 전체 경로. -->
@@ -169,7 +170,7 @@
                             <ListBox x:Name="FindResults" SelectionMode="Single" Background="{DynamicResource Oz.Background}" Foreground="{DynamicResource Oz.Text}"
                                      BorderThickness="0" Padding="4" ItemContainerStyle="{StaticResource Oz.EntryListItem}"
                                      VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
-                                     AutomationProperties.Name="찾기 결과" AutomationProperties.AutomationId="OZ-FindResults"
+                                     AutomationProperties.Name="{x:Static res:MainText.FindResults_Name}" AutomationProperties.AutomationId="OZ-FindResults"
                                      PreviewKeyDown="OnFindResultsKeyDown" MouseDoubleClick="OnFindResultsDoubleClick">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type models:FindHit}">
@@ -190,14 +191,14 @@
                 <StackPanel x:Name="StartContent" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="460">
                     <controls:AppLogo HorizontalAlignment="Center" />
                     <TextBlock Margin="0,18,0,0" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="15"
-                               Text="압축 파일을 끌어 놓거나 열기(Ctrl+O)를 누르세요" />
+                               Text="{x:Static res:MainText.Start_Prompt}" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
-                        <Button x:Name="EmptyOpenButton" Content="열기" Style="{StaticResource Oz.Button}" AutomationProperties.Name="열기" />
-                        <Button x:Name="EmptyCreateButton" Content="새 압축" Style="{StaticResource Oz.Button}" AutomationProperties.Name="새 압축" />
+                        <Button x:Name="EmptyOpenButton" Content="{x:Static res:MainText.StartOpen_Button}" Style="{StaticResource Oz.Button}" AutomationProperties.Name="{x:Static res:MainText.StartOpen_Button}" />
+                        <Button x:Name="EmptyCreateButton" Content="{x:Static res:MainText.StartNewArchive_Button}" Style="{StaticResource Oz.Button}" AutomationProperties.Name="{x:Static res:MainText.StartNewArchive_Button}" />
                     </StackPanel>
                     <TextBlock x:Name="EmptyReturnHint" Margin="0,14,0,0" HorizontalAlignment="Center" Visibility="Collapsed"
                                Foreground="{DynamicResource Oz.SecondaryText}" FontSize="{StaticResource Oz.SecondarySize}"
-                               Text="열린 압축 파일로 돌아가려면 F6 을 누르세요" />
+                               Text="{x:Static res:MainText.Start_ReturnHint}" />
                 </StackPanel>
             </Grid>
         </Grid>

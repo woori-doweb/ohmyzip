@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    앱 화면 문구. *.resx = 영어(기본), *.ko.resx = 한국어 위성 어셈블리.
+    WPF 프로젝트의 임시 마크업 컴파일(_wpftmp)은 resx 에서 만든 리소스 클래스를 보지 못하므로
+    문구는 이 별도 라이브러리에 두고 앱(XAML 의 x:Static 포함)이 참조한다.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>OhMyZip.App.Text</RootNamespace>
+    <NeutralLanguage>en</NeutralLanguage>
+    <SatelliteResourceLanguages>ko</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- resx 는 프로젝트 루트에 둔다: 매니페스트 이름(루트 네임스페이스 + 폴더 + 파일)과 생성 클래스의 이름이 같아야 문구를 찾는다. -->
+    <EmbeddedResource Update="*.resx">
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedNamespace>OhMyZip.App.Text</StronglyTypedNamespace>
+      <StronglyTypedClassName>%(Filename)</StronglyTypedClassName>
+      <StronglyTypedFileName>$(IntermediateOutputPath)%(Filename).Designer.cs</StronglyTypedFileName>
+      <PublicClass>true</PublicClass>
+    </EmbeddedResource>
+    <!-- 번역본은 클래스를 만들지 않는다. -->
+    <EmbeddedResource Update="*.ko.resx">
+      <StronglyTypedLanguage></StronglyTypedLanguage>
+      <StronglyTypedNamespace></StronglyTypedNamespace>
+      <StronglyTypedClassName></StronglyTypedClassName>
+      <StronglyTypedFileName></StronglyTypedFileName>
+      <PublicClass></PublicClass>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

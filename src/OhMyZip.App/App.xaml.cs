@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows;
 using Microsoft.Win32;
 using OhMyZip.App.Settings;
+using OhMyZip.App.Text;
 using OhMyZip.App.Theme;
 using OhMyZip.Core;
 
@@ -43,6 +44,10 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        // 설정은 시작할 때 한 번 읽는다. 화면 언어는 어떤 문구나 창보다도 먼저 정한다(명령줄 모드도 같은 언어).
+        // 읽기 실패 문장은 기본값(Windows 표시 언어)으로 만들어지고, 그때 설정도 기본값이라 언어가 같다.
+        var settingsError = AppSettings.Load();
+        UiLanguage.Apply(AppSettings.Current.Language);
         // 파일 연결 명령줄: 창 없이 현재 사용자(HKCU) 범위에 등록/해제하고 끝낸다(성공 0, 실패 1).
         if (e.Args.Length > 0 && (IsArg(e.Args[0], RegisterFileTypesArg) || IsArg(e.Args[0], UnregisterFileTypesArg)))
         {
@@ -59,8 +64,6 @@ public partial class App : Application
             AppUpdater.CleanupLeftovers(AppContext.BaseDirectory);
         }
         catch (Exception) { }
-        // 설정은 시작할 때 한 번 읽는다(테마 재정의가 첫 화면부터 적용되도록 테마보다 먼저).
-        var settingsError = AppSettings.Load();
         ThemeManager.Override = AppSettings.Current.Theme;
         ThemeManager.ReduceMotion = AppSettings.Current.ReduceMotion;
         ThemeManager.Initialize(this);
@@ -124,7 +127,7 @@ public partial class App : Application
         {
             if (register)
             {
-                string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("실행 파일 경로를 알 수 없습니다.");
+                string exePath = Environment.ProcessPath ?? throw new InvalidOperationException(MainText.ExePathUnknown);
                 FileAssociations.Register(Registry.CurrentUser, exePath);
             }
             else
@@ -136,7 +139,7 @@ public partial class App : Application
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"ohmyZip: 파일 연결 {(register ? "등록" : "해제")} 실패 — {ex.Message}");
+            Console.Error.WriteLine(string.Format(register ? MainText.FileTypes_RegisterFailed : MainText.FileTypes_UnregisterFailed, ex.Message));
             return 1;
         }
     }

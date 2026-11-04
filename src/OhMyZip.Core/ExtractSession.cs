@@ -1,3 +1,5 @@
+using OhMyZip.Core.Resources;
+
 namespace OhMyZip.Core;
 
 /// <summary>해제 한도 초과(압축 폭탄·항목 수). 세션 전체를 되돌린다.</summary>
@@ -56,7 +58,7 @@ internal sealed class ExtractSession
     {
         session = null!;
         if (selectedEntries > options.MaxEntries)
-            return OperationResult.Fail("항목 수 한도를 넘었습니다", $"항목 {selectedEntries}개 > 한도 {options.MaxEntries}개");
+            return OperationResult.Fail(EngineText.Extract_TooManyItems, string.Format(EngineText.Extract_TooManyItemsDetail, selectedEntries, options.MaxEntries));
         string root;
         try
         {
@@ -64,12 +66,12 @@ internal sealed class ExtractSession
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("대상 폴더 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail(EngineText.Extract_DestinationInvalid, ex.Message);
         }
         session = new ExtractSession(root, options, progress, cancel, totalBytes);
         string? error = session.EnsureDirectory(root);
         if (error is not null)
-            return OperationResult.Fail("대상 폴더를 만들 수 없습니다", error);
+            return OperationResult.Fail(EngineText.Extract_DestinationCreateFailed, error);
         return null;
     }
 
@@ -77,10 +79,10 @@ internal sealed class ExtractSession
     {
         _entries++;
         if (_entries > _options.MaxEntries)
-            throw new ExtractLimitException($"항목 수 한도({_options.MaxEntries}개)를 넘었습니다");
+            throw new ExtractLimitException(string.Format(EngineText.Extract_ItemLimitExceeded, _options.MaxEntries));
     }
 
-    public void Reject(string rawName, string reason) => _problems.Add($"거부: {rawName} — {reason}");
+    public void Reject(string rawName, string reason) => _problems.Add(string.Format(EngineText.Extract_Rejected, rawName, reason));
 
     private bool TryResolve(string rawName, out string relative, out string full)
     {
@@ -93,7 +95,7 @@ internal sealed class ExtractSession
         string? resolved = SafePaths.ResolveUnder(_root, relative);
         if (resolved is null)
         {
-            Reject(rawName, "대상 폴더 밖을 가리키는 경로");
+            Reject(rawName, EngineText.Extract_OutsideDestination);
             return false;
         }
         full = resolved;
@@ -106,7 +108,7 @@ internal sealed class ExtractSession
         CountEntry();
         if (isLink)
         {
-            Reject(rawName, "심볼릭 링크 항목");
+            Reject(rawName, EngineText.Extract_SymlinkItem);
             return;
         }
         if (!TryResolve(rawName, out string relative, out string full))
@@ -122,7 +124,7 @@ internal sealed class ExtractSession
         CountEntry();
         if (isLink)
         {
-            Reject(rawName, "심볼릭 링크 항목");
+            Reject(rawName, EngineText.Extract_SymlinkItem);
             return;
         }
         if (!TryResolve(rawName, out string relative, out string full))
@@ -140,12 +142,12 @@ internal sealed class ExtractSession
             switch (_options.Conflict)
             {
                 case ConflictPolicy.Skip:
-                    _notices.Add($"건너뜀(이미 있음): {relative}");
+                    _notices.Add(string.Format(EngineText.Extract_SkippedExisting, relative));
                     return;
                 case ConflictPolicy.Overwrite:
                     if (Directory.Exists(full))
                     {
-                        _problems.Add($"{relative}: 같은 이름의 폴더가 있어 덮어쓸 수 없습니다");
+                        _problems.Add(string.Format(EngineText.Extract_FolderInTheWay, relative));
                         return;
                     }
                     moveAside = true;
@@ -166,12 +168,12 @@ internal sealed class ExtractSession
             }
             catch (Exception ex) when (ex is IOException or InvalidDataException or SharpCompress.Common.SharpCompressException or NotSupportedException or UnauthorizedAccessException)
             {
-                _problems.Add($"{relative}: 해제 실패 — {ex.Message}");
+                _problems.Add(string.Format(EngineText.Extract_DecompressFailed, relative, ex.Message));
                 return;
             }
             if (expectedCrc is { } crc && crc != actualCrc)
             {
-                _problems.Add($"{relative}: CRC 불일치 (기대 {crc:X8}, 실제 {actualCrc:X8})");
+                _problems.Add(string.Format(EngineText.Common_CrcMismatch, relative, crc, actualCrc));
                 return;
             }
             if (modified is { } m)
@@ -192,7 +194,7 @@ internal sealed class ExtractSession
         }
         catch (IOException ex)
         {
-            _problems.Add($"{relative}: 쓰기 실패 — {ex.Message}");
+            _problems.Add(string.Format(EngineText.Extract_WriteFailed, relative, ex.Message));
         }
         finally
         {
@@ -214,7 +216,7 @@ internal sealed class ExtractSession
                 break;
             _processed += n;
             if (_processed > _options.MaxTotalBytes)
-                throw new ExtractLimitException($"해제 총량 한도({_options.MaxTotalBytes:N0} 바이트)를 넘었습니다 (압축 폭탄 의심)");
+                throw new ExtractLimitException(string.Format(EngineText.Extract_TotalLimitExceeded, _options.MaxTotalBytes));
             crc.Append(buffer.AsSpan(0, n));
             target.Write(buffer, 0, n);
             _progress?.Report(new ProgressInfo(_processed, _totalBytes, relative));
@@ -241,14 +243,14 @@ internal sealed class ExtractSession
         while (cur is not null && !Directory.Exists(cur))
         {
             if (File.Exists(cur))
-                return "같은 이름의 파일이 있어 폴더를 만들 수 없습니다";
+                return EngineText.Extract_FileInTheWay;
             missing.Push(cur);
             cur = Path.GetDirectoryName(cur);
         }
         for (string? c = cur; c is not null && SafePaths.IsStrictlyUnder(_root, c); c = Path.GetDirectoryName(c))
         {
             if ((File.GetAttributes(c) & FileAttributes.ReparsePoint) != 0)
-                return "링크(재분석 지점) 폴더를 거치는 경로는 풀지 않습니다";
+                return EngineText.Extract_ReparsePointPath;
         }
         while (missing.Count > 0)
         {
@@ -269,8 +271,10 @@ internal sealed class ExtractSession
         }
         _progress?.Report(new ProgressInfo(_processed, _totalBytes, null));
         if (_problems.Count > 0)
-            return new OperationResult(OperationStatus.Failed, $"일부 항목을 풀지 못했습니다 (문제 {_problems.Count}건, 파일 {_written}개 해제)", [.. _problems, .. _notices]);
-        string message = _notices.Count > 0 ? $"파일 {_written}개 해제, {_notices.Count}개 건너뜀" : $"파일 {_written}개 해제";
+            return new OperationResult(OperationStatus.Failed, string.Format(EngineText.Extract_PartialFailure, _problems.Count, _written), [.. _problems, .. _notices]);
+        string message = _notices.Count > 0
+            ? string.Format(EngineText.Extract_DoneWithSkipped, _written, _notices.Count)
+            : string.Format(EngineText.Extract_Done, _written);
         return new OperationResult(OperationStatus.Succeeded, message, [.. _notices]);
     }
 
@@ -301,7 +305,7 @@ internal sealed class ExtractSession
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                _problems.Add($"되돌리기 실패: {u.Path} — {ex.Message}");
+                _problems.Add(string.Format(EngineText.Extract_UndoFailed, u.Path, ex.Message));
             }
         }
         _undo.Clear();

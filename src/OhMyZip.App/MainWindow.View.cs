@@ -6,6 +6,7 @@ using OhMyZip.App.Commands;
 using OhMyZip.App.Dialogs;
 using OhMyZip.App.Models;
 using OhMyZip.App.Settings;
+using OhMyZip.App.Text;
 using OhMyZip.App.Theme;
 
 namespace OhMyZip.App;
@@ -99,7 +100,7 @@ public partial class MainWindow
         if (_extractMoreButton is not null)
         {
             _extractMoreButton.Style = (Style)FindResource(S.ToolbarMode == ToolbarMode.Classic ? "Oz.ToolbarClassicButton" : "Oz.ToolbarSmallButton");
-            _extractMoreButton.Content = S.ToolbarMode == ToolbarMode.Classic ? "▾" : "풀기 방식";
+            _extractMoreButton.Content = S.ToolbarMode == ToolbarMode.Classic ? "▾" : MainText.ExtractMore_Button;
             _extractMoreButton.MinWidth = 32;
             _extractMoreButton.Padding = new Thickness(2, 4, 2, 4);
             _extractMoreButton.Visibility = _toolbarButtons["archive.extract"].Visibility;
@@ -238,10 +239,10 @@ public partial class MainWindow
         if (more) hits.RemoveAt(hits.Count - 1);
         FindResults.ItemsSource = hits;
         FindSummary.Text = hits.Count == 0
-            ? $"'{_search}' 와(과) 맞는 항목이 없습니다 (압축 파일 전체에서 찾음)."
+            ? string.Format(MainText.Find_NoMatch, _search)
             : more
-                ? $"'{_search}' 찾기 결과: 처음 {MaxFindResults:N0}개만 표시 — 조건을 좁히세요. Enter = 위치로 이동, Esc = 지우기"
-                : $"'{_search}' 찾기 결과: {hits.Count:N0}개 (압축 파일 전체). Enter = 위치로 이동, Esc = 지우기";
+                ? string.Format(MainText.Find_Truncated, _search, MaxFindResults)
+                : string.Format(MainText.Find_Count, _search, hits.Count);
         FindPanel.Visibility = Visibility.Visible;
         UpdateUi();
     }

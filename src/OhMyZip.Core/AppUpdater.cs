@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -70,24 +71,24 @@ public sealed class AppUpdater
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
             using HttpResponseMessage response = await http.SendAsync(request, HttpCompletionOption.ResponseContentRead, ct).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.NotFound)
-                return Unavailable("아직 받을 수 있는 업데이트가 없습니다. 나중에 다시 확인하세요.");
+                return Unavailable(ServiceText.Update_NoneYet);
             if (response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.TooManyRequests)
-                return Unavailable("업데이트 서버가 지금은 요청을 받지 않습니다. 잠시 뒤 다시 확인하세요.");
+                return Unavailable(ServiceText.Update_ServerBusy);
             if (!response.IsSuccessStatusCode)
-                return Unavailable($"업데이트 정보를 받지 못했습니다(HTTP {(int)response.StatusCode}). 잠시 뒤 다시 확인하세요.");
+                return Unavailable(string.Format(ServiceText.Update_InfoHttpError, (int)response.StatusCode));
             json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
         }
         catch (HttpRequestException)
         {
-            return Unavailable("업데이트 서버에 연결하지 못했습니다. 인터넷 연결을 확인한 뒤 다시 확인하세요.");
+            return Unavailable(ServiceText.Update_CheckConnectFailed);
         }
         catch (OperationCanceledException) when (!ct.IsCancellationRequested)
         {
-            return Unavailable("업데이트 서버의 응답이 너무 늦습니다. 인터넷 연결을 확인한 뒤 다시 확인하세요.");
+            return Unavailable(ServiceText.Update_CheckTimeout);
         }
         catch (IOException)
         {
-            return Unavailable("업데이트 정보를 받는 중에 연결이 끊겼습니다. 인터넷 연결을 확인한 뒤 다시 확인하세요.");
+            return Unavailable(ServiceText.Update_CheckConnectionLost);
         }
 
         UpdateRelease? release;
@@ -98,14 +99,14 @@ public sealed class AppUpdater
         }
         catch (JsonException)
         {
-            (release, problem) = (null, "업데이트 정보를 읽지 못했습니다. 잠시 뒤 다시 확인하세요.");
+            (release, problem) = (null, ServiceText.Update_InfoUnreadable);
         }
         if (release is null)
             return Unavailable(problem!);
 
         return release.Version > installed
-            ? new UpdateCheckResult(UpdateCheckStatus.Available, release, $"새 버전을 받을 수 있습니다: {release.Version.ToString(3)} (지금 {installed.ToString(3)}).")
-            : new UpdateCheckResult(UpdateCheckStatus.UpToDate, null, $"최신 버전을 쓰고 있습니다({installed.ToString(3)}).");
+            ? new UpdateCheckResult(UpdateCheckStatus.Available, release, string.Format(ServiceText.Update_Available, release.Version.ToString(3), installed.ToString(3)))
+            : new UpdateCheckResult(UpdateCheckStatus.UpToDate, null, string.Format(ServiceText.Update_UpToDate, installed.ToString(3)));
     }
 
     /// <summary>
@@ -129,7 +130,7 @@ public sealed class AppUpdater
             string package = Path.Join(temp, assetName);
             string actual = await DownloadFileAsync(release.PackageUrl, package, progress, ct).ConfigureAwait(false);
             if (!string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase))
-                throw new UpdateFailure("내려받은 업데이트 파일이 손상되었습니다(SHA-256 불일치). 다시 받아 보세요.");
+                throw new UpdateFailure(ServiceText.Update_ChecksumMismatch);
 
             string files = Path.Join(temp, "files");
             ExtractPackage(package, files, ct);
@@ -148,7 +149,7 @@ public sealed class AppUpdater
         }
         catch (Exception ex) when (ex is not (UpdateFailure or OperationCanceledException))
         {
-            throw new UpdateFailure("업데이트를 내려받지 못했습니다. 인터넷 연결과 디스크 공간을 확인한 뒤 다시 시도하세요.", ex);
+            throw new UpdateFailure(ServiceText.Update_DownloadFailed, ex);
         }
         finally
         {
@@ -165,9 +166,9 @@ public sealed class AppUpdater
         ArgumentException.ThrowIfNullOrEmpty(stagedDir);
         string source = Path.TrimEndingDirectorySeparator(Path.GetFullPath(stagedDir));
         if (!File.Exists(Path.Join(source, MainExecutable)))
-            throw new UpdateFailure("설치할 업데이트 파일이 없습니다. 업데이트를 다시 받아 주세요.");
+            throw new UpdateFailure(ServiceText.Update_StagedMissing);
         if (!Directory.Exists(installRoot))
-            throw new UpdateFailure("ohmyZip 설치 폴더를 찾지 못했습니다. ohmyZip 을 다시 설치한 뒤 업데이트하세요.");
+            throw new UpdateFailure(ServiceText.Update_InstallFolderMissing);
 
         string[] files = Directory.GetFiles(source, "*", SearchOption.AllDirectories);
         Array.Sort(files, StringComparer.OrdinalIgnoreCase);
@@ -180,9 +181,9 @@ public sealed class AppUpdater
             {
                 string relative = Path.GetRelativePath(source, file);
                 string target = SafePaths.ResolveUnder(installRoot, relative)
-                    ?? throw new UpdateFailure($"업데이트 파일 '{relative}' 가 설치 폴더 밖을 가리킵니다. 업데이트를 다시 받아 주세요.");
+                    ?? throw new UpdateFailure(string.Format(ServiceText.Update_FileOutsideInstall, relative));
                 if (Directory.Exists(target))
-                    throw new UpdateFailure($"설치 폴더의 '{relative}' 가 폴더라서 파일로 바꿀 수 없습니다. 그 폴더를 옮긴 뒤 다시 시도하세요.");
+                    throw new UpdateFailure(string.Format(ServiceText.Update_TargetIsFolder, relative));
 
                 CreateMissingDirectories(Path.GetDirectoryName(target)!, createdDirectories);
                 string? backup = null;
@@ -199,12 +200,12 @@ public sealed class AppUpdater
         {
             bool restored = Rollback(replaced, createdDirectories);
             if (!restored)
-                throw new UpdateFailure("업데이트를 설치하다 멈췄고 일부 파일을 되돌리지 못했습니다. ohmyZip 을 새로 내려받아 설치 폴더에 다시 풀어 주세요.", ex);
+                throw new UpdateFailure(ServiceText.Update_RollbackIncomplete, ex);
             if (ex is UpdateFailure)
-                throw new UpdateFailure($"업데이트를 설치하지 못해 원래 파일로 되돌렸습니다. {ex.Message}", ex);
+                throw new UpdateFailure(string.Format(ServiceText.Update_RolledBackDetail, ex.Message), ex);
             if (ex is UnauthorizedAccessException)
-                throw new UpdateFailure("설치 폴더에 쓸 권한이 없어 업데이트를 설치하지 못했습니다(원래 파일로 되돌림). 쓰기 권한이 있는 폴더로 ohmyZip 을 옮기거나 관리자 권한으로 실행한 뒤 다시 시도하세요.", ex);
-            throw new UpdateFailure("업데이트를 설치하지 못해 원래 파일로 되돌렸습니다. 다른 프로그램이 ohmyZip 파일을 쓰고 있지 않은지 확인한 뒤 다시 시도하세요.", ex);
+                throw new UpdateFailure(ServiceText.Update_AccessDenied, ex);
+            throw new UpdateFailure(ServiceText.Update_RolledBack, ex);
         }
     }
 
@@ -262,14 +263,14 @@ public sealed class AppUpdater
         using JsonDocument doc = JsonDocument.Parse(json);
         JsonElement root = doc.RootElement;
         if (root.ValueKind != JsonValueKind.Object)
-            return (null, "업데이트 정보를 읽지 못했습니다. 잠시 뒤 다시 확인하세요.");
+            return (null, ServiceText.Update_InfoUnreadable);
         if (IsTrue(root, "draft") || IsTrue(root, "prerelease"))
-            return (null, "아직 받을 수 있는 업데이트가 없습니다. 나중에 다시 확인하세요.");
+            return (null, ServiceText.Update_NoneYet);
 
         string? tag = StringProperty(root, "tag_name");
         Match m = TagPattern.Match(tag ?? "");
         if (tag is null || !m.Success)
-            return (null, "최신 릴리스의 버전 표시를 읽지 못했습니다. 잠시 뒤 다시 확인하세요.");
+            return (null, ServiceText.Update_TagUnreadable);
         var version = new Version(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), int.Parse(m.Groups[3].Value));
         string versionText = version.ToString(3);
 
@@ -298,7 +299,7 @@ public sealed class AppUpdater
             }
         }
         if (package is null || checksum is null)
-            return (null, $"최신 릴리스 {tag} 에 설치 파일이 아직 없습니다. 잠시 뒤 다시 확인하세요.");
+            return (null, string.Format(ServiceText.Update_PackageMissing, tag));
 
         foreach (var (browser, api) in new[] { package.Value, checksum.Value })
         {
@@ -337,17 +338,17 @@ public sealed class AppUpdater
         }
         catch (HttpRequestException ex)
         {
-            throw new UpdateFailure("업데이트 서버에 연결하지 못했습니다. 인터넷 연결을 확인한 뒤 다시 시도하세요.", ex);
+            throw new UpdateFailure(ServiceText.Update_ConnectFailed, ex);
         }
         catch (OperationCanceledException ex) when (!ct.IsCancellationRequested)
         {
-            throw new UpdateFailure("업데이트 서버의 응답이 너무 늦습니다. 인터넷 연결을 확인한 뒤 다시 시도하세요.", ex);
+            throw new UpdateFailure(ServiceText.Update_Timeout, ex);
         }
         if (!response.IsSuccessStatusCode)
         {
             int code = (int)response.StatusCode;
             response.Dispose();
-            throw new UpdateFailure($"업데이트 파일을 받지 못했습니다(HTTP {code}). 잠시 뒤 다시 시도하세요.");
+            throw new UpdateFailure(string.Format(ServiceText.Update_FileHttpError, code));
         }
         return response;
     }
@@ -363,14 +364,14 @@ public sealed class AppUpdater
         while (length < buffer.Length && (read = await stream.ReadAsync(buffer.AsMemory(length), ct).ConfigureAwait(false)) > 0)
             length += read;
         if (length > MaxChecksumBytes)
-            throw new UpdateFailure("업데이트 검증 정보의 형식이 맞지 않습니다. 잠시 뒤 다시 시도하세요.");
+            throw new UpdateFailure(ServiceText.Update_ChecksumFormat);
 
         string text = Encoding.UTF8.GetString(buffer, 0, length).Trim('\uFEFF', ' ', '\t', '\r', '\n');
         Match m = ChecksumPattern.Match(text);
         if (!m.Success)
-            throw new UpdateFailure("업데이트 검증 정보의 형식이 맞지 않습니다. 잠시 뒤 다시 시도하세요.");
+            throw new UpdateFailure(ServiceText.Update_ChecksumFormat);
         if (!string.Equals(m.Groups[2].Value, assetName, StringComparison.Ordinal))
-            throw new UpdateFailure("업데이트 검증 정보가 설치 파일과 맞지 않습니다. 잠시 뒤 다시 시도하세요.");
+            throw new UpdateFailure(ServiceText.Update_ChecksumWrongFile);
         return m.Groups[1].Value.ToLowerInvariant();
     }
 
@@ -411,17 +412,17 @@ public sealed class AppUpdater
             foreach (ZipArchiveEntry entry in zip.Entries)
             {
                 if (!SafePaths.TryGetSafeRelative(entry.FullName, out string relative, out _))
-                    throw new UpdateFailure("업데이트 파일에 허용되지 않는 경로가 들어 있습니다. 업데이트를 다시 받아 보세요.");
+                    throw new UpdateFailure(ServiceText.Update_PackageBadPath);
                 bool isDirectory = SafePaths.EndsWithSeparator(entry.FullName);
                 int slash = relative.IndexOf('/');
                 string first = slash < 0 ? relative : relative[..slash];
                 string rest = slash < 0 ? "" : relative[(slash + 1)..];
                 if (!isDirectory && rest.Length == 0)
-                    throw new UpdateFailure("업데이트 파일의 구성이 올바르지 않습니다. 업데이트를 다시 받아 보세요.");
+                    throw new UpdateFailure(ServiceText.Update_PackageBadLayout);
                 if (top is null)
                     top = first;
                 else if (!string.Equals(top, first, StringComparison.Ordinal))
-                    throw new UpdateFailure("업데이트 파일의 구성이 올바르지 않습니다. 업데이트를 다시 받아 보세요.");
+                    throw new UpdateFailure(ServiceText.Update_PackageBadLayout);
                 if (rest.Length == 0)
                     continue;
                 if (!isDirectory && string.Equals(rest, MainExecutable, StringComparison.OrdinalIgnoreCase))
@@ -429,14 +430,14 @@ public sealed class AppUpdater
                 plan.Add((entry, rest, isDirectory));
             }
             if (!hasExecutable)
-                throw new UpdateFailure("업데이트 파일에 ohmyZip.exe 가 없습니다. 업데이트를 다시 받아 보세요.");
+                throw new UpdateFailure(ServiceText.Update_PackageNoExe);
 
             Directory.CreateDirectory(target);
             foreach (var (entry, relative, isDirectory) in plan)
             {
                 ct.ThrowIfCancellationRequested();
                 string path = SafePaths.ResolveUnder(target, relative)
-                    ?? throw new UpdateFailure("업데이트 파일에 허용되지 않는 경로가 들어 있습니다. 업데이트를 다시 받아 보세요.");
+                    ?? throw new UpdateFailure(ServiceText.Update_PackageBadPath);
                 if (isDirectory)
                 {
                     Directory.CreateDirectory(path);
@@ -450,7 +451,7 @@ public sealed class AppUpdater
         }
         catch (InvalidDataException ex)
         {
-            throw new UpdateFailure("내려받은 업데이트 파일을 풀 수 없습니다. 업데이트를 다시 받아 보세요.", ex);
+            throw new UpdateFailure(ServiceText.Update_PackageUnreadable, ex);
         }
     }
 

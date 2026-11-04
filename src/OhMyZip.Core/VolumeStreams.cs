@@ -1,3 +1,5 @@
+using OhMyZip.Core.Resources;
+
 namespace OhMyZip.Core;
 
 /// <summary>분할 압축 조각 이름 규칙: name.7z → name.7z.001, name.7z.002 …</summary>
@@ -71,7 +73,7 @@ internal sealed class VolumeWriteStream : Stream
         if (index == _currentIndex && _current is not null)
             return _current;
         if (index < _parts.Count && index != 0)
-            throw new NotSupportedException("첫 조각과 현재 조각 밖으로는 되돌아가 쓸 수 없습니다");
+            throw new NotSupportedException(EngineText.Volume_CannotSeekBackToWrite);
         // 새 조각은 차례대로만 만든다.
         while (_parts.Count <= index)
         {
@@ -118,7 +120,7 @@ internal sealed class VolumeWriteStream : Stream
             _ => _length + offset,
         };
         if (target < 0 || target > _length)
-            throw new IOException("분할 스트림 범위 밖으로 이동할 수 없습니다");
+            throw new IOException(EngineText.Volume_SeekOutOfRange);
         _position = target;
         return target;
     }
@@ -217,7 +219,7 @@ internal sealed class VolumeReadStream : Stream
             _ => _length + offset,
         };
         if (target < 0)
-            throw new IOException("스트림 앞으로 이동할 수 없습니다");
+            throw new IOException(EngineText.Stream_SeekBeforeStart);
         _position = target;
         return target;
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using OhMyZip.App.Dialogs;
 using OhMyZip.App.Settings;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App;
@@ -58,7 +59,7 @@ public partial class MainWindow
             var staged = await Task.Run(() => updater.DownloadAsync(release, null, cts.Token), cts.Token);
             if (cts.IsCancellationRequested) return;
             App.PendingUpdate = (staged, release.Version);
-            ShowNotice($"새 버전 {VersionText(release.Version)} 을(를) 받았습니다. 프로그램을 닫으면 설치됩니다.");
+            ShowNotice(string.Format(MainText.Update_Downloaded, VersionText(release.Version)));
         }
         catch (Exception)
         {
@@ -79,7 +80,7 @@ public partial class MainWindow
         var current = App.CurrentVersion;
         UpdateCheckResult check;
         SetUpdating(true);
-        _notice = "업데이트를 확인하는 중…";
+        _notice = MainText.Update_Checking;
         UpdateStatusText();
         AnnounceStatus();
         try
@@ -90,7 +91,7 @@ public partial class MainWindow
         catch (OperationCanceledException)
         {
             check = new UpdateCheckResult(UpdateCheckStatus.Unavailable, null,
-                $"업데이트 서버가 {ManualCheckTimeout.TotalSeconds:0}초 안에 응답하지 않았습니다.");
+                string.Format(MainText.Update_Timeout, ManualCheckTimeout.TotalSeconds));
         }
         finally
         {
@@ -102,16 +103,15 @@ public partial class MainWindow
         switch (check.Status)
         {
             case UpdateCheckStatus.UpToDate:
-                ShowNotice($"최신 버전입니다 ({VersionText(current)}).");
+                ShowNotice(string.Format(MainText.Update_UpToDate, VersionText(current)));
                 return;
             case UpdateCheckStatus.Available when check.Release is { } release:
                 await InstallUpdateAsync(updater, current, release);
                 return;
             default:
-                MessageDialog.Show(this, DialogKind.Warning, "업데이트를 확인할 수 없습니다",
-                    $"{check.Message}\n인터넷 연결을 확인한 뒤 도움말 > 업데이트 확인… 을 다시 누르세요. "
-                    + $"계속 안 되면 릴리스 페이지에서 새 버전을 직접 받을 수 있습니다: https://github.com/{AppUpdater.Repository}/releases",
-                    null, ["확인"]);
+                MessageDialog.Show(this, DialogKind.Warning, MainText.UpdateCheckFailed_Title,
+                    string.Format(MainText.UpdateCheckFailed_Body, check.Message, AppUpdater.Repository),
+                    null, [MainText.OK_Button]);
                 return;
         }
     }
@@ -120,10 +120,9 @@ public partial class MainWindow
     private async Task InstallUpdateAsync(AppUpdater updater, Version current, UpdateRelease release)
     {
         var newVersion = VersionText(release.Version);
-        int answer = MessageDialog.Show(this, DialogKind.Question, $"새 버전 {newVersion} 을(를) 설치할까요?",
-            $"현재 버전: {VersionText(current)}\n새 버전: {newVersion}\n\n바뀐 점:\n{FormatNotes(release)}\n\n"
-            + "업데이트하면 새 버전을 내려받아 설치한 뒤 ohmyZip 을 다시 시작합니다.",
-            null, ["업데이트", "취소"], defaultIndex: 0, cancelIndex: 1);
+        int answer = MessageDialog.Show(this, DialogKind.Question, string.Format(MainText.UpdateInstall_Title, newVersion),
+            string.Format(MainText.UpdateInstall_Body, VersionText(current), newVersion, FormatNotes(release)),
+            null, [MainText.Update_Button, MainText.Cancel_Button], defaultIndex: 0, cancelIndex: 1);
         if (answer != 0) return;
 
         string staged;
@@ -133,18 +132,18 @@ public partial class MainWindow
         }
         catch (OperationCanceledException)
         {
-            ShowNotice("업데이트 내려받기를 취소했습니다. 프로그램은 바뀌지 않았습니다.");
+            ShowNotice(MainText.UpdateDownloadCancelled);
             return;
         }
         catch (IOException ex)
         {
-            MessageDialog.Error(this, "업데이트를 내려받지 못했습니다", ex.Message);
+            MessageDialog.Error(this, MainText.UpdateDownloadFailed_Title, ex.Message);
             return;
         }
         catch (Exception ex)
         {
-            MessageDialog.Error(this, "업데이트를 내려받지 못했습니다",
-                $"{ex.Message}\n인터넷 연결을 확인한 뒤 도움말 > 업데이트 확인… 을 다시 누르세요.");
+            MessageDialog.Error(this, MainText.UpdateDownloadFailed_Title,
+                string.Format(MainText.UpdateDownloadFailed_Body, ex.Message));
             return;
         }
 
@@ -155,15 +154,13 @@ public partial class MainWindow
         }
         catch (Exception ex) when (ex is UnauthorizedAccessException || ex.InnerException is UnauthorizedAccessException)
         {
-            MessageDialog.Error(this, "업데이트를 설치하지 못했습니다",
-                $"설치 폴더에 쓸 권한이 없습니다: {AppContext.BaseDirectory}\n"
-                + "ohmyZip 을 관리자 권한으로 실행해 다시 업데이트하거나, 쓰기 권한이 있는 폴더(예: 사용자 폴더)로 옮겨 설치하세요. "
-                + $"릴리스 페이지에서 압축 파일을 받아 직접 풀어 넣어도 됩니다: {release.PageUrl}");
+            MessageDialog.Error(this, MainText.UpdateInstallFailed_Title,
+                string.Format(MainText.UpdateInstallFailed_NoAccess, AppContext.BaseDirectory, release.PageUrl));
             return;
         }
         catch (IOException ex)
         {
-            MessageDialog.Error(this, "업데이트를 설치하지 못했습니다", ex.Message);
+            MessageDialog.Error(this, MainText.UpdateInstallFailed_Title, ex.Message);
             return;
         }
         finally
@@ -190,7 +187,7 @@ public partial class MainWindow
         {
             if (await Task.WhenAny(task, Task.Delay(300)) != task)
             {
-                var window = new ProgressWindow("업데이트 내려받는 중", name, reporter, task, cts) { Owner = this };
+                var window = new ProgressWindow(MainText.UpdateDownloading_Title, name, reporter, task, cts) { Owner = this };
                 window.ShowDialog();
             }
             return await task;
@@ -208,7 +205,7 @@ public partial class MainWindow
         var exe = App.ExecutablePath;
         if (exe is null)
         {
-            MessageDialog.Info(this, $"새 버전 {newVersion} 을(를) 설치했습니다", "ohmyZip 을 다시 실행하면 새 버전이 시작됩니다.");
+            MessageDialog.Info(this, string.Format(MainText.UpdateInstalled_Title, newVersion), MainText.UpdateInstalled_Body);
             Close();
             return;
         }
@@ -221,8 +218,8 @@ public partial class MainWindow
         }
         catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or FileNotFoundException)
         {
-            MessageDialog.Error(this, "새 버전을 시작하지 못했습니다",
-                $"업데이트는 설치했습니다. ohmyZip 을 닫은 뒤 다시 실행하세요.\n{ex.Message}");
+            MessageDialog.Error(this, MainText.UpdateRestartFailed_Title,
+                string.Format(MainText.UpdateRestartFailed_Body, ex.Message));
             return;
         }
         Close();
@@ -239,9 +236,9 @@ public partial class MainWindow
     private static string FormatNotes(UpdateRelease release)
     {
         var lines = release.Notes.Replace("\r\n", "\n").Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        if (lines.Length == 0) return $"(설명 없음 — 릴리스 페이지: {release.PageUrl})";
+        if (lines.Length == 0) return string.Format(MainText.UpdateNotes_None, release.PageUrl);
         var shown = string.Join("\n", lines.Take(MaxNoteLines));
-        return lines.Length <= MaxNoteLines ? shown : $"{shown}\n… 외 {lines.Length - MaxNoteLines:N0}줄 — 전체 내용: {release.PageUrl}";
+        return lines.Length <= MaxNoteLines ? shown : string.Format(MainText.UpdateNotes_More, shown, lines.Length - MaxNoteLines, release.PageUrl);
     }
 
     private static string VersionText(Version v) => v.Build >= 0 ? v.ToString(3) : v.ToString();

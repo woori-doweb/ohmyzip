@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using OhMyZip.App.Text;
 
 namespace OhMyZip.App.Commands;
 
@@ -14,81 +15,93 @@ public sealed record MenuSpec(string Id, string Menu, string? Submenu, string He
 /// </summary>
 public static class CommandCatalog
 {
-    public const string PendingSuffix = " (준비 중)";
+    public static readonly string PendingSuffix = MenuText.PendingSuffix;
 
-    /// <summary>최상위 메뉴 7개(표시 순서). Name 은 MenuSpec.Menu 와 대응.</summary>
+    /// <summary>최상위 메뉴 이름(화면에 보이지 않는 식별자). MenuSpec.Menu 는 이 값 중 하나.</summary>
+    private static class MenuIds
+    {
+        public const string File = "file";
+        public const string Edit = "edit";
+        public const string Find = "find";
+        public const string Settings = "settings";
+        public const string View = "view";
+        public const string Tools = "tools";
+        public const string Help = "help";
+    }
+
+    /// <summary>최상위 메뉴 7개(표시 순서). Name 은 MenuSpec.Menu 와 대응, Header 는 화면 문구(접근 키 포함).</summary>
     public static readonly IReadOnlyList<(string Name, string Header)> Menus =
     [
-        ("파일", "파일(_F)"),
-        ("편집", "편집(_E)"),
-        ("찾기", "찾기(_I)"),
-        ("설정", "설정(_S)"),
-        ("보기", "보기(_V)"),
-        ("도구", "도구(_T)"),
-        ("도움말", "도움말(_A)"),
+        (MenuIds.File, MenuText.Menu_File),
+        (MenuIds.Edit, MenuText.Menu_Edit),
+        (MenuIds.Find, MenuText.Menu_Find),
+        (MenuIds.Settings, MenuText.Menu_Settings),
+        (MenuIds.View, MenuText.Menu_View),
+        (MenuIds.Tools, MenuText.Menu_Tools),
+        (MenuIds.Help, MenuText.Menu_Help),
     ];
 
     /// <summary>메뉴 명령 58개(OZ-C001~C058), 표시 순서.</summary>
     public static readonly IReadOnlyList<MenuSpec> Items =
     [
-        new("OZ-C001", "파일", null, "압축 파일 열기…", "Ctrl+O", "archive.open"),
-        new("OZ-C002", "파일", null, "새로 압축…", "Ctrl+N", "archive.create"),
-        new("OZ-C003", "파일", null, "압축 파일 닫기", "F4", "archive.close"),
-        new("OZ-C004", "파일", null, "다른 이름으로 저장…", null, "archive.save-as"),
-        new("OZ-C005", "파일", null, "압축 파일 삭제", "Ctrl+Del", "archive.delete-file"),
-        new("OZ-C006", "파일", null, "압축 파일 완전 삭제", "Shift+Ctrl+Del", "archive.shred"),
-        new("OZ-C007", "파일", null, "압축 파일이 있는 폴더 열기", null, "archive.reveal"),
-        new("OZ-C008", "파일", null, "압축 파일 테스트", "Ctrl+T", "archive.test"),
-        new("OZ-C009", "파일", null, "압축 파일 악성코드 검사", "Ctrl+I", "archive.scan"),
-        new("OZ-C010", "파일", null, "압축 풀기…", "Ctrl+E", "archive.extract"),
-        new("OZ-C011", "파일", null, "새 창 띄우기", "Ctrl+Shift+N", "app.new-window"),
-        new("OZ-C012", "파일", null, "새 창 띄우기(관리자 권한)", "Ctrl+Alt+N", "app.new-window-admin"),
-        new("OZ-C013", "파일", null, "종료", "Ctrl+W", "app.exit"),
-        new("OZ-C014", "편집", null, "이름 바꾸기…", "F2", "entry.rename"),
-        new("OZ-C015", "편집", null, "파일 추가…", "Ins", "entry.add"),
-        new("OZ-C016", "편집", null, "파일 삭제", "Del", "entry.delete"),
-        new("OZ-C017", "편집", null, "압축 파일 설명 편집…", "Ctrl+Shift+M", "archive.comment"),
-        new("OZ-C018", "편집", null, "클립보드로 파일 복사하기", "Ctrl+C", "entry.copy"),
-        new("OZ-C019", "편집", null, "클립보드에서 파일 붙여 넣기", "Ctrl+V", "entry.paste"),
-        new("OZ-C020", "편집", null, "파일의 경로명을 클립보드로 복사", null, "entry.copy-path"),
-        new("OZ-C021", "찾기", null, "파일 찾기", "Ctrl+F", "view.find"),
-        new("OZ-C022", "설정", null, "환경 설정…", "F5", "app.preferences"),
-        new("OZ-C023", "설정", null, "제품 등록…", null, "app.register"),
-        new("OZ-C024", "설정", null, "제품 등록 삭제…", null, "app.unregister"),
-        new("OZ-C025", "설정", null, "암호 관리자…", null, "app.passwords"),
-        new("OZ-C026", "보기", null, "시작 화면", "F6", "view.start"),
-        new("OZ-C027", "보기", null, "트리 컨트롤", "F7", "view.sidebar"),
-        new("OZ-C028", "보기", null, "압축 파일 설명", "F8", "view.comment"),
-        new("OZ-C029", "보기", null, "이미지 파일 미리 보기 사용", null, "view.preview"),
-        new("OZ-C030", "보기", null, "상태 표시줄", null, "view.statusbar"),
-        new("OZ-C031", "보기", "툴바", "크게", null, "view.toolbar"),
-        new("OZ-C032", "보기", "툴바", "작게", null, "view.toolbar"),
-        new("OZ-C033", "보기", "툴바", "구식", null, "view.toolbar"),
-        new("OZ-C034", "보기", "툴바", "숨기기", null, "view.toolbar"),
-        new("OZ-C035", "보기", "툴바", "툴바 버튼 설정…", null, "view.toolbar"),
-        new("OZ-C036", "보기", "파일 목록", "자세히", null, "view.listmode"),
-        new("OZ-C037", "보기", "파일 목록", "간단히", null, "view.listmode"),
-        new("OZ-C038", "보기", "파일 목록", "아이콘", null, "view.listmode"),
-        new("OZ-C039", "보기", "파일 목록", "큰 아이콘", null, "view.listmode"),
-        new("OZ-C040", "보기", "칼럼 설정", "압축 크기", null, "view.columns"),
-        new("OZ-C041", "보기", "칼럼 설정", "원본 크기", null, "view.columns"),
-        new("OZ-C042", "보기", "칼럼 설정", "파일 종류", null, "view.columns"),
-        new("OZ-C043", "보기", "칼럼 설정", "수정한 날짜", null, "view.columns"),
-        new("OZ-C044", "보기", "칼럼 설정", "압축 방식", null, "view.columns"),
-        new("OZ-C045", "보기", "칼럼 설정", "암호 방식", null, "view.columns"),
-        new("OZ-C046", "보기", "칼럼 설정", "CRC", null, "view.columns"),
-        new("OZ-C047", "보기", "칼럼 설정", "속성", null, "view.columns"),
-        new("OZ-C048", "보기", "칼럼 설정", "파일 설명", null, "view.columns"),
-        new("OZ-C049", "보기", "칼럼 설정", "부가 정보", null, "view.columns"),
-        new("OZ-C050", "보기", null, "항상 위에 표시", null, "view.topmost"),
-        new("OZ-C051", "보기", null, "색상 설정…", null, "view.theme"),
-        new("OZ-C052", "도구", null, "손상된 압축 파일 복구…", null, "tools.repair"),
-        new("OZ-C053", "도구", null, "압축 파일 암호 복구…", null, "tools.recover-password"),
-        new("OZ-C054", "도움말", null, "정보", "F1", "help.about"),
-        new("OZ-C055", "도움말", null, "프로그램 설치 폴더 열기", null, "help.install-folder"),
-        new("OZ-C056", "도움말", null, "도움말 페이지 열기", null, "help.docs"),
-        new("OZ-C057", "도움말", null, "토론 게시판 열기", null, "help.forum"),
-        new("OZ-C058", "도움말", null, "홈페이지 열기", null, "help.home"),
+        new("OZ-C001", MenuIds.File, null, MenuText.Label_OpenArchive, "Ctrl+O", "archive.open"),
+        new("OZ-C002", MenuIds.File, null, MenuText.Label_NewArchive, "Ctrl+N", "archive.create"),
+        new("OZ-C003", MenuIds.File, null, MenuText.Label_CloseArchive, "F4", "archive.close"),
+        new("OZ-C004", MenuIds.File, null, MenuText.Label_SaveAs, null, "archive.save-as"),
+        new("OZ-C005", MenuIds.File, null, MenuText.Label_DeleteArchive, "Ctrl+Del", "archive.delete-file"),
+        new("OZ-C006", MenuIds.File, null, MenuText.Label_SecureDeleteArchive, "Shift+Ctrl+Del", "archive.shred"),
+        new("OZ-C007", MenuIds.File, null, MenuText.Label_OpenContainingFolder, null, "archive.reveal"),
+        new("OZ-C008", MenuIds.File, null, MenuText.Label_TestArchive, "Ctrl+T", "archive.test"),
+        new("OZ-C009", MenuIds.File, null, MenuText.Label_ScanForMalware, "Ctrl+I", "archive.scan"),
+        new("OZ-C010", MenuIds.File, null, MenuText.Label_Extract, "Ctrl+E", "archive.extract"),
+        new("OZ-C011", MenuIds.File, null, MenuText.Label_NewWindow, "Ctrl+Shift+N", "app.new-window"),
+        new("OZ-C012", MenuIds.File, null, MenuText.Label_NewWindowAdmin, "Ctrl+Alt+N", "app.new-window-admin"),
+        new("OZ-C013", MenuIds.File, null, MenuText.Label_Exit, "Ctrl+W", "app.exit"),
+        new("OZ-C014", MenuIds.Edit, null, MenuText.Label_Rename, "F2", "entry.rename"),
+        new("OZ-C015", MenuIds.Edit, null, MenuText.Label_AddFiles, "Ins", "entry.add"),
+        new("OZ-C016", MenuIds.Edit, null, MenuText.Label_DeleteFiles, "Del", "entry.delete"),
+        new("OZ-C017", MenuIds.Edit, null, MenuText.Label_EditComment, "Ctrl+Shift+M", "archive.comment"),
+        new("OZ-C018", MenuIds.Edit, null, MenuText.Label_CopyToClipboard, "Ctrl+C", "entry.copy"),
+        new("OZ-C019", MenuIds.Edit, null, MenuText.Label_PasteFromClipboard, "Ctrl+V", "entry.paste"),
+        new("OZ-C020", MenuIds.Edit, null, MenuText.Label_CopyPath, null, "entry.copy-path"),
+        new("OZ-C021", MenuIds.Find, null, MenuText.Label_FindFiles, "Ctrl+F", "view.find"),
+        new("OZ-C022", MenuIds.Settings, null, MenuText.Label_Settings, "F5", "app.preferences"),
+        new("OZ-C023", MenuIds.Settings, null, MenuText.Label_Register, null, "app.register"),
+        new("OZ-C024", MenuIds.Settings, null, MenuText.Label_Unregister, null, "app.unregister"),
+        new("OZ-C025", MenuIds.Settings, null, MenuText.Label_PasswordManager, null, "app.passwords"),
+        new("OZ-C026", MenuIds.View, null, MenuText.Label_StartScreen, "F6", "view.start"),
+        new("OZ-C027", MenuIds.View, null, MenuText.Label_FolderTree, "F7", "view.sidebar"),
+        new("OZ-C028", MenuIds.View, null, MenuText.Label_ArchiveComment, "F8", "view.comment"),
+        new("OZ-C029", MenuIds.View, null, MenuText.Label_ImagePreview, null, "view.preview"),
+        new("OZ-C030", MenuIds.View, null, MenuText.Label_StatusBar, null, "view.statusbar"),
+        new("OZ-C031", MenuIds.View, MenuText.Submenu_Toolbar, MenuText.Label_ToolbarLarge, null, "view.toolbar"),
+        new("OZ-C032", MenuIds.View, MenuText.Submenu_Toolbar, MenuText.Label_ToolbarSmall, null, "view.toolbar"),
+        new("OZ-C033", MenuIds.View, MenuText.Submenu_Toolbar, MenuText.Label_ToolbarClassic, null, "view.toolbar"),
+        new("OZ-C034", MenuIds.View, MenuText.Submenu_Toolbar, MenuText.Label_ToolbarHide, null, "view.toolbar"),
+        new("OZ-C035", MenuIds.View, MenuText.Submenu_Toolbar, MenuText.Label_ToolbarButtons, null, "view.toolbar"),
+        new("OZ-C036", MenuIds.View, MenuText.Submenu_FileList, MenuText.Label_ListDetails, null, "view.listmode"),
+        new("OZ-C037", MenuIds.View, MenuText.Submenu_FileList, MenuText.Label_ListSimple, null, "view.listmode"),
+        new("OZ-C038", MenuIds.View, MenuText.Submenu_FileList, MenuText.Label_ListIcons, null, "view.listmode"),
+        new("OZ-C039", MenuIds.View, MenuText.Submenu_FileList, MenuText.Label_ListLargeIcons, null, "view.listmode"),
+        new("OZ-C040", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnPackedSize, null, "view.columns"),
+        new("OZ-C041", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnSize, null, "view.columns"),
+        new("OZ-C042", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnType, null, "view.columns"),
+        new("OZ-C043", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnModified, null, "view.columns"),
+        new("OZ-C044", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnMethod, null, "view.columns"),
+        new("OZ-C045", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnEncryption, null, "view.columns"),
+        new("OZ-C046", MenuIds.View, MenuText.Submenu_Columns, "CRC", null, "view.columns"),
+        new("OZ-C047", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnAttributes, null, "view.columns"),
+        new("OZ-C048", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnDescription, null, "view.columns"),
+        new("OZ-C049", MenuIds.View, MenuText.Submenu_Columns, MenuText.Label_ColumnExtraInfo, null, "view.columns"),
+        new("OZ-C050", MenuIds.View, null, MenuText.Label_AlwaysOnTop, null, "view.topmost"),
+        new("OZ-C051", MenuIds.View, null, MenuText.Label_ColorTheme, null, "view.theme"),
+        new("OZ-C052", MenuIds.Tools, null, MenuText.Label_RepairArchive, null, "tools.repair"),
+        new("OZ-C053", MenuIds.Tools, null, MenuText.Label_RecoverPassword, null, "tools.recover-password"),
+        new("OZ-C054", MenuIds.Help, null, MenuText.Label_About, "F1", "help.about"),
+        new("OZ-C055", MenuIds.Help, null, MenuText.Label_OpenInstallFolder, null, "help.install-folder"),
+        new("OZ-C056", MenuIds.Help, null, MenuText.Label_OpenHelp, null, "help.docs"),
+        new("OZ-C057", MenuIds.Help, null, MenuText.Label_OpenForum, null, "help.forum"),
+        new("OZ-C058", MenuIds.Help, null, MenuText.Label_OpenHomepage, null, "help.home"),
     ];
 
     /// <summary>
@@ -99,8 +112,8 @@ public static class CommandCatalog
     /// </summary>
     public static readonly IReadOnlyList<(string AfterKey, MenuSpec Spec)> FeatureItems =
     [
-        ("archive.extract", new("OZ-F027", "파일", null, "알아서 풀기", null, "archive.extract.smart")),
-        ("help.about", new("OZ-AppUpdate", "도움말", null, "업데이트 확인…", null, "app.update")),
+        ("archive.extract", new("OZ-F027", MenuIds.File, null, MenuText.Label_SmartExtract, null, "archive.extract.smart")),
+        ("help.about", new("OZ-AppUpdate", MenuIds.Help, null, MenuText.Label_CheckForUpdates, null, "app.update")),
     ];
 
     /// <summary>
@@ -130,9 +143,9 @@ public static class CommandCatalog
     /// <summary>툴바 3묶음. 모든 키는 <see cref="Items"/> 에 있어야 한다(OZ-A06).</summary>
     public static readonly IReadOnlyList<IReadOnlyList<ToolbarSpec>> ToolbarGroups =
     [
-        [new("archive.open", "열기", "\uE8E5"), new("archive.create", "새 압축", "\uE7B8")],
-        [new("archive.extract", "풀기", "\uE896", IsPrimary: true), new("entry.add", "추가", "\uE710"), new("entry.delete", "삭제", "\uE74D")],
-        [new("archive.test", "테스트", "\uE73E")],
+        [new("archive.open", MenuText.Toolbar_Open, "\uE8E5"), new("archive.create", MenuText.Toolbar_NewArchive, "\uE7B8")],
+        [new("archive.extract", MenuText.Toolbar_Extract, "\uE896", IsPrimary: true), new("entry.add", MenuText.Toolbar_Add, "\uE710"), new("entry.delete", MenuText.Toolbar_Delete, "\uE74D")],
+        [new("archive.test", MenuText.Toolbar_Test, "\uE73E")],
     ];
 
     private static readonly Dictionary<string, RoutedUICommand> Routed = BuildRouted();
@@ -152,7 +165,7 @@ public static class CommandCatalog
 
     /// <summary>구현된 명령의 RoutedUICommand. 미구현 키는 예외.</summary>
     public static RoutedUICommand Command(string key) =>
-        Routed.TryGetValue(key, out var cmd) ? cmd : throw new KeyNotFoundException($"구현되지 않은 명령: {key}");
+        Routed.TryGetValue(key, out var cmd) ? cmd : throw new KeyNotFoundException(string.Format(MenuText.Error_CommandNotImplemented, key));
 
     /// <summary>키의 첫 메뉴 항목(헤더·단축키).</summary>
     public static MenuSpec Spec(string key) => Items.Concat(FeatureItems.Select(f => f.Spec)).First(i => i.Key == key);

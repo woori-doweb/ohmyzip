@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OhMyZip.Core\OhMyZip.Core.csproj" />
+    <ProjectReference Include="..\OhMyZip.App.Text\OhMyZip.App.Text.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -14,7 +15,7 @@
     <RootNamespace>OhMyZip.App</RootNamespace>
     <Product>ohmyZip</Product>
     <AssemblyTitle>ohmyZip</AssemblyTitle>
-    <Description>ohmyZip 압축 파일 관리자</Description>
+    <Description>ohmyZip archive manager</Description>
     <Version>0.2.0</Version>
     <AssemblyVersion>0.2.0.0</AssemblyVersion>
     <FileVersion>0.2.0.0</FileVersion>
@@ -23,10 +24,13 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <!-- packaging/make_icon.ps1 이 Theme/AppIcon.xaml 에서 생성 -->
     <ApplicationIcon>ohmyZip.ico</ApplicationIcon>
+    <!-- 화면 문구는 OhMyZip.App.Text(영어 기본 + ko 위성). 다른 언어의 프레임워크 위성은 넣지 않는다. -->
+    <SatelliteResourceLanguages>ko</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="HELP.md" Condition="Exists('HELP.md')" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="HELP.en.md" Condition="Exists('HELP.en.md')" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

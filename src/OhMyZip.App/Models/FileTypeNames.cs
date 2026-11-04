@@ -1,12 +1,13 @@
 using System.IO;
 using System.Runtime.InteropServices;
+using OhMyZip.App.Text;
 
 namespace OhMyZip.App.Models;
 
 /// <summary>Windows 셸이 알려 주는 파일 종류 이름("텍스트 문서" 등). 실제 파일 없이 확장자로만 묻는다. UI 스레드 전용.</summary>
 public static class FileTypeNames
 {
-    public const string Folder = "파일 폴더";
+    public static string Folder => MainText.FileType_Folder;
     private static readonly Dictionary<string, string> Cache = new(StringComparer.OrdinalIgnoreCase);
 
     public static string ForFileName(string name)
@@ -15,7 +16,7 @@ public static class FileTypeNames
         if (Cache.TryGetValue(ext, out var cached)) return cached;
         string result = Query(string.IsNullOrEmpty(ext) ? "file" : "file" + ext) ?? "";
         if (string.IsNullOrWhiteSpace(result))
-            result = string.IsNullOrEmpty(ext) ? "파일" : $"{ext.TrimStart('.').ToUpperInvariant()} 파일";
+            result = string.IsNullOrEmpty(ext) ? MainText.FileType_File : string.Format(MainText.FileType_Extension, ext.TrimStart('.').ToUpperInvariant());
         Cache[ext] = result;
         return result;
     }

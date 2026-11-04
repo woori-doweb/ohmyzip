@@ -7,6 +7,7 @@ using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using OhMyZip.App.Text;
 using OhMyZip.App.Settings;
 using OhMyZip.Core;
 
@@ -21,29 +22,40 @@ public partial class PreferencesWindow : Window
 {
     public static readonly IReadOnlyList<string> Categories =
     [
-        "일반 설정", "파일 연결", "탐색기 메뉴", "압축 풀기", "압축하기", "보기/편집", "보안 설정", "고급 설정", "언어 설정",
+        DialogText.Pref_Category_General, DialogText.Pref_Category_FileAssoc, DialogText.Pref_Category_ShellMenu,
+        DialogText.Pref_Category_Extract, DialogText.Pref_Category_Create, DialogText.Pref_Category_ViewEdit,
+        DialogText.Pref_Category_Security, DialogText.Pref_Category_Advanced, DialogText.Pref_Category_Language,
     ];
 
     private static readonly (AppTheme Value, string Label)[] Themes =
     [
-        (AppTheme.System, "시스템 설정 따르기"), (AppTheme.Light, "라이트"), (AppTheme.Dark, "다크"),
+        (AppTheme.System, DialogText.Theme_System), (AppTheme.Light, DialogText.Theme_Light), (AppTheme.Dark, DialogText.Theme_Dark),
+    ];
+
+    private static readonly (AppLanguage Value, string Label)[] Languages =
+    [
+        (AppLanguage.System, DialogText.Pref_Language_System),
+        (AppLanguage.Korean, DialogText.Pref_Language_Korean),
+        (AppLanguage.English, DialogText.Pref_Language_English),
     ];
 
     private static readonly (ExtractDestination Value, string Label)[] Destinations =
     [
-        (ExtractDestination.ArchiveFolder, "압축 파일이 있는 폴더"),
-        (ExtractDestination.ArchiveNameFolder, "압축 파일 이름으로 된 폴더"),
-        (ExtractDestination.LastUsed, "마지막으로 푼 위치"),
+        (ExtractDestination.ArchiveFolder, DialogText.Pref_Dest_ArchiveFolder),
+        (ExtractDestination.ArchiveNameFolder, DialogText.Pref_Dest_ArchiveNameFolder),
+        (ExtractDestination.LastUsed, DialogText.Pref_Dest_LastUsed),
     ];
 
     private static readonly (ConflictChoice Value, string Label)[] Conflicts =
     [
-        (ConflictChoice.Ask, "묻기"), (ConflictChoice.Overwrite, "덮어쓰기"), (ConflictChoice.Skip, "건너뛰기"), (ConflictChoice.Rename, "이름 바꾸기"),
+        (ConflictChoice.Ask, DialogText.Conflict_Ask), (ConflictChoice.Overwrite, DialogText.Conflict_Overwrite),
+        (ConflictChoice.Skip, DialogText.Conflict_Skip), (ConflictChoice.Rename, DialogText.Conflict_Rename),
     ];
 
     private static readonly (ListMode Value, string Label)[] ListModes =
     [
-        (ListMode.Details, "자세히"), (ListMode.List, "간단히"), (ListMode.Icons, "아이콘"), (ListMode.LargeIcons, "큰 아이콘"),
+        (ListMode.Details, DialogText.Pref_ListMode_Details), (ListMode.List, DialogText.Pref_ListMode_List),
+        (ListMode.Icons, DialogText.Pref_ListMode_Icons), (ListMode.LargeIcons, DialogText.Pref_ListMode_LargeIcons),
     ];
 
     private readonly Action<AppSettings> _apply;
@@ -57,6 +69,7 @@ public partial class PreferencesWindow : Window
         _working = AppSettings.Current.Clone();
         CategoryList.ItemsSource = Categories;
         ThemeBox.ItemsSource = Themes.Select(t => t.Label).ToList();
+        LanguageBox.ItemsSource = Languages.Select(l => l.Label).ToList();
         DestinationBox.ItemsSource = Destinations.Select(d => d.Label).ToList();
         ConflictBox.ItemsSource = Conflicts.Select(c => c.Label).ToList();
         FormatBox.ItemsSource = CreateArchiveDialog.Formats.Select(f => f.Label).ToList();
@@ -69,8 +82,8 @@ public partial class PreferencesWindow : Window
             _columnBoxes[key] = box;
             ColumnPanel.Children.Add(box);
         }
-        SettingsPathText.Text = $"설정 파일: {AppSettings.FilePath}";
-        FileAssocExtensionsText.Text = $"대상 확장자: {ExtensionList}. 확장자의 지금 기본 프로그램 설정은 바꾸지 않고 '연결 프로그램' 후보로만 더합니다.";
+        SettingsPathText.Text = string.Format(DialogText.Pref_SettingsFile, AppSettings.FilePath);
+        FileAssocExtensionsText.Text = string.Format(DialogText.Pref_FileAssocExtensions, ExtensionList);
         RefreshFileAssocStatus();
         Load(_working);
         CategoryList.SelectedIndex = 0;
@@ -85,6 +98,7 @@ public partial class PreferencesWindow : Window
     {
         ShowStartScreenBox.IsChecked = s.ShowStartScreen;
         ThemeBox.SelectedIndex = Index(Themes, s.Theme);
+        LanguageBox.SelectedIndex = Index(Languages, s.Language);
         ReduceMotionBox.IsChecked = s.ReduceMotion;
         AutoUpdateBox.IsChecked = s.AutoUpdate;
         DestinationBox.SelectedIndex = Index(Destinations, s.ExtractDestination);
@@ -102,6 +116,7 @@ public partial class PreferencesWindow : Window
     {
         s.ShowStartScreen = ShowStartScreenBox.IsChecked == true;
         s.Theme = Themes[Math.Max(0, ThemeBox.SelectedIndex)].Value;
+        s.Language = Languages[Math.Max(0, LanguageBox.SelectedIndex)].Value;
         s.ReduceMotion = ReduceMotionBox.IsChecked == true;
         s.AutoUpdate = AutoUpdateBox.IsChecked == true;
         s.ExtractDestination = Destinations[Math.Max(0, DestinationBox.SelectedIndex)].Value;
@@ -126,20 +141,20 @@ public partial class PreferencesWindow : Window
         Store(_working);
         var error = AppSettings.Save(_working);
         _apply(_working);
-        if (error is not null) MessageDialog.Error(this, "설정을 적용했지만 저장하지 못했습니다", error);
+        if (error is not null) MessageDialog.Error(this, DialogText.Pref_SaveFailed_Title, error);
         DialogResult = true;
     }
 
     private void OnReset(object sender, RoutedEventArgs e)
     {
-        int answer = MessageDialog.Show(this, DialogKind.Question, "모든 ohmyZip 설정을 기본값으로 되돌릴까요?",
-            $"범위: 모든 ohmyZip 설정을 기본값으로(일반·압축 풀기·압축하기·보기/편집, 보기 메뉴의 툴바·칼럼·목록 방식·항상 위 포함). 바로 저장되며 되돌릴 수 없습니다.\n설정 파일: {AppSettings.FilePath}",
-            null, ["초기화", "취소"], defaultIndex: 0, cancelIndex: 1);
+        int answer = MessageDialog.Show(this, DialogKind.Question, DialogText.Pref_ResetConfirm_Title,
+            string.Format(DialogText.Pref_ResetConfirmBody, AppSettings.FilePath),
+            null, [DialogText.Pref_ResetConfirm_Button, DialogText.Cancel_Button], defaultIndex: 0, cancelIndex: 1);
         if (answer != 0) return;
         var defaults = new AppSettings();
         var error = AppSettings.Save(defaults);
         _apply(defaults);
-        if (error is not null) MessageDialog.Error(this, "기본값을 적용했지만 저장하지 못했습니다", error);
+        if (error is not null) MessageDialog.Error(this, DialogText.Pref_ResetSaveFailed_Title, error);
         DialogResult = true;
     }
 
@@ -156,7 +171,7 @@ public partial class PreferencesWindow : Window
         FileAssocRegisterButton.IsEnabled = exePath is not null;
         if (exePath is null)
         {
-            FileAssocStatusText.Text = "ⓘ 실행 파일 경로를 알 수 없어 등록할 수 없습니다.";
+            FileAssocStatusText.Text = DialogText.Pref_FileAssocNoExe;
             FileAssocUnregisterButton.IsEnabled = true;
             return;
         }
@@ -167,17 +182,15 @@ public partial class PreferencesWindow : Window
         }
         catch (Exception ex) when (IsRegistryError(ex))
         {
-            FileAssocStatusText.Text = $"ⓘ 등록 상태를 읽지 못했습니다: {ex.Message}";
+            FileAssocStatusText.Text = string.Format(DialogText.Pref_FileAssocReadFailed, ex.Message);
             FileAssocUnregisterButton.IsEnabled = true;
             return;
         }
         FileAssocStatusText.Text = status switch
         {
-            FileAssociationStatus.Registered =>
-                "ⓘ 등록됨 — Windows 기본 앱에서 ohmyZip 을 고를 수 있습니다. 지금 기본 프로그램인지는 Windows 기본 앱 설정에서 확인하세요.",
-            FileAssociationStatus.RegisteredElsewhere =>
-                "ⓘ 다른 위치의 ohmyZip 이 등록돼 있음 — 다시 등록하면 이 위치로 바뀝니다.",
-            _ => "ⓘ 등록되지 않음 — Windows 기본 앱 목록에 ohmyZip 이 없습니다. 압축 파일은 ohmyZip 창으로 끌어 놓거나 열기(Ctrl+O)로 여세요.",
+            FileAssociationStatus.Registered => DialogText.Pref_FileAssocRegistered,
+            FileAssociationStatus.RegisteredElsewhere => DialogText.Pref_FileAssocRegisteredElsewhere,
+            _ => DialogText.Pref_FileAssocNotRegistered,
         };
         FileAssocUnregisterButton.IsEnabled = status != FileAssociationStatus.NotRegistered;
     }
@@ -187,22 +200,15 @@ public partial class PreferencesWindow : Window
         string? exePath = Environment.ProcessPath;
         if (exePath is null)
         {
-            MessageDialog.Error(this, "파일 연결을 등록하지 못했습니다", "실행 파일 경로를 알 수 없습니다.");
+            MessageDialog.Error(this, DialogText.Pref_RegisterFailed_Title, DialogText.Pref_ExePathUnknown);
             return;
         }
-        int answer = MessageDialog.Show(this, DialogKind.Question, "ohmyZip 을 압축 파일 기본 프로그램 후보로 등록할까요?",
-            "현재 사용자(HKCU) 범위에만 기록하며 관리자 권한이 필요하지 않습니다. 확장자의 지금 기본 프로그램 설정은 바꾸지 않습니다.\n"
-            + "등록한 뒤 열리는 Windows 기본 앱 설정에서 ohmyZip 을 골라야 기본 프로그램이 됩니다.\n"
-            + "되돌리기: 이 페이지의 '등록 해제' (또는 ohmyZip.exe --unregister-file-types).\n\n"
-            + $"대상 확장자: {ExtensionList}\n"
-            + $"실행 파일: {exePath}\n"
-            + "기록할 곳(모두 HKCU 아래):\n"
-            + $"  {FileAssociations.ProgIdPath}\n"
-            + $"  {FileAssociations.ApplicationPath}\n"
-            + $"  {FileAssociations.CapabilitiesPath}\n"
-            + $"  {FileAssociations.RegisteredApplicationsPath} 의 {FileAssociations.AppName} 값\n"
-            + $"  {FileAssociations.ClassesPath}\\<확장자>\\OpenWithProgids 의 {FileAssociations.ProgId} 값",
-            null, ["등록", "취소"], defaultIndex: 0, cancelIndex: 1);
+        int answer = MessageDialog.Show(this, DialogKind.Question, DialogText.Pref_Register_Title,
+            string.Format(DialogText.Pref_RegisterBody, ExtensionList, exePath,
+                FileAssociations.ProgIdPath, FileAssociations.ApplicationPath, FileAssociations.CapabilitiesPath,
+                FileAssociations.RegisteredApplicationsPath, FileAssociations.AppName,
+                FileAssociations.ClassesPath, FileAssociations.ProgId),
+            null, [DialogText.Pref_Register_Button, DialogText.Cancel_Button], defaultIndex: 0, cancelIndex: 1);
         if (answer != 0) return;
         try
         {
@@ -214,12 +220,12 @@ public partial class PreferencesWindow : Window
             RefreshFileAssocStatus();
             // 일부만 기록됐을 수 있으므로 해제는 항상 누를 수 있게 둔다.
             FileAssocUnregisterButton.IsEnabled = true;
-            MessageDialog.Error(this, "파일 연결을 등록하지 못했습니다", $"{ex.Message}\n일부만 기록됐을 수 있습니다. '등록 해제' 로 지울 수 있습니다.");
+            MessageDialog.Error(this, DialogText.Pref_RegisterFailed_Title, string.Format(DialogText.Pref_RegisterPartial, ex.Message));
             return;
         }
         RefreshFileAssocStatus();
         if (OpenDefaultAppsSettings())
-            FileAssocStatusText.Text += " 열린 Windows 기본 앱 설정에서 ohmyZip 을 고르면 기본 프로그램이 됩니다.";
+            FileAssocStatusText.Text += " " + DialogText.Pref_RegisterDone;
         AnnounceFileAssocStatus();
     }
 
@@ -233,12 +239,12 @@ public partial class PreferencesWindow : Window
         catch (Exception ex) when (IsRegistryError(ex))
         {
             RefreshFileAssocStatus();
-            MessageDialog.Error(this, "파일 연결 등록을 해제하지 못했습니다", ex.Message);
+            MessageDialog.Error(this, DialogText.Pref_UnregisterFailed_Title, ex.Message);
             return;
         }
         RefreshFileAssocStatus();
         // 상태 문장이 해제 전과 같을 수 있으므로(실행 파일 경로를 모를 때 등) 결과를 덧붙인다.
-        FileAssocStatusText.Text += " 등록을 해제했습니다. 압축 파일을 열 프로그램은 Windows 기본 앱 설정에서 다시 고르세요.";
+        FileAssocStatusText.Text += " " + DialogText.Pref_UnregisterDone;
         AnnounceFileAssocStatus();
     }
 
@@ -258,8 +264,8 @@ public partial class PreferencesWindow : Window
         }
         catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
         {
-            MessageDialog.Error(this, "Windows 기본 앱 설정을 열 수 없습니다",
-                $"Windows 설정 > 앱 > 기본 앱 에서 ohmyZip 을 찾아 고르세요.\n{ex.Message}");
+            MessageDialog.Error(this, DialogText.Pref_OpenSettingsFailed_Title,
+                string.Format(DialogText.Pref_OpenSettingsFailedBody, ex.Message));
             return false;
         }
     }

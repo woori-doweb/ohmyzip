@@ -1,6 +1,7 @@
 <Window x:Class="OhMyZip.App.Dialogs.InputDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:OhMyZip.App.Text;assembly=OhMyZip.App.Text"
         Style="{StaticResource Oz.WindowStyle}"
         Width="420" SizeToContent="Height"
         ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
@@ -9,8 +10,8 @@
         <TextBox x:Name="ValueBox" Style="{StaticResource Oz.TextBox}" AutomationProperties.LabeledBy="{Binding ElementName=PromptText}" />
         <TextBlock x:Name="ErrorText" Margin="0,8,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Oz.Error}" Visibility="Collapsed" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
-            <Button x:Name="OkButton" Content="확인" IsDefault="True" Style="{StaticResource Oz.Button}" Click="OnOk" />
-            <Button Content="취소" IsCancel="True" Style="{StaticResource Oz.Button}" />
+            <Button x:Name="OkButton" Content="{x:Static res:DialogText.Ok_Button}" IsDefault="True" Style="{StaticResource Oz.Button}" Click="OnOk" />
+            <Button Content="{x:Static res:DialogText.Cancel_Button}" IsCancel="True" Style="{StaticResource Oz.Button}" />
         </StackPanel>
     </StackPanel>
 </Window>

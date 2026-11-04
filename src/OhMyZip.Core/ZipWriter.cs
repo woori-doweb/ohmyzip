@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
 using System.Text;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -103,7 +104,7 @@ internal sealed class ZipWriter(ZipVolumeWriter output)
         }
         long compressed = output.TotalWritten - dataStart;
         if (!zip64 && (size >= 0xFFFFFFFF || compressed >= 0xFFFFFFFF))
-            throw new IOException($"{entryName}: 쓰는 도중 파일이 4 GiB 를 넘게 커졌습니다");
+            throw new IOException(string.Format(EngineText.Zip_FileGrewPast4GiB, entryName));
         uint storedCrc = aes ? 0 : crc.Value; // AE-2: CRC 0, 무결성은 HMAC
 
         byte[] patch = new byte[12];
@@ -162,7 +163,7 @@ internal sealed class ZipWriter(ZipVolumeWriter output)
             cancel.ThrowIfCancellationRequested();
             int n = reader.Stream.Read(buffer, 0, (int)Math.Min(buffer.Length, left));
             if (n <= 0)
-                throw new InvalidDataException($"{r.Name}: 데이터가 잘렸습니다");
+                throw new InvalidDataException(string.Format(EngineText.Zip_DataTruncated, r.Name));
             output.Write(buffer, 0, n);
             left -= n;
             onCopied?.Invoke(n);
@@ -193,7 +194,7 @@ internal sealed class ZipWriter(ZipVolumeWriter output)
     public void Finish(byte[] comment)
     {
         if (comment.Length > 0xFFFF)
-            throw new IOException("압축 파일 설명이 65535 바이트를 넘습니다");
+            throw new IOException(EngineText.Zip_ArchiveCommentTooLong);
         long tail = _central.Sum(c => (long)CentralHeader(c).Length) + 56 + 20 + ZipCentralDirectory.EocdLength + comment.Length;
         if (output.TryCollapseToSingle(tail))
         {

@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PendingSuffix" xml:space="preserve">
+    <value> (준비 중)</value>
+  </data>
+  <data name="Error_CommandNotImplemented" xml:space="preserve">
+    <value>구현되지 않은 명령: {0}</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>파일(_F)</value>
+  </data>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>편집(_E)</value>
+  </data>
+  <data name="Menu_Find" xml:space="preserve">
+    <value>찾기(_I)</value>
+  </data>
+  <data name="Menu_Settings" xml:space="preserve">
+    <value>설정(_S)</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>보기(_V)</value>
+  </data>
+  <data name="Menu_Tools" xml:space="preserve">
+    <value>도구(_T)</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>도움말(_A)</value>
+  </data>
+  <data name="Submenu_Toolbar" xml:space="preserve">
+    <value>툴바</value>
+  </data>
+  <data name="Submenu_FileList" xml:space="preserve">
+    <value>파일 목록</value>
+  </data>
+  <data name="Submenu_Columns" xml:space="preserve">
+    <value>칼럼 설정</value>
+  </data>
+  <data name="Label_OpenArchive" xml:space="preserve">
+    <value>압축 파일 열기…</value>
+  </data>
+  <data name="Label_NewArchive" xml:space="preserve">
+    <value>새로 압축…</value>
+  </data>
+  <data name="Label_CloseArchive" xml:space="preserve">
+    <value>압축 파일 닫기</value>
+  </data>
+  <data name="Label_SaveAs" xml:space="preserve">
+    <value>다른 이름으로 저장…</value>
+  </data>
+  <data name="Label_DeleteArchive" xml:space="preserve">
+    <value>압축 파일 삭제</value>
+  </data>
+  <data name="Label_SecureDeleteArchive" xml:space="preserve">
+    <value>압축 파일 완전 삭제</value>
+  </data>
+  <data name="Label_OpenContainingFolder" xml:space="preserve">
+    <value>압축 파일이 있는 폴더 열기</value>
+  </data>
+  <data name="Label_TestArchive" xml:space="preserve">
+    <value>압축 파일 테스트</value>
+  </data>
+  <data name="Label_ScanForMalware" xml:space="preserve">
+    <value>압축 파일 악성코드 검사</value>
+  </data>
+  <data name="Label_Extract" xml:space="preserve">
+    <value>압축 풀기…</value>
+  </data>
+  <data name="Label_SmartExtract" xml:space="preserve">
+    <value>알아서 풀기</value>
+  </data>
+  <data name="Label_NewWindow" xml:space="preserve">
+    <value>새 창 띄우기</value>
+  </data>
+  <data name="Label_NewWindowAdmin" xml:space="preserve">
+    <value>새 창 띄우기(관리자 권한)</value>
+  </data>
+  <data name="Label_Exit" xml:space="preserve">
+    <value>종료</value>
+  </data>
+  <data name="Label_Rename" xml:space="preserve">
+    <value>이름 바꾸기…</value>
+  </data>
+  <data name="Label_AddFiles" xml:space="preserve">
+    <value>파일 추가…</value>
+  </data>
+  <data name="Label_DeleteFiles" xml:space="preserve">
+    <value>파일 삭제</value>
+  </data>
+  <data name="Label_EditComment" xml:space="preserve">
+    <value>압축 파일 설명 편집…</value>
+  </data>
+  <data name="Label_CopyToClipboard" xml:space="preserve">
+    <value>클립보드로 파일 복사하기</value>
+  </data>
+  <data name="Label_PasteFromClipboard" xml:space="preserve">
+    <value>클립보드에서 파일 붙여 넣기</value>
+  </data>
+  <data name="Label_CopyPath" xml:space="preserve">
+    <value>파일의 경로명을 클립보드로 복사</value>
+  </data>
+  <data name="Label_FindFiles" xml:space="preserve">
+    <value>파일 찾기</value>
+  </data>
+  <data name="Label_Settings" xml:space="preserve">
+    <value>환경 설정…</value>
+  </data>
+  <data name="Label_Register" xml:space="preserve">
+    <value>제품 등록…</value>
+  </data>
+  <data name="Label_Unregister" xml:space="preserve">
+    <value>제품 등록 삭제…</value>
+  </data>
+  <data name="Label_PasswordManager" xml:space="preserve">
+    <value>암호 관리자…</value>
+  </data>
+  <data name="Label_StartScreen" xml:space="preserve">
+    <value>시작 화면</value>
+  </data>
+  <data name="Label_FolderTree" xml:space="preserve">
+    <value>트리 컨트롤</value>
+  </data>
+  <data name="Label_ArchiveComment" xml:space="preserve">
+    <value>압축 파일 설명</value>
+  </data>
+  <data name="Label_ImagePreview" xml:space="preserve">
+    <value>이미지 파일 미리 보기 사용</value>
+  </data>
+  <data name="Label_StatusBar" xml:space="preserve">
+    <value>상태 표시줄</value>
+  </data>
+  <data name="Label_ToolbarLarge" xml:space="preserve">
+    <value>크게</value>
+  </data>
+  <data name="Label_ToolbarSmall" xml:space="preserve">
+    <value>작게</value>
+  </data>
+  <data name="Label_ToolbarClassic" xml:space="preserve">
+    <value>구식</value>
+  </data>
+  <data name="Label_ToolbarHide" xml:space="preserve">
+    <value>숨기기</value>
+  </data>
+  <data name="Label_ToolbarButtons" xml:space="preserve">
+    <value>툴바 버튼 설정…</value>
+  </data>
+  <data name="Label_ListDetails" xml:space="preserve">
+    <value>자세히</value>
+  </data>
+  <data name="Label_ListSimple" xml:space="preserve">
+    <value>간단히</value>
+  </data>
+  <data name="Label_ListIcons" xml:space="preserve">
+    <value>아이콘</value>
+  </data>
+  <data name="Label_ListLargeIcons" xml:space="preserve">
+    <value>큰 아이콘</value>
+  </data>
+  <data name="Label_ColumnPackedSize" xml:space="preserve">
+    <value>압축 크기</value>
+  </data>
+  <data name="Label_ColumnSize" xml:space="preserve">
+    <value>원본 크기</value>
+  </data>
+  <data name="Label_ColumnType" xml:space="preserve">
+    <value>파일 종류</value>
+  </data>
+  <data name="Label_ColumnModified" xml:space="preserve">
+    <value>수정한 날짜</value>
+  </data>
+  <data name="Label_ColumnMethod" xml:space="preserve">
+    <value>압축 방식</value>
+  </data>
+  <data name="Label_ColumnEncryption" xml:space="preserve">
+    <value>암호 방식</value>
+  </data>
+  <data name="Label_ColumnAttributes" xml:space="preserve">
+    <value>속성</value>
+  </data>
+  <data name="Label_ColumnDescription" xml:space="preserve">
+    <value>파일 설명</value>
+  </data>
+  <data name="Label_ColumnExtraInfo" xml:space="preserve">
+    <value>부가 정보</value>
+  </data>
+  <data name="Label_AlwaysOnTop" xml:space="preserve">
+    <value>항상 위에 표시</value>
+  </data>
+  <data name="Label_ColorTheme" xml:space="preserve">
+    <value>색상 설정…</value>
+  </data>
+  <data name="Label_RepairArchive" xml:space="preserve">
+    <value>손상된 압축 파일 복구…</value>
+  </data>
+  <data name="Label_RecoverPassword" xml:space="preserve">
+    <value>압축 파일 암호 복구…</value>
+  </data>
+  <data name="Label_About" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <data name="Label_CheckForUpdates" xml:space="preserve">
+    <value>업데이트 확인…</value>
+  </data>
+  <data name="Label_OpenInstallFolder" xml:space="preserve">
+    <value>프로그램 설치 폴더 열기</value>
+  </data>
+  <data name="Label_OpenHelp" xml:space="preserve">
+    <value>도움말 페이지 열기</value>
+  </data>
+  <data name="Label_OpenForum" xml:space="preserve">
+    <value>토론 게시판 열기</value>
+  </data>
+  <data name="Label_OpenHomepage" xml:space="preserve">
+    <value>홈페이지 열기</value>
+  </data>
+  <data name="Toolbar_Open" xml:space="preserve">
+    <value>열기</value>
+  </data>
+  <data name="Toolbar_NewArchive" xml:space="preserve">
+    <value>새 압축</value>
+  </data>
+  <data name="Toolbar_Extract" xml:space="preserve">
+    <value>풀기</value>
+  </data>
+  <data name="Toolbar_Add" xml:space="preserve">
+    <value>추가</value>
+  </data>
+  <data name="Toolbar_Delete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="Toolbar_Test" xml:space="preserve">
+    <value>테스트</value>
+  </data>
+</root>

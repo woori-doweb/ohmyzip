@@ -3,6 +3,7 @@ using System.IO.Compression;
 using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using System.Text;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -133,7 +134,7 @@ public static class ZipRepair
         var recovered = new List<string>();
         var lost = new List<string>();
         var problems = new List<string>();
-        string method = "지역 파일 머리·데이터 설명자·CRC 기반 복구";
+        string method = EngineText.Repair_Method;
         string? temporary = null;
 
         try
@@ -149,9 +150,9 @@ public static class ZipRepair
 
             var entries = ScanEntries(bytes, progress, cancel, recovered, lost, problems, out bool scanLimitExceeded);
             if (entries.Count == 0)
-                return FailedReport("복구할 지역 파일 머리를 찾지 못했습니다", recovered, lost, method, problems);
+                return FailedReport(EngineText.Repair_NoLocalHeaders, recovered, lost, method, problems);
             if (scanLimitExceeded)
-                return FailedReport("복구 항목 수가 한도를 초과했습니다", recovered, lost, method, problems);
+                return FailedReport(EngineText.Repair_TooManyItems, recovered, lost, method, problems);
 
             // 이름이 위험하거나 데이터 검증이 끝난 항목만 ZipArchive에 쓴다.
             var valid = entries.Where(e => e.Data is not null && e.Problem is null).ToList();
@@ -159,7 +160,7 @@ public static class ZipRepair
             {
                 foreach (var entry in entries.Where(e => e.Problem is not null))
                     AddLost(lost, entry.Local.Name);
-                return FailedReport("복구에 성공한 항목이 없습니다", recovered, lost, method, problems);
+                return FailedReport(EngineText.Repair_NothingRecovered, recovered, lost, method, problems);
             }
 
             string? parent = Path.GetDirectoryName(output);
@@ -218,17 +219,17 @@ public static class ZipRepair
             }
 
             OperationResult result = lost.Count == 0
-                ? OperationResult.Ok($"항목 {recovered.Count}개를 복구했습니다")
+                ? OperationResult.Ok(string.Format(EngineText.Repair_Recovered, recovered.Count))
                 : new OperationResult(
                     OperationStatus.Succeeded,
-                    $"항목 {recovered.Count}개를 복구했습니다. 손실 {lost.Count}개",
+                    string.Format(EngineText.Repair_RecoveredWithLost, recovered.Count, lost.Count),
                     problems);
             return new RepairReport(result, recovered, lost, method);
         }
         catch (OperationCanceledException)
         {
             DeleteTemporary(temporary);
-            return new RepairReport(OperationResult.Cancelled("복구를 취소했습니다"), recovered, lost, method);
+            return new RepairReport(OperationResult.Cancelled(EngineText.Repair_Cancelled), recovered, lost, method);
         }
         catch (RepairFormatException ex)
         {
@@ -238,12 +239,12 @@ public static class ZipRepair
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
         {
             DeleteTemporary(temporary);
-            return FailedReport("ZIP 복구 중 오류가 발생했습니다", recovered, lost, method, [ex.Message]);
+            return FailedReport(EngineText.Repair_Error, recovered, lost, method, [ex.Message]);
         }
         catch (Exception ex)
         {
             DeleteTemporary(temporary);
-            return FailedReport("ZIP 복구 중 형식 오류가 발생했습니다", recovered, lost, method, [ex.Message]);
+            return FailedReport(EngineText.Repair_FormatError, recovered, lost, method, [ex.Message]);
         }
     }
 
@@ -262,7 +263,7 @@ public static class ZipRepair
     private static FileStream OpenInput(string input)
     {
         if (!OperatingSystem.IsWindows())
-            throw new PlatformNotSupportedException("ZIP 복구는 Windows에서 지원합니다");
+            throw new PlatformNotSupportedException(EngineText.Repair_WindowsOnly);
         try
         {
             // Open the final component without following a reparse point and
@@ -273,7 +274,7 @@ public static class ZipRepair
             {
                 int error = Marshal.GetLastWin32Error();
                 handle.Dispose();
-                throw new IOException("ZIP 파일을 열 수 없습니다",
+                throw new IOException(EngineText.Repair_CannotOpen,
                     new System.ComponentModel.Win32Exception(error));
             }
             FileStream stream;
@@ -290,10 +291,10 @@ public static class ZipRepair
             {
                 ByHandleFileInformation info = GetHandleInformation(stream);
                 if ((info.FileAttributes & FileAttributeReparsePoint) != 0)
-                    throw new RepairFormatException("재분석 지점 입력은 복구하지 않습니다");
+                    throw new RepairFormatException(EngineText.Repair_ReparsePointInput);
                 long length = HandleLength(info);
                 if (length != stream.Length)
-                    throw new RepairFormatException("입력 파일 크기를 확인하지 못했습니다");
+                    throw new RepairFormatException(EngineText.Repair_InputSizeUnknown);
                 return stream;
             }
             catch
@@ -304,26 +305,26 @@ public static class ZipRepair
         }
         catch (FileNotFoundException)
         {
-            throw new RepairFormatException("손상된 ZIP 파일이 없습니다");
+            throw new RepairFormatException(EngineText.Repair_InputMissing);
         }
         catch (DirectoryNotFoundException)
         {
-            throw new RepairFormatException("손상된 ZIP 파일이 없습니다");
+            throw new RepairFormatException(EngineText.Repair_InputMissing);
         }
         catch (UnauthorizedAccessException)
         {
-            throw new RepairFormatException("ZIP 파일을 열 수 없습니다");
+            throw new RepairFormatException(EngineText.Repair_CannotOpen);
         }
         catch (IOException ex)
         {
-            throw new RepairFormatException($"ZIP 파일을 열 수 없습니다: {ex.Message}");
+            throw new RepairFormatException(string.Format(EngineText.Repair_CannotOpenDetail, ex.Message));
         }
     }
 
     private static ByHandleFileInformation GetHandleInformation(FileStream stream)
     {
         if (!GetFileInformationByHandle(stream.SafeFileHandle, out ByHandleFileInformation info))
-            throw new RepairFormatException("입력 파일 속성을 확인하지 못했습니다");
+            throw new RepairFormatException(EngineText.Repair_InputAttributesUnknown);
         return info;
     }
 
@@ -338,9 +339,9 @@ public static class ZipRepair
         ByHandleFileInformation initial = GetHandleInformation(stream);
         long length = HandleLength(initial);
         if (length <= 0)
-            throw new RepairFormatException("ZIP 파일이 비어 있습니다");
+            throw new RepairFormatException(EngineText.Repair_InputEmpty);
         if (length > MaxArchiveBytes || length > int.MaxValue)
-            throw new RepairFormatException("압축 파일이 복구 입력 한도를 초과했습니다");
+            throw new RepairFormatException(EngineText.Repair_InputTooLarge);
 
         byte[] bytes = GC.AllocateUninitializedArray<byte>((int)length);
         stream.Position = 0;
@@ -350,37 +351,37 @@ public static class ZipRepair
             cancel.ThrowIfCancellationRequested();
             int n = stream.Read(bytes, read, bytes.Length - read);
             if (n <= 0)
-                throw new RepairFormatException("입력 파일이 읽는 도중 짧아졌습니다");
+                throw new RepairFormatException(EngineText.Repair_InputShrank);
             read += n;
         }
         cancel.ThrowIfCancellationRequested();
         if (stream.ReadByte() >= 0)
-            throw new RepairFormatException("입력 파일이 복구 중 커졌습니다");
+            throw new RepairFormatException(EngineText.Repair_InputGrew);
         ByHandleFileInformation final = GetHandleInformation(stream);
         if (HandleLength(final) != length
             || (final.FileAttributes & FileAttributeReparsePoint) != 0)
-            throw new RepairFormatException("입력 파일이 복구 중 변경되었습니다");
+            throw new RepairFormatException(EngineText.Repair_InputChanged);
         return bytes;
     }
 
     private static void ValidatePaths(string input, string output)
     {
         if (!File.Exists(input))
-            throw new RepairFormatException("손상된 ZIP 파일이 없습니다");
+            throw new RepairFormatException(EngineText.Repair_InputMissing);
         if (Directory.Exists(input))
-            throw new RepairFormatException("입력 경로가 폴더입니다");
+            throw new RepairFormatException(EngineText.Repair_InputIsFolder);
         if (File.Exists(output) || Directory.Exists(output))
-            throw new RepairFormatException("출력 파일이 이미 존재합니다");
+            throw new RepairFormatException(EngineText.Repair_OutputExists);
         if (string.Equals(input, output, StringComparison.OrdinalIgnoreCase))
-            throw new RepairFormatException("입력과 출력 경로가 같습니다");
+            throw new RepairFormatException(EngineText.Repair_SamePaths);
         try
         {
             if ((File.GetAttributes(input) & FileAttributes.ReparsePoint) != 0)
-                throw new RepairFormatException("재분석 지점 입력은 복구하지 않습니다");
+                throw new RepairFormatException(EngineText.Repair_ReparsePointInput);
         }
         catch (FileNotFoundException)
         {
-            throw new RepairFormatException("손상된 ZIP 파일이 없습니다");
+            throw new RepairFormatException(EngineText.Repair_InputMissing);
         }
     }
 
@@ -404,7 +405,7 @@ public static class ZipRepair
             if (entries.Count >= MaxScannedEntries)
             {
                 scanLimitExceeded = true;
-                problems.Add($"지역 항목 수가 {MaxScannedEntries}개 한도를 초과했습니다");
+                problems.Add(string.Format(EngineText.Repair_LocalItemLimit, MaxScannedEntries));
                 break;
             }
             if (!TryReadLocal(bytes, offset, out LocalEntry? local, out string? parseError))
@@ -426,7 +427,7 @@ public static class ZipRepair
                 entry = entry with
                 {
                     Data = null,
-                    Problem = "복구 총량 한도를 초과했습니다"
+                    Problem = EngineText.Repair_TotalLimit
                 };
             }
             entries.Add(entry);
@@ -461,7 +462,7 @@ public static class ZipRepair
         if (!HasBytes(bytes, offset, 30)
             || ReadUInt32(bytes, offset) != LocalHeaderSignature)
         {
-            error = "지역 파일 머리가 손상되었습니다";
+            error = EngineText.Repair_LocalHeaderDamaged;
             return false;
         }
 
@@ -475,7 +476,7 @@ public static class ZipRepair
         long headerLength = 30L + nameLength + extraLength;
         if (headerLength > int.MaxValue || !HasBytes(bytes, offset, (int)headerLength))
         {
-            error = "지역 파일 머리의 이름·확장 필드가 파일 밖으로 나갑니다";
+            error = EngineText.Repair_LocalHeaderOutside;
             return false;
         }
 
@@ -489,7 +490,7 @@ public static class ZipRepair
         }
         catch (DecoderFallbackException)
         {
-            error = "항목 이름 인코딩이 올바르지 않습니다";
+            error = EngineText.Repair_NameEncodingInvalid;
             return false;
         }
 
@@ -509,12 +510,12 @@ public static class ZipRepair
         }
         if ((zip64Compressed || zip64Size) && !TryReadZip64Sizes(extra, ref compressed, ref size))
         {
-            error = "ZIP64 항목 크기가 없습니다";
+            error = EngineText.Repair_Zip64SizesMissing;
             return false;
         }
         if (compressed < -1 || size < -1)
         {
-            error = "항목 크기가 올바르지 않습니다";
+            error = EngineText.Common_ItemSizeInvalid;
             return false;
         }
 
@@ -593,13 +594,13 @@ public static class ZipRepair
         if (!SafePaths.TryGetSafeRelative(local.RawName, out _, out string pathError))
             return new ParsedEntry(local, null, FindNextHeader(bytes, local.DataStart, cancel, scanBudget), null, null, pathError);
         if ((local.Flags & EncryptionFlag) != 0)
-            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, "암호화된 항목은 복구하지 않습니다");
+            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, EngineText.Repair_EncryptedSkipped);
         if (local.Method is not (0 or 8))
-            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, $"지원하지 않는 압축 방식: {local.Method}");
+            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, string.Format(EngineText.Common_MethodUnsupported, local.Method));
         if (local.HeaderSize > MaxEntryBytes)
-            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, "압축 해제 크기가 한도를 초과했습니다");
+            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, EngineText.Repair_SizeLimit);
         if (local.HeaderCompressedSize > MaxArchiveBytes)
-            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, "압축 데이터 크기가 올바르지 않습니다");
+            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, EngineText.Repair_CompressedSizeInvalid);
 
         try
         {
@@ -608,7 +609,7 @@ public static class ZipRepair
             {
                 if (!local.HasDescriptor
                     && (local.HeaderCompressedSize != 0 || local.HeaderSize != 0 || local.HeaderCrc != 0))
-                    return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, "폴더 항목 크기가 0이 아닙니다");
+                    return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, EngineText.Repair_FolderSizeNotZero);
                 int next = local.DataStart;
                 if (local.HasDescriptor)
                 {
@@ -620,7 +621,7 @@ public static class ZipRepair
                         local.HeaderSize,
                         out Descriptor? descriptor);
                     if (descriptor is null || descriptor.CompressedSize != 0 || descriptor.Size != 0 || descriptor.Crc != 0)
-                        return new ParsedEntry(local, null, Math.Max(next, fallbackNext), null, null, "폴더 데이터 설명자가 올바르지 않습니다");
+                        return new ParsedEntry(local, null, Math.Max(next, fallbackNext), null, null, EngineText.Repair_FolderDescriptorInvalid);
                 }
                 return new ParsedEntry(local, [], Math.Max(next, fallbackNext), 0, 0, null);
             }
@@ -649,9 +650,9 @@ public static class ZipRepair
         long compressed = local.HeaderCompressedSize;
         long size = local.HeaderSize;
         if (compressed < 0 || compressed > int.MaxValue || local.DataStart > bytes.Length - compressed)
-            return new ParsedEntry(local, null, FindNextHeader(bytes, local.DataStart, cancel, scanBudget), null, null, "압축 데이터가 파일 밖으로 나갑니다");
+            return new ParsedEntry(local, null, FindNextHeader(bytes, local.DataStart, cancel, scanBudget), null, null, EngineText.Repair_DataOutside);
         if (size > MaxEntryBytes)
-            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, "압축 해제 크기가 한도를 초과했습니다");
+            return new ParsedEntry(local, null, SkipKnownData(bytes, local, cancel, scanBudget), null, null, EngineText.Repair_SizeLimit);
 
         int dataEnd = checked(local.DataStart + (int)compressed);
         ReadOnlySpan<byte> compressedData = bytes.AsSpan(local.DataStart, (int)compressed);
@@ -664,7 +665,7 @@ public static class ZipRepair
         {
             data = Inflate(compressedData, size, cancel, out int consumed);
             if (consumed != compressedData.Length)
-                return new ParsedEntry(local, null, dataEnd, null, size, "압축 데이터 길이가 헤더와 일치하지 않습니다");
+                return new ParsedEntry(local, null, dataEnd, null, size, EngineText.Repair_LengthMismatchHeader);
         }
 
         Descriptor? descriptor = null;
@@ -678,12 +679,12 @@ public static class ZipRepair
         {
             // A missing descriptor is a malformed streamed entry. Do not
             // silently treat its trailing bytes as another valid archive.
-            return new ParsedEntry(local, null, dataEnd, null, null, "데이터 설명자를 찾지 못했습니다");
+            return new ParsedEntry(local, null, dataEnd, null, null, EngineText.Repair_DescriptorNotFound);
         }
         if (expectedSize is { } expected && expected != data.LongLength)
-            return new ParsedEntry(local, null, Math.Max(next, dataEnd), expectedCrc, expected, "압축 해제 크기가 일치하지 않습니다");
+            return new ParsedEntry(local, null, Math.Max(next, dataEnd), expectedCrc, expected, EngineText.Repair_SizeMismatch);
         if (expectedCrc is { } crc && ZipCentralDirectory.Crc(data) != crc)
-            return new ParsedEntry(local, null, Math.Max(next, dataEnd), crc, expectedSize, "CRC가 일치하지 않습니다");
+            return new ParsedEntry(local, null, Math.Max(next, dataEnd), crc, expectedSize, EngineText.Repair_CrcMismatch);
         return new ParsedEntry(local, data, Math.Max(next, dataEnd), expectedCrc, expectedSize, null);
     }
 
@@ -713,7 +714,7 @@ public static class ZipRepair
                     && ZipCentralDirectory.Crc(data) == descriptor.Crc)
                     return new ParsedEntry(local, data, DescriptorEnd(descriptor), descriptor.Crc, descriptor.Size, null);
             }
-            return new ParsedEntry(local, null, FindNextHeader(bytes, local.DataStart, cancel, scanBudget), null, null, "저장 항목의 데이터 설명자 또는 CRC를 확인하지 못했습니다");
+            return new ParsedEntry(local, null, FindNextHeader(bytes, local.DataStart, cancel, scanBudget), null, null, EngineText.Repair_StoredUnverified);
         }
 
         // Locate a descriptor before inflating. This bounds the compressed
@@ -734,7 +735,7 @@ public static class ZipRepair
                 byte[] compressed = bytes.AsSpan(local.DataStart, checked((int)descriptor.CompressedSize)).ToArray();
                 byte[] data = Inflate(compressed, descriptor.Size, cancel, out int consumed);
                 if (consumed != compressed.Length)
-                    return new ParsedEntry(local, null, DescriptorEnd(descriptor), descriptor.Crc, descriptor.Size, "압축 데이터 길이가 설명자와 일치하지 않습니다");
+                    return new ParsedEntry(local, null, DescriptorEnd(descriptor), descriptor.Crc, descriptor.Size, EngineText.Repair_LengthMismatchDescriptor);
                 if (data.LongLength != descriptor.Size || ZipCentralDirectory.Crc(data) != descriptor.Crc)
                     return new ParsedEntry(
                         local,
@@ -742,9 +743,9 @@ public static class ZipRepair
                         DescriptorEnd(descriptor),
                         descriptor.Crc,
                         descriptor.Size,
-                        data.LongLength == descriptor.Size ? "CRC가 일치하지 않습니다" : "압축 해제 크기가 일치하지 않습니다");
+                        data.LongLength == descriptor.Size ? EngineText.Repair_CrcMismatch : EngineText.Repair_SizeMismatch);
                 if (local.HeaderSize >= 0 && local.HeaderSize != descriptor.Size)
-                    return new ParsedEntry(local, null, DescriptorEnd(descriptor), descriptor.Crc, descriptor.Size, "압축 해제 크기가 일치하지 않습니다");
+                    return new ParsedEntry(local, null, DescriptorEnd(descriptor), descriptor.Crc, descriptor.Size, EngineText.Repair_SizeMismatch);
                 return new ParsedEntry(local, data, DescriptorEnd(descriptor), descriptor.Crc, descriptor.Size, null);
             }
             catch (InvalidDataException)
@@ -762,7 +763,7 @@ public static class ZipRepair
             FindNextHeader(bytes, local.DataStart, cancel, scanBudget),
             null,
             null,
-            "CRC를 확인할 수 없는 스트림 항목입니다");
+            EngineText.Repair_StreamUnverified);
     }
 
     private static byte[] Inflate(
@@ -780,14 +781,14 @@ public static class ZipRepair
         {
             cancel.ThrowIfCancellationRequested();
             if (output.Length > MaxEntryBytes - n)
-                throw new InvalidDataException("압축 해제 크기가 한도를 초과했습니다");
+                throw new InvalidDataException(EngineText.Repair_SizeLimit);
             output.Write(buffer, 0, n);
             if (expectedSize >= 0 && output.Length > expectedSize)
-                throw new InvalidDataException("압축 해제 크기가 헤더보다 큽니다");
+                throw new InvalidDataException(EngineText.Repair_LargerThanHeader);
         }
         consumed = checked((int)input.Position);
         if (consumed <= 0)
-            throw new InvalidDataException("Deflate 데이터가 비어 있습니다");
+            throw new InvalidDataException(EngineText.Repair_DeflateEmpty);
         return output.ToArray();
     }
 
@@ -1002,7 +1003,7 @@ public static class ZipRepair
             || descriptor.Length < 0
             || descriptor.Offset > int.MaxValue
             || descriptor.Offset > int.MaxValue - descriptor.Length)
-            throw new InvalidDataException("데이터 설명자 위치가 올바르지 않습니다");
+            throw new InvalidDataException(EngineText.Repair_DescriptorLocationInvalid);
         return checked((int)descriptor.Offset + descriptor.Length);
     }
 

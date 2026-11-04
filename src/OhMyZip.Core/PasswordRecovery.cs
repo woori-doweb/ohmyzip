@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -44,11 +45,11 @@ public static class PasswordRecovery
             return Complete(validation, null, 0, stopwatch);
 
         if (string.IsNullOrWhiteSpace(archivePath))
-            return Complete(OperationResult.Fail("압축 파일 경로가 올바르지 않습니다"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail(ServiceText.Recovery_InvalidArchivePath), null, 0, stopwatch);
 
         TimeSpan remaining = options.MaxDuration - stopwatch.Elapsed;
         if (remaining <= TimeSpan.Zero)
-            return Complete(OperationResult.Fail("한도 안에서 찾지 못함 (시도 0회)"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail(string.Format(ServiceText.Recovery_NotFound, 0)), null, 0, stopwatch);
         using var budget = CancellationTokenSource.CreateLinkedTokenSource(cancel);
         ScheduleDeadline(budget, remaining);
 
@@ -64,20 +65,20 @@ public static class PasswordRecovery
         }
         catch
         {
-            probe = OperationResult.Fail("압축 파일을 검사할 수 없습니다");
+            probe = OperationResult.Fail(ServiceText.Recovery_CannotTestArchive);
         }
 
         if (cancel.IsCancellationRequested)
             return Complete(OperationResult.Cancelled(), null, 0, stopwatch);
         if (budget.IsCancellationRequested || stopwatch.Elapsed >= options.MaxDuration)
-            return Complete(OperationResult.Fail("한도 안에서 찾지 못함 (시도 0회)"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail(string.Format(ServiceText.Recovery_NotFound, 0)), null, 0, stopwatch);
 
         if (probe.Status == OperationStatus.Cancelled)
         {
             return Complete(probe, null, 0, stopwatch);
         }
         if (probe.Status == OperationStatus.Succeeded)
-            return Complete(OperationResult.Fail("암호가 걸린 압축 파일이 아닙니다"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail(ServiceText.Recovery_NotEncrypted), null, 0, stopwatch);
         if (probe.Status != OperationStatus.PasswordRequired)
             return Complete(probe, null, 0, stopwatch);
 
@@ -94,7 +95,7 @@ public static class PasswordRecovery
                 catch
                 {
                     // 후보나 예외 텍스트가 외부로 유출되지 않도록 일반 실패로 바꾼다.
-                    return new CandidateCheck(OperationStatus.Failed, "암호 후보를 검사할 수 없습니다", []);
+                    return new CandidateCheck(OperationStatus.Failed, ServiceText.Recovery_CannotTestCandidate, []);
                 }
             },
             progress,
@@ -117,7 +118,7 @@ public static class PasswordRecovery
         if (cancel.IsCancellationRequested)
             return Complete(OperationResult.Cancelled(), null, 0, stopwatch);
         if (check is null)
-            return Complete(OperationResult.Fail("암호 검사기가 올바르지 않습니다"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail(ServiceText.Recovery_InvalidChecker), null, 0, stopwatch);
 
         OperationResult? validation = ValidateOptions(options, stopwatch, cancel, out string charset);
         if (validation is not null)
@@ -125,7 +126,7 @@ public static class PasswordRecovery
 
         TimeSpan remaining = options.MaxDuration - stopwatch.Elapsed;
         if (remaining <= TimeSpan.Zero)
-            return Complete(OperationResult.Fail("한도 안에서 찾지 못함 (시도 0회)"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail(string.Format(ServiceText.Recovery_NotFound, 0)), null, 0, stopwatch);
 
         using var budget = CancellationTokenSource.CreateLinkedTokenSource(cancel);
         ScheduleDeadline(budget, remaining);
@@ -134,7 +135,7 @@ public static class PasswordRecovery
             (candidate, token) =>
             {
                 OperationStatus status = check(candidate, token);
-                return new CandidateCheck(status, "암호 후보를 검사할 수 없습니다", []);
+                return new CandidateCheck(status, ServiceText.Recovery_CannotTestCandidate, []);
             },
             progress,
             cancel,
@@ -157,7 +158,7 @@ public static class PasswordRecovery
 
         PasswordRecoveryResult LimitResult() =>
             Complete(
-                OperationResult.Fail($"한도 안에서 찾지 못함 (시도 {attempts}회)"),
+                OperationResult.Fail(string.Format(ServiceText.Recovery_NotFound, attempts)),
                 null,
                 attempts,
                 stopwatch);
@@ -198,12 +199,12 @@ public static class PasswordRecovery
             }
             catch (OperationCanceledException)
             {
-                candidateCheck = new CandidateCheck(OperationStatus.Cancelled, "취소됨", []);
+                candidateCheck = new CandidateCheck(OperationStatus.Cancelled, ServiceText.Common_Canceled, []);
             }
             catch
             {
                 terminalResult = Complete(
-                    OperationResult.Fail("암호 검사 중 오류가 발생했습니다"),
+                    OperationResult.Fail(ServiceText.Recovery_CheckError),
                     null,
                     attempts,
                     stopwatch);
@@ -225,7 +226,7 @@ public static class PasswordRecovery
 
             if (candidateCheck.Status == OperationStatus.Succeeded)
             {
-                terminalResult = Complete(OperationResult.Ok("암호를 찾았습니다"), candidate, attempts, stopwatch);
+                terminalResult = Complete(OperationResult.Ok(ServiceText.Recovery_Found), candidate, attempts, stopwatch);
                 return false;
             }
             if (candidateCheck.Status == OperationStatus.PasswordRequired)
@@ -241,7 +242,7 @@ public static class PasswordRecovery
                 new OperationResult(
                     candidateCheck.Status,
                     string.IsNullOrWhiteSpace(candidateCheck.Message)
-                        ? "암호 후보를 검사할 수 없습니다"
+                        ? ServiceText.Recovery_CannotTestCandidate
                         : candidateCheck.Message,
                     candidateCheck.Problems),
                 null,
@@ -270,7 +271,7 @@ public static class PasswordRecovery
             catch
             {
                 terminalResult = Complete(
-                    OperationResult.Fail("사전 항목을 읽을 수 없습니다"),
+                    OperationResult.Fail(ServiceText.Recovery_DictionaryReadFailed),
                     null,
                     attempts,
                     stopwatch);
@@ -280,7 +281,7 @@ public static class PasswordRecovery
             if (word is null)
             {
                 terminalResult = Complete(
-                    OperationResult.Fail("사전 항목이 올바르지 않습니다"),
+                    OperationResult.Fail(ServiceText.Recovery_DictionaryInvalid),
                     null,
                     attempts,
                     stopwatch);
@@ -299,7 +300,7 @@ public static class PasswordRecovery
             catch
             {
                 terminalResult = Complete(
-                    OperationResult.Fail("사전 항목을 읽을 수 없습니다"),
+                    OperationResult.Fail(ServiceText.Recovery_DictionaryReadFailed),
                     null,
                     attempts,
                     stopwatch);
@@ -359,15 +360,15 @@ public static class PasswordRecovery
         if (cancel.IsCancellationRequested)
             return OperationResult.Cancelled();
         if (options is null)
-            return OperationResult.Fail("암호 복구 옵션이 없습니다");
+            return OperationResult.Fail(ServiceText.Recovery_NoOptions);
         if (string.IsNullOrEmpty(options.Charset))
-            return OperationResult.Fail("문자 집합이 비어 있습니다");
+            return OperationResult.Fail(ServiceText.Recovery_EmptyCharset);
         if (options.MinLength < 0 || options.MaxLength < options.MinLength || options.MaxLength > MaxPasswordLength)
-            return OperationResult.Fail("암호 길이 한도가 올바르지 않습니다");
+            return OperationResult.Fail(ServiceText.Recovery_InvalidLength);
         if (options.MaxAttempts <= 0 || options.MaxAttempts > MaxAttemptLimit)
-            return OperationResult.Fail("시도 횟수 한도가 올바르지 않습니다");
+            return OperationResult.Fail(ServiceText.Recovery_InvalidAttempts);
         if (options.MaxDuration <= TimeSpan.Zero || options.MaxDuration > MaxDurationLimit)
-            return OperationResult.Fail("시간 한도가 올바르지 않습니다");
+            return OperationResult.Fail(ServiceText.Recovery_InvalidDuration);
 
         return BuildDistinctCharset(options.Charset, stopwatch, cancel, options.MaxDuration, out charset);
     }
@@ -408,7 +409,7 @@ public static class PasswordRecovery
             if (count == distinct.Length)
             {
                 charset = string.Empty;
-                return OperationResult.Fail("문자 집합은 서로 다른 문자 100개 이하여야 합니다");
+                return OperationResult.Fail(ServiceText.Recovery_CharsetTooLarge);
             }
             distinct[count++] = current;
         }
@@ -463,7 +464,7 @@ public static class PasswordRecovery
         if (cancel.IsCancellationRequested)
             return OperationResult.Cancelled();
         if (stopwatch.Elapsed >= maxDuration)
-            return OperationResult.Fail("한도 안에서 찾지 못함 (시도 0회)");
+            return OperationResult.Fail(string.Format(ServiceText.Recovery_NotFound, 0));
         return null;
     }
 

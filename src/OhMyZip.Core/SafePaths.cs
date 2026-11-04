@@ -1,3 +1,5 @@
+using OhMyZip.Core.Resources;
+
 namespace OhMyZip.Core;
 
 /// <summary>압축 파일 항목 이름을 다루는 공용 규칙. 해제 경로 검증(Zip Slip·절대경로·장치 이름)은 모두 여기서 한다.</summary>
@@ -46,12 +48,12 @@ internal static class SafePaths
         string p = rawName.Replace('\\', '/');
         if (p.StartsWith('/'))
         {
-            error = "절대 경로 항목";
+            error = EngineText.Path_Absolute;
             return false;
         }
         if (p.Contains(':'))
         {
-            error = "드라이브 문자 또는 ':' 가 든 경로";
+            error = EngineText.Path_DriveOrColon;
             return false;
         }
         var parts = new List<string>();
@@ -61,30 +63,30 @@ internal static class SafePaths
                 continue;
             if (seg == "..")
             {
-                error = "상위 폴더('..')로 나가는 경로";
+                error = EngineText.Path_ParentFolder;
                 return false;
             }
             if (seg.IndexOfAny(InvalidNameChars) >= 0)
             {
-                error = "파일 이름에 쓸 수 없는 문자";
+                error = EngineText.Path_InvalidChars;
                 return false;
             }
             if (seg.EndsWith('.') || seg.EndsWith(' '))
             {
-                error = "끝이 '.' 또는 공백인 이름";
+                error = EngineText.Path_TrailingDotOrSpace;
                 return false;
             }
             string stem = seg.Split('.')[0].TrimEnd(' ');
             if (ReservedDeviceNames.Contains(stem))
             {
-                error = "Windows 장치 이름";
+                error = EngineText.Path_DeviceName;
                 return false;
             }
             parts.Add(seg);
         }
         if (parts.Count == 0)
         {
-            error = "빈 경로";
+            error = EngineText.Path_Empty;
             return false;
         }
         relative = string.Join('/', parts);
@@ -111,9 +113,9 @@ internal static class SafePaths
     public static string? ValidateLeafName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return "이름이 비어 있습니다";
+            return EngineText.Name_Empty;
         if (name.Contains('/') || name.Contains('\\'))
-            return "이름에 '/' 나 '\\' 를 쓸 수 없습니다";
+            return EngineText.Name_HasSeparator;
         if (!TryGetSafeRelative(name, out _, out string error))
             return error;
         return null;

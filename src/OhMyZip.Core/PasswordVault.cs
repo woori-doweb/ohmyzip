@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -17,7 +18,7 @@ public sealed class PasswordVault
     public PasswordVault(string storePath)
     {
         if (string.IsNullOrWhiteSpace(storePath))
-            throw new ArgumentException("보관 파일 경로가 비어 있습니다", nameof(storePath));
+            throw new ArgumentException(ServiceText.Vault_PathEmpty, nameof(storePath));
         try
         {
             _storePath = Path.GetFullPath(storePath);
@@ -25,7 +26,7 @@ public sealed class PasswordVault
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            throw new ArgumentException("보관 파일 경로가 올바르지 않습니다", nameof(storePath), ex);
+            throw new ArgumentException(ServiceText.Vault_PathInvalid, nameof(storePath), ex);
         }
     }
 
@@ -39,7 +40,7 @@ public sealed class PasswordVault
             {
                 string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 if (string.IsNullOrWhiteSpace(appData))
-                    throw new InvalidOperationException("사용자 AppData 경로를 찾을 수 없습니다");
+                    throw new InvalidOperationException(ServiceText.Vault_AppDataMissing);
                 root = Path.Combine(appData, "ohmyZip");
             }
             return Path.Combine(root, "passwords.dat");
@@ -55,7 +56,7 @@ public sealed class PasswordVault
     public VaultEntry Add(string label, string password)
     {
         if (string.IsNullOrWhiteSpace(label))
-            throw new ArgumentException("라벨이 비어 있습니다", nameof(label));
+            throw new ArgumentException(ServiceText.Vault_LabelEmpty, nameof(label));
         if (password is null)
             throw new ArgumentNullException(nameof(password));
 
@@ -104,7 +105,7 @@ public sealed class PasswordVault
     private List<StoredEntry> LoadCore()
     {
         if (!OperatingSystem.IsWindows())
-            throw new PlatformNotSupportedException("암호 보관함은 Windows DPAPI(CurrentUser)에서만 지원됩니다");
+            throw new PlatformNotSupportedException(ServiceText.Vault_WindowsOnly);
         if (!File.Exists(_storePath))
             return [];
 
@@ -144,7 +145,7 @@ public sealed class PasswordVault
     private void SaveCore(IReadOnlyList<StoredEntry> entries)
     {
         if (!OperatingSystem.IsWindows())
-            throw new PlatformNotSupportedException("암호 보관함은 Windows DPAPI(CurrentUser)에서만 지원됩니다");
+            throw new PlatformNotSupportedException(ServiceText.Vault_WindowsOnly);
         byte[]? plain = null;
         byte[]? encrypted = null;
         string? temp = null;
@@ -212,12 +213,12 @@ public sealed class PasswordVault
         new(entry.Id, entry.Label, entry.Created);
 
     private static InvalidDataException Corrupt() =>
-        new("암호 보관 파일이 손상되었거나 이 사용자용 파일이 아닙니다");
+        new(ServiceText.Vault_Corrupt);
 
     private VaultMutex EnterLock()
     {
         if (!OperatingSystem.IsWindows())
-            throw new PlatformNotSupportedException("암호 보관함은 Windows DPAPI(CurrentUser)에서만 지원됩니다");
+            throw new PlatformNotSupportedException(ServiceText.Vault_WindowsOnly);
         Mutex mutex = new(initiallyOwned: false, _mutexName);
         bool acquired = false;
         try
@@ -234,7 +235,7 @@ public sealed class PasswordVault
             }
 
             if (!acquired)
-                throw new TimeoutException("암호 보관함 잠금 대기 시간이 초과되었습니다");
+                throw new TimeoutException(ServiceText.Vault_LockTimeout);
             return new VaultMutex(mutex);
         }
         catch

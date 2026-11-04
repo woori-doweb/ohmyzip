@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using SharpCompress.Compressors.LZMA;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -23,7 +24,7 @@ internal static class SourceTree
             }
             catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
             {
-                problems.Add($"경로가 올바르지 않음: {source}");
+                problems.Add(string.Format(FormatText.Source_PathInvalid, source));
                 continue;
             }
             string name = Path.GetFileName(full);
@@ -32,7 +33,7 @@ internal static class SourceTree
             else if (Directory.Exists(full) && name.Length > 0)
                 AddFolder(new DirectoryInfo(full), prefix + name, items, exclude);
             else
-                problems.Add($"원본이 없음: {source}");
+                problems.Add(string.Format(FormatText.Source_Missing, source));
         }
         return items;
     }

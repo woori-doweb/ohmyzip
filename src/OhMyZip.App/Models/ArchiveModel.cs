@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.IO;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App.Models;
@@ -156,7 +157,7 @@ public sealed class EntryRow
     public string CrcText => Crc32 is { } c ? c.ToString("X8", CultureInfo.InvariantCulture) : "";
     public string MethodText => Method ?? "";
     /// <summary>엔진은 '암호 걸림' 여부와 압축 방식만 알려 준다. 그 이상(ZipCrypto/AES 구분)은 지어내지 않는다.</summary>
-    public string EncryptionText => !Encrypted ? "" : string.IsNullOrEmpty(Method) ? "암호화됨" : $"암호화됨 ({Method})";
+    public string EncryptionText => !Encrypted ? "" : string.IsNullOrEmpty(Method) ? MainText.Entry_Encrypted : string.Format(MainText.Entry_EncryptedMethod, Method);
     // 속성·파일 설명·부가 정보: 엔진 계약(ArchiveEntry)에 값이 없으므로 빈 칸. 가짜 값을 만들지 않는다.
     public string AttributesText => "";
     public string DescriptionText => "";

@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using OhMyZip.App.Text;
 using OhMyZip.App.Theme;
 
 namespace OhMyZip.App;
@@ -62,8 +63,8 @@ internal static class NativeMethods
             fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_SILENT | FOF_NOERRORUI,
         };
         int code = SHFileOperation(ref op);
-        if (code != 0) return $"휴지통으로 보내지 못했습니다(오류 코드 0x{code:X}).";
-        if (op.fAnyOperationsAborted) return "휴지통으로 보내기가 중단되었습니다.";
-        return System.IO.File.Exists(path) ? "파일이 아직 남아 있습니다." : null;
+        if (code != 0) return string.Format(MainText.Recycle_Failed, code);
+        if (op.fAnyOperationsAborted) return MainText.Recycle_Aborted;
+        return System.IO.File.Exists(path) ? MainText.Recycle_StillExists : null;
     }
 }

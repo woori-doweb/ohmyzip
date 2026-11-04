@@ -13,6 +13,7 @@ using OhMyZip.App.Commands;
 using OhMyZip.App.Dialogs;
 using OhMyZip.App.Models;
 using OhMyZip.App.Settings;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App;
@@ -146,7 +147,7 @@ public partial class MainWindow : Window
             // 미구현: 보이되 누를 수 없음. 클릭 가능한 빈 동작을 만들지 않는다.
             item.Header = spec.Header + CommandCatalog.PendingSuffix;
             item.IsEnabled = false;
-            item.ToolTip = "아직 구현하지 않은 기능입니다.";
+            item.ToolTip = MainText.Menu_NotImplementedToolTip;
         }
         if (separator) parent.Items.Add(new Separator());
         parent.Items.Add(item);
@@ -184,10 +185,10 @@ public partial class MainWindow : Window
     /// <summary>풀기 드롭다운(OZ-F027 ui_location): 압축 풀기… / 알아서 풀기. 두 명령 모두 파일 메뉴에도 있다(OZ-A06).</summary>
     private Button BuildExtractMoreButton()
     {
-        var button = new Button { Tag = "\uE70D", Content = "풀기 방식", MinWidth = 32, Padding = new Thickness(2, 4, 2, 4), Margin = new Thickness(0, 0, 2, 0) };
-        AutomationProperties.SetName(button, "풀기 방식 선택");
+        var button = new Button { Tag = "\uE70D", Content = MainText.ExtractMore_Button, MinWidth = 32, Padding = new Thickness(2, 4, 2, 4), Margin = new Thickness(0, 0, 2, 0) };
+        AutomationProperties.SetName(button, MainText.ExtractMore_Name);
         AutomationProperties.SetAutomationId(button, "archive.extract.more");
-        button.ToolTip = "풀기 방식 선택: 압축 풀기… / 알아서 풀기";
+        button.ToolTip = MainText.ExtractMore_ToolTip;
         var menu = new ContextMenu { PlacementTarget = button, Placement = PlacementMode.Bottom };
         foreach (var key in new[] { "archive.extract", "archive.extract.smart" })
         {
@@ -231,7 +232,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            MessageDialog.Error(this, "작업을 완료하지 못했습니다", ex.Message);
+            MessageDialog.Error(this, MainText.OperationFailed_Title, ex.Message);
         }
     }
 
@@ -358,8 +359,8 @@ public partial class MainWindow : Window
     private void UpdateStatusText()
     {
         var summary = _archive is null
-            ? "열린 압축 파일이 없습니다"
-            : $"파일: {_archive.FileCount:N0}, 폴더: {_archive.FolderCount:N0}, 압축 파일 크기: {_archive.ArchiveSize:N0}바이트";
+            ? MainText.Status_NoArchive
+            : string.Format(MainText.Status_Summary, _archive.FileCount, _archive.FolderCount, _archive.ArchiveSize);
         StatusText.Text = _notice is null ? summary : $"{_notice}  ·  {summary}";
     }
 
@@ -376,7 +377,7 @@ public partial class MainWindow : Window
         UpdateStatusText();
 
         CommentPane.Visibility = S.ShowComment && _archive is not null ? Visibility.Visible : Visibility.Collapsed;
-        CommentText.Text = string.IsNullOrEmpty(_archive?.Comment) ? "설명 없음" : _archive!.Comment;
+        CommentText.Text = string.IsNullOrEmpty(_archive?.Comment) ? MainText.Comment_None : _archive!.Comment;
 
         SetChecked("view.start", start);
         SetChecked("view.sidebar", S.ShowSidebar);
@@ -430,38 +431,38 @@ public partial class MainWindow : Window
     /// <summary>명령을 쓸 수 없는 이유(툴팁). 쓸 수 있으면 null.</summary>
     private string? DisabledReason(string key)
     {
-        if (_busy && key != "app.exit") return "다른 작업이 진행 중입니다.";
+        if (_busy && key != "app.exit") return MainText.Disabled_Busy;
         var caps = _archive?.Engine.Capabilities;
         string format = _archive?.Format switch
         {
             ArchiveFormat.Zip => "ZIP", ArchiveFormat.SevenZip => "7Z", ArchiveFormat.Tar => "TAR", ArchiveFormat.TarGz => "TAR.GZ",
-            ArchiveFormat.GZip => "GZ", ArchiveFormat.Rar => "RAR", _ => "이",
+            ArchiveFormat.GZip => "GZ", ArchiveFormat.Rar => "RAR", _ => MainText.Disabled_FormatUnknown,
         };
         bool needsArchive = key is "archive.close" or "archive.reveal" or "archive.save-as" or "archive.delete-file" or "archive.test"
             or "archive.extract" or "archive.extract.smart" or "archive.comment" or "view.find"
             or "entry.add" or "entry.paste" or "entry.delete" or "entry.rename" or "entry.copy" or "entry.copy-path";
-        if (needsArchive && _archive is null) return "열린 압축 파일이 없습니다.";
+        if (needsArchive && _archive is null) return MainText.Disabled_NoArchive;
         bool entryCommand = key.StartsWith("entry.", StringComparison.Ordinal);
-        if (entryCommand && _showStart) return "시작 화면을 닫으면(F6) 쓸 수 있습니다.";
-        if (entryCommand && Finding) return "찾기 결과에서는 쓸 수 없습니다 — Enter 로 항목 위치로 이동하세요.";
+        if (entryCommand && _showStart) return MainText.Disabled_StartScreen;
+        if (entryCommand && Finding) return MainText.Disabled_FindResults;
         switch (key)
         {
             case "entry.add" or "entry.paste" or "entry.delete" or "entry.rename" when caps is { Modify: false }:
-                return $"{format} 압축 파일은 읽기 전용입니다 — 추가·삭제·이름 바꾸기를 아직 지원하지 않습니다.";
+                return string.Format(MainText.Disabled_ReadOnly, format);
             case "archive.comment" when caps is { Comment: false }:
-                return $"{format} 형식은 압축 파일 설명 편집을 아직 지원하지 않습니다.";
+                return string.Format(MainText.Disabled_NoCommentEdit, format);
             case "archive.test" when caps is { Test: false }:
-                return $"{format} 형식은 테스트를 아직 지원하지 않습니다.";
+                return string.Format(MainText.Disabled_NoTest, format);
             case "archive.extract" or "archive.extract.smart" or "entry.copy" when caps is { Extract: false }:
-                return $"{format} 형식은 압축 풀기를 아직 지원하지 않습니다.";
+                return string.Format(MainText.Disabled_NoExtract, format);
             case "entry.paste" when !ClipboardHasFiles():
-                return "클립보드에 붙여 넣을 파일이 없습니다.";
+                return MainText.Clipboard_NoFiles;
             case "entry.delete" or "entry.copy" or "entry.copy-path" when SelectionCount == 0:
-                return "목록에서 항목을 선택하세요.";
+                return MainText.Disabled_SelectItem;
             case "entry.rename" when SelectionCount != 1:
-                return "목록에서 이름을 바꿀 항목 하나를 선택하세요.";
+                return MainText.Disabled_SelectOne;
             case "app.update" when !CanCheckUpdate:
-                return "업데이트를 확인하거나 내려받는 중입니다. 끝나면 다시 누르세요.";
+                return MainText.Disabled_Updating;
             default:
                 return null;
         }
@@ -710,7 +711,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            MessageDialog.Error(this, "압축 파일을 열 수 없습니다", ex.Message);
+            MessageDialog.Error(this, MainText.OpenArchiveFailed_Title, ex.Message);
         }
     }
 
@@ -762,6 +763,6 @@ public partial class MainWindow : Window
     private void SaveSettings()
     {
         var error = AppSettings.SaveCurrent();
-        if (error is not null) MessageDialog.Error(this, "설정을 저장하지 못했습니다", error);
+        if (error is not null) MessageDialog.Error(this, MainText.SaveSettingsFailed_Title, error);
     }
 }

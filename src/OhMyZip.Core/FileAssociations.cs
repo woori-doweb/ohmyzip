@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -26,8 +27,8 @@ public static class FileAssociations
     public const string AppName = "ohmyZip";
     public const string ProgId = "ohmyZip.Archive";
     public const string ExeName = "ohmyZip.exe";
-    public const string TypeName = "ohmyZip 압축 파일";
-    public const string AppDescription = "ohmyZip 압축 파일 관리자";
+    public static string TypeName => ServiceText.Assoc_TypeName;
+    public static string AppDescription => ServiceText.Assoc_AppDescription;
     public const string SettingsUri = "ms-settings:defaultapps?registeredAppUser=ohmyZip";
 
     public const string ClassesPath = @"Software\Classes";
@@ -160,8 +161,8 @@ public static class FileAssociations
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(exePath);
         if (!Path.IsPathFullyQualified(exePath))
-            throw new ArgumentException("실행 파일 경로는 전체 경로여야 합니다.", nameof(exePath));
+            throw new ArgumentException(ServiceText.Assoc_ExePathNotFull, nameof(exePath));
         if (exePath.Contains('"'))
-            throw new ArgumentException("실행 파일 경로에 큰따옴표를 쓸 수 없습니다.", nameof(exePath));
+            throw new ArgumentException(ServiceText.Assoc_ExePathQuote, nameof(exePath));
     }
 }

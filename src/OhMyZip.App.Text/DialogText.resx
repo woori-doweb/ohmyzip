@@ -1,0 +1,683 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Pref_LanguageLabel" xml:space="preserve">
+    <value>Display language:</value>
+  </data>
+  <data name="Pref_Language_System" xml:space="preserve">
+    <value>Use Windows display language</value>
+  </data>
+  <data name="Pref_Language_Korean" xml:space="preserve">
+    <value>한국어 (Korean)</value>
+  </data>
+  <data name="Pref_Language_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Pref_LanguageNote" xml:space="preserve">
+    <value>The new language takes effect the next time you start ohmyZip.</value>
+  </data>
+  <data name="Ok_Button" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Cancel_Button" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Apply_Button" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Save_Button" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Replace_Button" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="Browse_Button" xml:space="preserve">
+    <value>Browse…</value>
+  </data>
+  <data name="Filter_AllFiles" xml:space="preserve">
+    <value>All files (*.*)|*.*</value>
+  </data>
+  <data name="OpenFolderAfterExtract" xml:space="preserve">
+    <value>Open folder after extracting</value>
+  </data>
+  <data name="Conflict_Ask" xml:space="preserve">
+    <value>Ask</value>
+  </data>
+  <data name="Conflict_Overwrite" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="Conflict_Skip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Conflict_Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Theme_System" xml:space="preserve">
+    <value>Use system setting</value>
+  </data>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Name_Required" xml:space="preserve">
+    <value>Enter a name.</value>
+  </data>
+  <data name="Name_Dots" xml:space="preserve">
+    <value>You can't use '.' or '..' as a name. Enter a different name.</value>
+  </data>
+  <data name="Name_InvalidChars" xml:space="preserve">
+    <value>Remove \ / : * ? " &lt; &gt; | from the name.</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>About ohmyZip</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="About_Description" xml:space="preserve">
+    <value>An archive manager for Windows. Open an archive to view its contents, extract it, test it, create new archives, and add, delete, or rename items. Help describes all features and keyboard shortcuts.</value>
+  </data>
+  <data name="About_ThirdPartyHeading" xml:space="preserve">
+    <value>Third-party notices</value>
+  </data>
+  <data name="About_ThirdPartyNotices" xml:space="preserve">
+    <value>SharpCompress 1.0.0 — MIT License (Copyright (c) 2014 Adam Hathcock). Used to handle archive formats.
+System.Security.Cryptography.ProtectedData 9.0.10 — MIT License (Copyright (c) .NET Foundation and Contributors). Used to call Windows Data Protection (DPAPI).
+The full text is in THIRD-PARTY-NOTICES.txt in the program folder.</value>
+  </data>
+  <data name="Message_KindSuccess" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Message_KindWarning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Message_KindError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Message_KindQuestion" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Message_KindInfo" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Message_ProblemsName" xml:space="preserve">
+    <value>Problem list</value>
+  </data>
+  <data name="Password_Title" xml:space="preserve">
+    <value>Enter Password</value>
+  </data>
+  <data name="Password_Label" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="Password_Name" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Password_PlainName" xml:space="preserve">
+    <value>Password (shown)</value>
+  </data>
+  <data name="Password_Show" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="Password_Manager_Button" xml:space="preserve">
+    <value>Choose from Password Manager (Coming Soon)</value>
+  </data>
+  <data name="Password_ManagerTip" xml:space="preserve">
+    <value>Password Manager isn't available yet.</value>
+  </data>
+  <data name="Password_Ok_Button" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Password_Wrong" xml:space="preserve">
+    <value>The password is incorrect. Enter it again.</value>
+  </data>
+  <data name="Password_Required" xml:space="preserve">
+    <value>A password is required.</value>
+  </data>
+  <data name="Password_Enter" xml:space="preserve">
+    <value>Enter a password.</value>
+  </data>
+  <data name="Create_Title" xml:space="preserve">
+    <value>New Archive</value>
+  </data>
+  <data name="Create_SourcesLabel" xml:space="preserve">
+    <value>Items to archive:</value>
+  </data>
+  <data name="Create_AddFiles_Button" xml:space="preserve">
+    <value>Add Files…</value>
+  </data>
+  <data name="Create_AddFolder_Button" xml:space="preserve">
+    <value>Add Folder…</value>
+  </data>
+  <data name="Create_Remove_Button" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Create_TargetLabel" xml:space="preserve">
+    <value>Archive path:</value>
+  </data>
+  <data name="Create_FormatLabel" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="Create_LevelLabel" xml:space="preserve">
+    <value>Compression level:</value>
+  </data>
+  <data name="Create_ConfirmLabel" xml:space="preserve">
+    <value>Confirm password:</value>
+  </data>
+  <data name="Create_ConfirmName" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="Create_ConfirmPlainName" xml:space="preserve">
+    <value>Confirm password (shown)</value>
+  </data>
+  <data name="Create_MethodLabel" xml:space="preserve">
+    <value>Encryption:</value>
+  </data>
+  <data name="Create_EncryptNames" xml:space="preserve">
+    <value>Encrypt file names (7Z only)</value>
+  </data>
+  <data name="Create_SplitLabel" xml:space="preserve">
+    <value>Split archive:</value>
+  </data>
+  <data name="Create_SplitCustomName" xml:space="preserve">
+    <value>Volume size (MB)</value>
+  </data>
+  <data name="Create_Ok_Button" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Create_Level0" xml:space="preserve">
+    <value>0 - Store (no compression)</value>
+  </data>
+  <data name="Create_Level1" xml:space="preserve">
+    <value>1 - Fastest</value>
+  </data>
+  <data name="Create_Level3" xml:space="preserve">
+    <value>3 - Fast</value>
+  </data>
+  <data name="Create_Level5" xml:space="preserve">
+    <value>5 - Normal</value>
+  </data>
+  <data name="Create_Level7" xml:space="preserve">
+    <value>7 - High</value>
+  </data>
+  <data name="Create_Level9" xml:space="preserve">
+    <value>9 - Maximum</value>
+  </data>
+  <data name="Create_SplitNone" xml:space="preserve">
+    <value>Don't split</value>
+  </data>
+  <data name="Create_SplitFat32" xml:space="preserve">
+    <value>4,000 MB (under the FAT32 limit)</value>
+  </data>
+  <data name="Create_SplitCustom" xml:space="preserve">
+    <value>Custom size</value>
+  </data>
+  <data name="Create_DefaultName" xml:space="preserve">
+    <value>New Archive</value>
+  </data>
+  <data name="Create_FormatNotSupported" xml:space="preserve">
+    <value>Creating {0} archives isn't supported yet (the engine is in development).</value>
+  </data>
+  <data name="Create_FeaturesOff" xml:space="preserve">
+    <value>{0} archives don't support {1} yet, so those options are turned off.</value>
+  </data>
+  <data name="Create_FeaturePassword" xml:space="preserve">
+    <value>passwords</value>
+  </data>
+  <data name="Create_FeatureSplit" xml:space="preserve">
+    <value>split archives</value>
+  </data>
+  <data name="Create_FeatureSeparator" xml:space="preserve">
+    <value> and </value>
+  </data>
+  <data name="Create_PasswordMismatch" xml:space="preserve">
+    <value>The passwords don't match. Enter the same password in both boxes.</value>
+  </data>
+  <data name="Create_AddFiles_Title" xml:space="preserve">
+    <value>Add Files to Archive</value>
+  </data>
+  <data name="Create_AddFolder_Title" xml:space="preserve">
+    <value>Add Folders to Archive</value>
+  </data>
+  <data name="Create_Save_Title" xml:space="preserve">
+    <value>Save New Archive</value>
+  </data>
+  <data name="Create_SaveFilter" xml:space="preserve">
+    <value>{0} archive (*{1})|*{1}</value>
+  </data>
+  <data name="Create_FormatCannotCreate" xml:space="preserve">
+    <value>Archives in this format can't be created yet. Choose a different format.</value>
+  </data>
+  <data name="Create_NoSources" xml:space="preserve">
+    <value>Add the files or folders to archive.</value>
+  </data>
+  <data name="Create_TargetRequired" xml:space="preserve">
+    <value>Enter an archive path.</value>
+  </data>
+  <data name="Create_TargetNotFull" xml:space="preserve">
+    <value>Enter the archive path as a full path that starts with a drive.</value>
+  </data>
+  <data name="Create_TargetInvalid" xml:space="preserve">
+    <value>The archive path isn't valid.</value>
+  </data>
+  <data name="Create_TargetFolderMissing" xml:space="preserve">
+    <value>The folder to save in doesn't exist.</value>
+  </data>
+  <data name="Create_TargetIsFolder" xml:space="preserve">
+    <value>A folder with the same name already exists.</value>
+  </data>
+  <data name="Create_TargetIsSource" xml:space="preserve">
+    <value>The archive can't be saved to the same path as a file being archived. Choose a different name or folder.</value>
+  </data>
+  <data name="Create_TargetInsideSource" xml:space="preserve">
+    <value>The archive can't be saved inside a folder being archived. Choose a location outside that folder.</value>
+  </data>
+  <data name="Create_SplitSizeInvalid" xml:space="preserve">
+    <value>Enter a volume size in MB from 0.0625 (64 KB) to 1,000,000.</value>
+  </data>
+  <data name="Create_Exists_Title" xml:space="preserve">
+    <value>An Archive with the Same Name Already Exists</value>
+  </data>
+  <data name="Create_ExistsBody" xml:space="preserve">
+    <value>{0}
+If the new archive is created successfully, it replaces the existing file. If it fails or you cancel, the existing file stays as it is.</value>
+  </data>
+  <data name="Extract_Title" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="Extract_DestinationLabel" xml:space="preserve">
+    <value>Extract to:</value>
+  </data>
+  <data name="Extract_NewFolder_Button" xml:space="preserve">
+    <value>New Folder…</value>
+  </data>
+  <data name="Extract_NewFolderTip" xml:space="preserve">
+    <value>Names a new folder inside the destination (created when extracting).</value>
+  </data>
+  <data name="Extract_ScopeLabel" xml:space="preserve">
+    <value>Items to extract:</value>
+  </data>
+  <data name="Extract_ScopeAll" xml:space="preserve">
+    <value>All items</value>
+  </data>
+  <data name="Extract_ScopeSelected" xml:space="preserve">
+    <value>Selected items</value>
+  </data>
+  <data name="Extract_ScopeSelectedCount" xml:space="preserve">
+    <value>Selected items ({0:N0})</value>
+  </data>
+  <data name="Extract_ConflictLabel" xml:space="preserve">
+    <value>If a file with the same name exists:</value>
+  </data>
+  <data name="Extract_Ok_Button" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="Extract_DefaultFolderName" xml:space="preserve">
+    <value>Extracted</value>
+  </data>
+  <data name="Extract_FolderMissingHint" xml:space="preserve">
+    <value>This folder doesn't exist yet — it will be created when you extract.</value>
+  </data>
+  <data name="Extract_Browse_Title" xml:space="preserve">
+    <value>Choose a Folder to Extract To</value>
+  </data>
+  <data name="Extract_NewFolder_Title" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
+  <data name="Extract_NewFolderPrompt" xml:space="preserve">
+    <value>Name of the new folder to create in the destination:</value>
+  </data>
+  <data name="Extract_NewFolderDefault" xml:space="preserve">
+    <value>New folder</value>
+  </data>
+  <data name="Extract_DestinationRequired" xml:space="preserve">
+    <value>Enter a destination.</value>
+  </data>
+  <data name="Extract_DestinationNotFull" xml:space="preserve">
+    <value>Enter the destination as a full path that starts with a drive.</value>
+  </data>
+  <data name="Extract_DestinationIsFile" xml:space="preserve">
+    <value>A file with the same name exists, so it can't be used as a folder.</value>
+  </data>
+  <data name="Extract_DestinationInvalid" xml:space="preserve">
+    <value>The destination path isn't valid.</value>
+  </data>
+  <data name="Progress_CurrentFileHelp" xml:space="preserve">
+    <value>Current file</value>
+  </data>
+  <data name="Progress_BarName" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Progress_StatusHelp" xml:space="preserve">
+    <value>Progress status</value>
+  </data>
+  <data name="Progress_CancelTip" xml:space="preserve">
+    <value>Cancel the operation (Esc)</value>
+  </data>
+  <data name="Progress_Speed" xml:space="preserve">
+    <value>{0}/s</value>
+  </data>
+  <data name="Progress_TimeLeft" xml:space="preserve">
+    <value>About {0} left</value>
+  </data>
+  <data name="Progress_MeasuringSpeed" xml:space="preserve">
+    <value>Calculating speed</value>
+  </data>
+  <data name="Progress_Unknown" xml:space="preserve">
+    <value>Progress unknown</value>
+  </data>
+  <data name="Progress_UnknownProcessed" xml:space="preserve">
+    <value>Progress unknown · {0} processed</value>
+  </data>
+  <data name="Progress_Bytes" xml:space="preserve">
+    <value>{0:N0} bytes</value>
+  </data>
+  <data name="Progress_Canceling_Button" xml:space="preserve">
+    <value>Canceling…</value>
+  </data>
+  <data name="Progress_Canceling_Title" xml:space="preserve">
+    <value>{0} — Canceling…</value>
+  </data>
+  <data name="Duration_UnderSecond" xml:space="preserve">
+    <value>less than 1 s</value>
+  </data>
+  <data name="Duration_Seconds" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Duration_MinutesSeconds" xml:space="preserve">
+    <value>{0} min {1} s</value>
+  </data>
+  <data name="Duration_HoursMinutes" xml:space="preserve">
+    <value>{0} h {1} min</value>
+  </data>
+  <data name="Toolbar_Title" xml:space="preserve">
+    <value>Customize Toolbar</value>
+  </data>
+  <data name="Toolbar_Prompt" xml:space="preserve">
+    <value>Choose the buttons to show in the toolbar. Hidden commands are still available from the menus and keyboard shortcuts.</value>
+  </data>
+  <data name="Theme_Title" xml:space="preserve">
+    <value>Color Settings</value>
+  </data>
+  <data name="Theme_Prompt" xml:space="preserve">
+    <value>Changes colors only in ohmyZip windows (ohmyZip setting). When a high contrast theme is on, system colors are always used.</value>
+  </data>
+  <data name="Comment_Title" xml:space="preserve">
+    <value>Edit Archive Comment</value>
+  </data>
+  <data name="Comment_Prompt" xml:space="preserve">
+    <value>Comment for {0} (leave empty to delete the comment):</value>
+  </data>
+  <data name="Comment_Name" xml:space="preserve">
+    <value>Archive comment</value>
+  </data>
+  <data name="Column_PackedSize" xml:space="preserve">
+    <value>Packed Size</value>
+  </data>
+  <data name="Column_Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="Column_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Column_Modified" xml:space="preserve">
+    <value>Date Modified</value>
+  </data>
+  <data name="Column_Method" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="Column_Encryption" xml:space="preserve">
+    <value>Encryption</value>
+  </data>
+  <data name="Column_Attributes" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="Column_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Column_Extra" xml:space="preserve">
+    <value>Extra Info</value>
+  </data>
+  <data name="Settings_LoadFailed" xml:space="preserve">
+    <value>Couldn't read the settings file, so ohmyZip started with the default settings: {0}</value>
+  </data>
+  <data name="Settings_SaveFailed" xml:space="preserve">
+    <value>Couldn't save settings ({0}): {1}</value>
+  </data>
+  <data name="Pref_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Pref_Reset_Button" xml:space="preserve">
+    <value>Reset…</value>
+  </data>
+  <data name="Pref_ResetTip" xml:space="preserve">
+    <value>Restores all ohmyZip settings to their defaults (asks first).</value>
+  </data>
+  <data name="Pref_CategoriesName" xml:space="preserve">
+    <value>Settings categories</value>
+  </data>
+  <data name="Pref_Category_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Pref_Category_FileAssoc" xml:space="preserve">
+    <value>File Associations</value>
+  </data>
+  <data name="Pref_Category_ShellMenu" xml:space="preserve">
+    <value>File Explorer Menu</value>
+  </data>
+  <data name="Pref_Category_Extract" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="Pref_Category_Create" xml:space="preserve">
+    <value>Create Archives</value>
+  </data>
+  <data name="Pref_Category_ViewEdit" xml:space="preserve">
+    <value>View &amp; Edit</value>
+  </data>
+  <data name="Pref_Category_Security" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="Pref_Category_Advanced" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="Pref_Category_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Pref_ShowStartScreen" xml:space="preserve">
+    <value>Show the start screen at startup</value>
+  </data>
+  <data name="Pref_StartScreenNote" xml:space="preserve">
+    <value>When off, starting without an archive opens an empty window instead of the start screen (press F6 to show it anytime).</value>
+  </data>
+  <data name="Pref_ThemeLabel" xml:space="preserve">
+    <value>Theme (ohmyZip setting):</value>
+  </data>
+  <data name="Pref_ThemeNote" xml:space="preserve">
+    <value>Windows settings aren't changed. When a high contrast theme is on, system colors are always used.</value>
+  </data>
+  <data name="Pref_ReduceMotion" xml:space="preserve">
+    <value>Reduce motion (ohmyZip setting)</value>
+  </data>
+  <data name="Pref_ReduceMotionNote" xml:space="preserve">
+    <value>Progress windows don't use a moving bar. Turning off Animation effects in Windows has the same effect.</value>
+  </data>
+  <data name="Pref_AutoUpdate" xml:space="preserve">
+    <value>Download new versions automatically and install when ohmyZip closes</value>
+  </data>
+  <data name="Pref_AutoUpdateNote" xml:space="preserve">
+    <value>Checks GitHub for a new version once a day. When off, ohmyZip updates only from Help &gt; Check for Updates.</value>
+  </data>
+  <data name="Pref_FileAssocNote" xml:space="preserve">
+    <value>Windows doesn't let apps change the default app themselves. After you register, ohmyZip appears in the Windows default apps list, and choosing ohmyZip in the settings that open makes it the default. Only the current user's settings are written, so administrator rights aren't needed.</value>
+  </data>
+  <data name="Pref_FileAssocRegister_Button" xml:space="preserve">
+    <value>Register ohmyZip as Default App…</value>
+  </data>
+  <data name="Pref_FileAssocUnregister_Button" xml:space="preserve">
+    <value>Unregister</value>
+  </data>
+  <data name="Pref_FileAssocOpenSettings_Button" xml:space="preserve">
+    <value>Open Windows Default Apps Settings</value>
+  </data>
+  <data name="Pref_FileAssocImmediateNote" xml:space="preserve">
+    <value>Buttons on this page take effect immediately, regardless of OK or Cancel below.</value>
+  </data>
+  <data name="Pref_ShellMenuStatus" xml:space="preserve">
+    <value>ⓘ Registering with the system requires your consent — coming soon. ohmyZip doesn't add items to the File Explorer context menu yet.</value>
+  </data>
+  <data name="Pref_DestinationLabel" xml:space="preserve">
+    <value>Default destination:</value>
+  </data>
+  <data name="Pref_ConflictLabel" xml:space="preserve">
+    <value>When a file with the same name exists:</value>
+  </data>
+  <data name="Pref_FormatLabel" xml:space="preserve">
+    <value>Default format:</value>
+  </data>
+  <data name="Pref_FormatNote" xml:space="preserve">
+    <value>If you choose a format that can't be created yet, the New Archive dialog explains why.</value>
+  </data>
+  <data name="Pref_LevelLabel" xml:space="preserve">
+    <value>Default compression level:</value>
+  </data>
+  <data name="Pref_ConfirmDelete" xml:space="preserve">
+    <value>Confirm before deleting items in an archive</value>
+  </data>
+  <data name="Pref_ListModeLabel" xml:space="preserve">
+    <value>File list view:</value>
+  </data>
+  <data name="Pref_ColumnsLabel" xml:space="preserve">
+    <value>Columns (Details view):</value>
+  </data>
+  <data name="Pref_ColumnsName" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="Pref_SecurityStatus" xml:space="preserve">
+    <value>ⓘ Password Manager and Scan for Malware settings are coming soon. Passwords you enter are kept in memory only for the open archive and are never saved to the settings file or history.</value>
+  </data>
+  <data name="Pref_AdvancedStatus" xml:space="preserve">
+    <value>ⓘ Advanced settings are coming soon. Extraction safety limits are fixed at the engine defaults (8 GB total, 200,000 items).</value>
+  </data>
+  <data name="Pref_Dest_ArchiveFolder" xml:space="preserve">
+    <value>Folder containing the archive</value>
+  </data>
+  <data name="Pref_Dest_ArchiveNameFolder" xml:space="preserve">
+    <value>Folder named after the archive</value>
+  </data>
+  <data name="Pref_Dest_LastUsed" xml:space="preserve">
+    <value>Last extraction location</value>
+  </data>
+  <data name="Pref_ListMode_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Pref_ListMode_List" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Pref_ListMode_Icons" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="Pref_ListMode_LargeIcons" xml:space="preserve">
+    <value>Large icons</value>
+  </data>
+  <data name="Pref_SettingsFile" xml:space="preserve">
+    <value>Settings file: {0}</value>
+  </data>
+  <data name="Pref_FileAssocExtensions" xml:space="preserve">
+    <value>Extensions: {0}. ohmyZip is only added as an 'Open with' option; the current default app for each extension isn't changed.</value>
+  </data>
+  <data name="Pref_SaveFailed_Title" xml:space="preserve">
+    <value>Settings Were Applied but Couldn't Be Saved</value>
+  </data>
+  <data name="Pref_ResetConfirm_Title" xml:space="preserve">
+    <value>Reset All ohmyZip Settings to Defaults?</value>
+  </data>
+  <data name="Pref_ResetConfirmBody" xml:space="preserve">
+    <value>Scope: all ohmyZip settings return to their defaults (General, Extract, Create Archives, and View &amp; Edit, including the toolbar, columns, list view, and Always on Top from the View menu). The change is saved immediately and can't be undone.
+Settings file: {0}</value>
+  </data>
+  <data name="Pref_ResetConfirm_Button" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Pref_ResetSaveFailed_Title" xml:space="preserve">
+    <value>Defaults Were Applied but Couldn't Be Saved</value>
+  </data>
+  <data name="Pref_FileAssocNoExe" xml:space="preserve">
+    <value>ⓘ Can't register because the program path is unknown.</value>
+  </data>
+  <data name="Pref_FileAssocReadFailed" xml:space="preserve">
+    <value>ⓘ Couldn't read the registration status: {0}</value>
+  </data>
+  <data name="Pref_FileAssocRegistered" xml:space="preserve">
+    <value>ⓘ Registered — you can choose ohmyZip in Windows default apps. Check Windows default apps settings to see whether it's the current default.</value>
+  </data>
+  <data name="Pref_FileAssocRegisteredElsewhere" xml:space="preserve">
+    <value>ⓘ ohmyZip from a different location is registered — registering again switches it to this location.</value>
+  </data>
+  <data name="Pref_FileAssocNotRegistered" xml:space="preserve">
+    <value>ⓘ Not registered — ohmyZip isn't in the Windows default apps list. Drag archives onto the ohmyZip window or open them with Open (Ctrl+O).</value>
+  </data>
+  <data name="Pref_RegisterFailed_Title" xml:space="preserve">
+    <value>Couldn't Register File Associations</value>
+  </data>
+  <data name="Pref_ExePathUnknown" xml:space="preserve">
+    <value>The program path is unknown.</value>
+  </data>
+  <data name="Pref_Register_Title" xml:space="preserve">
+    <value>Register ohmyZip as a Default App Option for Archives?</value>
+  </data>
+  <data name="Pref_RegisterBody" xml:space="preserve">
+    <value>Only the current user (HKCU) scope is written, so administrator rights aren't needed. The current default app for each extension isn't changed.
+After registering, choose ohmyZip in the Windows default apps settings that open to make it the default.
+To undo: Unregister on this page (or ohmyZip.exe --unregister-file-types).
+
+Extensions: {0}
+Program: {1}
+Locations to write (all under HKCU):
+  {2}
+  {3}
+  {4}
+  {6} value in {5}
+  {8} value in {7}\&lt;extension&gt;\OpenWithProgids</value>
+  </data>
+  <data name="Pref_Register_Button" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Pref_RegisterPartial" xml:space="preserve">
+    <value>{0}
+Some entries may have been written. Use Unregister to remove them.</value>
+  </data>
+  <data name="Pref_RegisterDone" xml:space="preserve">
+    <value>Choose ohmyZip in the Windows default apps settings that opened to make it the default.</value>
+  </data>
+  <data name="Pref_UnregisterFailed_Title" xml:space="preserve">
+    <value>Couldn't Unregister File Associations</value>
+  </data>
+  <data name="Pref_UnregisterDone" xml:space="preserve">
+    <value>Unregistered. Choose the app that opens archives again in Windows default apps settings.</value>
+  </data>
+  <data name="Pref_OpenSettingsFailed_Title" xml:space="preserve">
+    <value>Couldn't Open Windows Default Apps Settings</value>
+  </data>
+  <data name="Pref_OpenSettingsFailedBody" xml:space="preserve">
+    <value>Find and choose ohmyZip in Windows Settings &gt; Apps &gt; Default apps.
+{0}</value>
+  </data>
+  <data name="Create_TarNote" xml:space="preserve">
+    <value>TAR only bundles files without compressing them (no compression level).</value>
+  </data>
+  <data name="Create_GzNote" xml:space="preserve">
+    <value>A GZ archive can hold only one file.</value>
+  </data>
+</root>

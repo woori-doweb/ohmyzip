@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Stream_ForwardOnly" xml:space="preserve">
+    <value>This stream can only be read forward.</value>
+  </data>
+  <data name="GZip_HeaderInvalid" xml:space="preserve">
+    <value>The GZ header is not valid.</value>
+  </data>
+  <data name="GZip_TooShort" xml:space="preserve">
+    <value>The GZ file is too short.</value>
+  </data>
+  <data name="GZip_NameTooLong" xml:space="preserve">
+    <value>The file name in the GZ header is too long.</value>
+  </data>
+  <data name="GZip_HeaderTruncated" xml:space="preserve">
+    <value>The GZ header is truncated.</value>
+  </data>
+  <data name="Tar_Truncated" xml:space="preserve">
+    <value>The TAR archive is truncated (the end block is missing).</value>
+  </data>
+  <data name="Tar_EntrySizeInvalid" xml:space="preserve">
+    <value>A TAR item has a size that is not valid.</value>
+  </data>
+  <data name="Tar_ExtendedHeaderTooLarge" xml:space="preserve">
+    <value>A TAR extended header is too large.</value>
+  </data>
+  <data name="Tar_EntryDataTruncated" xml:space="preserve">
+    <value>TAR item data is truncated.</value>
+  </data>
+  <data name="Tar_ChecksumMismatch" xml:space="preserve">
+    <value>TAR header checksum mismatch</value>
+  </data>
+  <data name="Tar_NumberFieldInvalid" xml:space="preserve">
+    <value>A number field in the TAR header is not valid.</value>
+  </data>
+  <data name="Pax_HeaderInvalid" xml:space="preserve">
+    <value>A PAX extended header is not valid.</value>
+  </data>
+  <data name="Tar_UnsupportedEntryType" xml:space="preserve">
+    <value>Unsupported item type (TAR type '{0}')</value>
+  </data>
+  <data name="Tar_CannotCopyEntryType" xml:space="preserve">
+    <value>Can't copy TAR item type '{0}': {1}</value>
+  </data>
+  <data name="List_ItemCount" xml:space="preserve">
+    <value>Items: {0}</value>
+  </data>
+  <data name="Test_FilesOk" xml:space="preserve">
+    <value>No errors found. Files: {0}</value>
+  </data>
+  <data name="Test_DamagedItems" xml:space="preserve">
+    <value>Damaged items: {0}</value>
+  </data>
+  <data name="Check_SizeMismatch" xml:space="preserve">
+    <value>Size mismatch (expected {0}, actual {1})</value>
+  </data>
+  <data name="Check_SizeMismatchAt" xml:space="preserve">
+    <value>{0}: size mismatch (expected {1}, actual {2})</value>
+  </data>
+  <data name="Check_CrcMismatch" xml:space="preserve">
+    <value>CRC mismatch (expected {0:X8}, actual {1:X8})</value>
+  </data>
+  <data name="Check_CrcMismatchAt" xml:space="preserve">
+    <value>{0}: CRC mismatch (expected {1:X8}, actual {2:X8})</value>
+  </data>
+  <data name="Archive_OpenFailed" xml:space="preserve">
+    <value>Can't open the {0} archive.</value>
+  </data>
+  <data name="Archive_ReadFailed" xml:space="preserve">
+    <value>Can't read the {0} archive.</value>
+  </data>
+  <data name="Archive_Damaged" xml:space="preserve">
+    <value>The {0} archive is damaged.</value>
+  </data>
+  <data name="Archive_TestFailed" xml:space="preserve">
+    <value>Can't test the {0} archive.</value>
+  </data>
+  <data name="Archive_PathInvalid" xml:space="preserve">
+    <value>The archive path is not valid.</value>
+  </data>
+  <data name="Archive_Missing" xml:space="preserve">
+    <value>The archive doesn't exist.</value>
+  </data>
+  <data name="Volume_FirstMissing" xml:space="preserve">
+    <value>The first volume is missing.</value>
+  </data>
+  <data name="Volume_Missing" xml:space="preserve">
+    <value>A volume is missing: {0}</value>
+  </data>
+  <data name="Password_Required" xml:space="preserve">
+    <value>A password is required.</value>
+  </data>
+  <data name="Password_Wrong" xml:space="preserve">
+    <value>The password is incorrect.</value>
+  </data>
+  <data name="Password_RequiredEncryptedList" xml:space="preserve">
+    <value>A password is required (the {0} file list is encrypted).</value>
+  </data>
+  <data name="Password_WrongOrDamaged" xml:space="preserve">
+    <value>The password is incorrect, or the archive is damaged.</value>
+  </data>
+  <data name="Password_WrongOrDamagedRolledBack" xml:space="preserve">
+    <value>The password is incorrect, or the archive is damaged. Files created by this extraction were deleted.</value>
+  </data>
+  <data name="Password_WrongUnchanged" xml:space="preserve">
+    <value>The password is incorrect. The archive was not changed.</value>
+  </data>
+  <data name="Extract_CancelledRolledBack" xml:space="preserve">
+    <value>Extraction was canceled. Files created by this extraction were deleted.</value>
+  </data>
+  <data name="Extract_Aborted" xml:space="preserve">
+    <value>Extraction stopped because of an error.</value>
+  </data>
+  <data name="Create_WrongFormat" xml:space="preserve">
+    <value>The {0} engine can only create {0} archives.</value>
+  </data>
+  <data name="Create_LevelOutOfRange" xml:space="preserve">
+    <value>The compression level must be from 0 to 9.</value>
+  </data>
+  <data name="Create_EncryptionUnsupported" xml:space="preserve">
+    <value>{0} doesn't support encryption.</value>
+  </data>
+  <data name="Create_SplitUnsupported" xml:space="preserve">
+    <value>{0} doesn't support split archives.</value>
+  </data>
+  <data name="Create_TarNoLevel" xml:space="preserve">
+    <value>TAR doesn't compress files, so you can't set a compression level. Use TAR.GZ instead.</value>
+  </data>
+  <data name="Create_FileExists" xml:space="preserve">
+    <value>A file with the same name already exists.</value>
+  </data>
+  <data name="Create_NoSources" xml:space="preserve">
+    <value>There are no files to compress.</value>
+  </data>
+  <data name="Create_FolderMissing" xml:space="preserve">
+    <value>The folder for the archive doesn't exist.</value>
+  </data>
+  <data name="Create_GZipSingleFile" xml:space="preserve">
+    <value>GZ can compress only one file. For several files or folders, use TAR.GZ.</value>
+  </data>
+  <data name="Create_SourcesNotFound" xml:space="preserve">
+    <value>Can't find the files to compress.</value>
+  </data>
+  <data name="Create_DuplicateNames" xml:space="preserve">
+    <value>Some files to compress have the same name.</value>
+  </data>
+  <data name="Create_Done" xml:space="preserve">
+    <value>Created the archive. Items: {0}</value>
+  </data>
+  <data name="Create_DoneSplit" xml:space="preserve">
+    <value>Created the split archive. Items: {0}, volumes: {1}</value>
+  </data>
+  <data name="Create_Cancelled" xml:space="preserve">
+    <value>Archive creation was canceled.</value>
+  </data>
+  <data name="Create_Failed" xml:space="preserve">
+    <value>Couldn't create the archive.</value>
+  </data>
+  <data name="Create_PasswordEmpty" xml:space="preserve">
+    <value>Enter a password to encrypt the archive.</value>
+  </data>
+  <data name="Create_SevenZipAesOnly" xml:space="preserve">
+    <value>7Z archives can only be encrypted with AES-256. Set the encryption to AES-256.</value>
+  </data>
+  <data name="Create_EncryptNamesNeedsPassword" xml:space="preserve">
+    <value>File names can be encrypted only when a password is set.</value>
+  </data>
+  <data name="Create_VolumeTooSmall" xml:space="preserve">
+    <value>The volume size must be at least {0} KiB.</value>
+  </data>
+  <data name="Modify_GZipSingleFile" xml:space="preserve">
+    <value>GZ holds only one file, so it can't be modified.</value>
+  </data>
+  <data name="Modify_SplitUnsupported" xml:space="preserve">
+    <value>A split 7Z archive can't be modified. Extract it and create a new archive.</value>
+  </data>
+  <data name="Modify_Cancelled" xml:space="preserve">
+    <value>Canceled. The archive was not changed.</value>
+  </data>
+  <data name="Modify_Failed" xml:space="preserve">
+    <value>Couldn't modify the archive. The original was not changed.</value>
+  </data>
+  <data name="Modify_NameClash" xml:space="preserve">
+    <value>An item with the same name already exists. The archive was not changed.</value>
+  </data>
+  <data name="Modify_ItemNotInArchive" xml:space="preserve">
+    <value>The item isn't in the archive.</value>
+  </data>
+  <data name="Add_TargetFolderInvalid" xml:space="preserve">
+    <value>The destination folder name is not valid.</value>
+  </data>
+  <data name="Add_NoSources" xml:space="preserve">
+    <value>There are no files to add.</value>
+  </data>
+  <data name="Add_SourcesNotFound" xml:space="preserve">
+    <value>Can't find the files to add. The archive was not changed.</value>
+  </data>
+  <data name="Add_DuplicateNames" xml:space="preserve">
+    <value>Some files to add have the same name.</value>
+  </data>
+  <data name="Add_TargetIsFile" xml:space="preserve">
+    <value>The destination path is a file, not a folder.</value>
+  </data>
+  <data name="Add_AlreadyExists" xml:space="preserve">
+    <value>Already exists: {0}</value>
+  </data>
+  <data name="Add_Done" xml:space="preserve">
+    <value>Added files: {0}</value>
+  </data>
+  <data name="Delete_NoItems" xml:space="preserve">
+    <value>There are no items to delete.</value>
+  </data>
+  <data name="Delete_ItemMissing" xml:space="preserve">
+    <value>Not in the archive: {0}</value>
+  </data>
+  <data name="Delete_Done" xml:space="preserve">
+    <value>Deleted items: {0}</value>
+  </data>
+  <data name="Rename_NoItem" xml:space="preserve">
+    <value>There is no item to rename.</value>
+  </data>
+  <data name="Rename_NameInvalid" xml:space="preserve">
+    <value>The new name is not valid.</value>
+  </data>
+  <data name="Rename_SameName" xml:space="preserve">
+    <value>The name is the same, so nothing was changed.</value>
+  </data>
+  <data name="Comment_Unsupported" xml:space="preserve">
+    <value>This format doesn't support archive comments.</value>
+  </data>
+  <data name="Rar_CommentUnsupported" xml:space="preserve">
+    <value>RAR archive comments aren't supported.</value>
+  </data>
+  <data name="Rar_WriteUnsupported" xml:space="preserve">
+    <value>Creating or modifying RAR archives isn't supported (the RAR license doesn't allow creating RAR archives).</value>
+  </data>
+  <data name="Source_PathInvalid" xml:space="preserve">
+    <value>Path not valid: {0}</value>
+  </data>
+  <data name="Source_Missing" xml:space="preserve">
+    <value>Not found: {0}</value>
+  </data>
+  <data name="Aes_StreamFinished" xml:space="preserve">
+    <value>The encryption stream has already finished</value>
+  </data>
+</root>

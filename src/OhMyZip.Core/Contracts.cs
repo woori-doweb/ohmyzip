@@ -1,3 +1,5 @@
+using OhMyZip.Core.Resources;
+
 namespace OhMyZip.Core;
 
 /// <summary>압축 파일 형식. 엔진이 실제로 시험을 통과한 기능만 <see cref="FormatCapabilities"/> 에 true 로 둔다.</summary>
@@ -30,7 +32,7 @@ public sealed record OperationResult(OperationStatus Status, string Message, IRe
     public static OperationResult Ok(string message = "") => new(OperationStatus.Succeeded, message, []);
     public static OperationResult Fail(string message, params string[] problems) => new(OperationStatus.Failed, message, problems);
     public static OperationResult Unsupported(string message) => new(OperationStatus.NotSupported, message, []);
-    public static OperationResult Cancelled(string message = "취소됨") => new(OperationStatus.Cancelled, message, []);
+    public static OperationResult Cancelled(string? message = null) => new(OperationStatus.Cancelled, message ?? EngineText.Common_Cancelled, []);
     public static OperationResult NeedPassword(string message) => new(OperationStatus.PasswordRequired, message, []);
     public bool Succeeded => Status == OperationStatus.Succeeded;
 }

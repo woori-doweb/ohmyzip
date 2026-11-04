@@ -1,11 +1,12 @@
 using System.Buffers.Binary;
 using System.Text.RegularExpressions;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
 /// <summary>분할 ZIP 의 조각 파일이 없다. 메시지에 없는 파일 이름이 들어간다.</summary>
 internal sealed class ZipVolumeMissingException(string fileName)
-    : IOException($"분할 압축 파일의 조각이 없습니다: {Path.GetFileName(fileName)}")
+    : IOException(string.Format(EngineText.Zip_VolumeMissing, Path.GetFileName(fileName)))
 {
     public string FileName { get; } = fileName;
 }
@@ -49,7 +50,7 @@ internal sealed partial class ZipVolumeSet
                 throw new ZipVolumeMissingException(last);
         }
         if (!File.Exists(last))
-            throw new FileNotFoundException("압축 파일이 없습니다", last);
+            throw new FileNotFoundException(EngineText.Common_ArchiveNotFound, last);
         int disk;
         using (var fs = new FileStream(last, FileMode.Open, FileAccess.Read, FileShare.Read))
             disk = LastDiskNumber(fs);
@@ -95,7 +96,7 @@ internal sealed partial class ZipVolumeSet
         if (!IsSplit)
             return offset;
         if (disk < 0 || disk >= _starts.Length)
-            throw new InvalidDataException($"없는 디스크 번호 {disk}");
+            throw new InvalidDataException(string.Format(EngineText.Zip_DiskNumberMissing, disk));
         return _starts[disk] + offset;
     }
 
@@ -303,7 +304,7 @@ internal sealed class ZipVolumeWriter : Stream
     public (int Disk, long Offset) EnsureRoom(long length)
     {
         if (length > _volumeSize)
-            throw new IOException("분할 크기가 압축 파일 끝 기록보다 작습니다");
+            throw new IOException(EngineText.Zip_VolumeSizeTooSmall);
         if (_volumeSize - _current.Position < length)
             OpenVolume();
         return (Disk, DiskOffset);
@@ -381,7 +382,7 @@ internal sealed class ZipVolumeWriter : Stream
         for (int i = 0; i < _temps.Count; i++)
             targets.Add(i == _temps.Count - 1 ? _finalPath : ZipVolumeSet.PartPath(_finalPath, i + 1));
         if (!overwrite && targets.FirstOrDefault(File.Exists) is { } existing)
-            throw new IOException($"같은 이름의 파일이 이미 있습니다: {Path.GetFileName(existing)}");
+            throw new IOException(string.Format(EngineText.Zip_FileExistsNamed, Path.GetFileName(existing)));
         var moved = new List<string>();
         try
         {

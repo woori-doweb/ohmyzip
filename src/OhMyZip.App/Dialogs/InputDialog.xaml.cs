@@ -1,5 +1,6 @@
 using System.IO;
 using System.Windows;
+using OhMyZip.App.Text;
 
 namespace OhMyZip.App.Dialogs;
 
@@ -41,10 +42,10 @@ public partial class InputDialog : Window
         DialogResult = true;
     }
 
-    /// <summary>okLabel 은 확정 단추 문구(동사, 예: "이름 바꾸기").</summary>
-    public static string? Ask(Window owner, string title, string prompt, string initial, Func<string, string?> validate, string okLabel = "확인")
+    /// <summary>okLabel 은 확정 단추 문구(동사, 예: "이름 바꾸기"). 없으면 확인.</summary>
+    public static string? Ask(Window owner, string title, string prompt, string initial, Func<string, string?> validate, string? okLabel = null)
     {
-        var dlg = new InputDialog(title, prompt, initial, validate, okLabel) { Owner = owner };
+        var dlg = new InputDialog(title, prompt, initial, validate, okLabel ?? DialogText.Ok_Button) { Owner = owner };
         return dlg.ShowDialog() == true ? dlg.Value : null;
     }
 }

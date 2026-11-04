@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using OhMyZip.App.Dialogs;
 using OhMyZip.App.Models;
 using OhMyZip.App.Settings;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App;
@@ -24,15 +25,13 @@ public partial class MainWindow
     {
         var dialog = new OpenFileDialog
         {
-            Title = "압축 파일 열기",
-            Filter = "압축 파일 (*.zip;*.7z;*.tar;*.gz;*.tgz;*.rar)|*.zip;*.7z;*.tar;*.gz;*.tgz;*.rar|ZIP 압축 파일 (*.zip)|*.zip|7Z 압축 파일 (*.7z)|*.7z|모든 파일 (*.*)|*.*",
+            Title = MainText.OpenArchive_Title,
+            Filter = MainText.Filter_Open,
             CheckFileExists = true,
         };
         if (_archive is not null) dialog.InitialDirectory = Path.GetDirectoryName(_archive.FilePath);
         if (dialog.ShowDialog(this) == true) await OpenArchiveAsync(dialog.FileName);
     }
-
-    private static bool IsWrongPassword(OperationResult result) => result.Message.Contains("올바르지 않", StringComparison.Ordinal);
 
     /// <summary>
     /// 압축 파일을 열어 목록을 보여 준다. 엔진이 PasswordRequired 를 돌려주면 암호를 물어 같은 형식 엔진으로 다시 연다.
@@ -47,15 +46,15 @@ public partial class MainWindow
         }
         catch (Exception ex)
         {
-            MessageDialog.Error(this, "압축 파일을 열 수 없습니다", ex.Message);
+            MessageDialog.Error(this, MainText.OpenArchiveFailed_Title, ex.Message);
             return;
         }
         var name = Path.GetFileName(full);
         if (!File.Exists(full))
         {
-            MessageDialog.Error(this, $"{name}을(를) 열 수 없습니다", Directory.Exists(full)
-                ? "폴더는 열 수 없습니다. 폴더 안의 압축 파일을 고르세요."
-                : $"파일을 찾을 수 없습니다: {full}\n경로를 확인하거나 열기(Ctrl+O)로 다시 고르세요.");
+            MessageDialog.Error(this, string.Format(MainText.OpenNamedFailed_Title, name), Directory.Exists(full)
+                ? MainText.Open_FolderNotArchive
+                : string.Format(MainText.Open_FileNotFound, full));
             return;
         }
 
@@ -67,13 +66,13 @@ public partial class MainWindow
             var format = ArchiveFormat.Unknown;
             IArchiveEngine? engine = null;
             var current = options;
-            var listed = await RunAsync("압축 파일 여는 중", name, (_, cancel) =>
+            var listed = await RunAsync(MainText.Opening_Title, name, (_, cancel) =>
             {
                 try
                 {
                     format = Archives.Detect(full);
                     if (format == ArchiveFormat.Unknown)
-                        return new ListResult(OperationResult.Fail("지원하지 않거나 알 수 없는 압축 파일 형식입니다. ZIP·7Z·RAR·TAR·GZ·TGZ 파일을 여세요."), []);
+                        return new ListResult(OperationResult.Fail(MainText.Open_UnknownFormat), []);
                     engine = Archives.For(format, current);
                     return engine.List(full, cancel);
                 }
@@ -89,7 +88,7 @@ public partial class MainWindow
 
             if (listed.Result.Status == OperationStatus.PasswordRequired && engine is not null)
             {
-                var password = PasswordDialog.Ask(this, name, tried || IsWrongPassword(listed.Result));
+                var password = PasswordDialog.Ask(this, name, tried || current?.Password is not null);
                 if (password is null)
                 {
                     // 암호 입력 취소: 열지 않는다(다시 읽던 중이면 낡은 목록도 남기지 않음).
@@ -106,7 +105,7 @@ public partial class MainWindow
                 // 다시 읽기에 실패하면 낡은 목록을 남기지 않는다.
                 if (sameArchive) CloseArchive();
                 if (listed.Result.Status != OperationStatus.Cancelled)
-                    MessageDialog.Result(this, $"{name}을(를) 열 수 없습니다", listed.Result);
+                    MessageDialog.Result(this, string.Format(MainText.OpenNamedFailed_Title, name), listed.Result);
                 return;
             }
 
@@ -121,7 +120,7 @@ public partial class MainWindow
             UpdateFind();
             FocusList();
             if (listed.Result.Problems.Count > 0)
-                MessageDialog.Show(this, DialogKind.Warning, $"{name}을(를) 열었지만 확인할 점이 있습니다", listed.Result.Message, listed.Result.Problems, ["확인"]);
+                MessageDialog.Show(this, DialogKind.Warning, string.Format(MainText.OpenedWithProblems_Title, name), listed.Result.Message, listed.Result.Problems, [MainText.OK_Button]);
             return;
         }
     }
@@ -164,8 +163,8 @@ public partial class MainWindow
                 if (!ReferenceEquals(current, a.Engine) && read is not null) a.UsePassword(current, read);
                 return result;
             }
-            var password = PasswordDialog.Ask(this, a.FileName, tried || IsWrongPassword(result));
-            if (password is null) return OperationResult.Cancelled("암호 입력을 취소했습니다. 아무것도 바꾸지 않았습니다.");
+            var password = PasswordDialog.Ask(this, a.FileName, tried);
+            if (password is null) return OperationResult.Cancelled(MainText.PasswordCancelled);
             read = (a.Read ?? new ReadOptions()) with { Password = password };
             engine = Archives.For(a.Format, read);
             tried = true;
@@ -177,14 +176,14 @@ public partial class MainWindow
         if (_archive is null) return;
         var psi = new ProcessStartInfo("explorer.exe") { UseShellExecute = false };
         psi.ArgumentList.Add("/select," + _archive.FilePath);
-        StartProcess(psi, "탐색기를 열 수 없습니다");
+        StartProcess(psi, MainText.ExplorerFailed_Title);
     }
 
     private void OpenFolderInExplorer(string folder)
     {
         var psi = new ProcessStartInfo("explorer.exe") { UseShellExecute = false };
         psi.ArgumentList.Add(folder);
-        StartProcess(psi, "탐색기를 열 수 없습니다");
+        StartProcess(psi, MainText.ExplorerFailed_Title);
     }
 
     private bool StartProcess(ProcessStartInfo psi, string failHeading)
@@ -207,21 +206,21 @@ public partial class MainWindow
     {
         if (_archive is null) return;
         var a = _archive;
-        var result = await RunArchiveOperationAsync(a, "압축 파일 테스트 중", a.FileName, (e, p, c) => e.Test(a.FilePath, p, c));
+        var result = await RunArchiveOperationAsync(a, MainText.Testing_Title, a.FileName, (e, p, c) => e.Test(a.FilePath, p, c));
         switch (result.Status)
         {
             case OperationStatus.Succeeded when result.Problems.Count == 0:
-                MessageDialog.Show(this, DialogKind.Success, "압축 파일에 오류가 없습니다",
-                    string.IsNullOrWhiteSpace(result.Message) ? $"{a.FileName} — 파일 {a.FileCount:N0}개를 확인했습니다." : result.Message, null, ["확인"]);
+                MessageDialog.Show(this, DialogKind.Success, MainText.TestOk_Title,
+                    string.IsNullOrWhiteSpace(result.Message) ? string.Format(MainText.TestOk_Body, a.FileName, a.FileCount) : result.Message, null, [MainText.OK_Button]);
                 break;
             case OperationStatus.Succeeded:
-                MessageDialog.Result(this, "테스트를 마쳤지만 확인할 점이 있습니다", result);
+                MessageDialog.Result(this, MainText.TestProblems_Title, result);
                 break;
             case OperationStatus.Cancelled:
-                ShowNotice("테스트를 취소했습니다. 파일은 바뀌지 않았습니다.");
+                ShowNotice(MainText.TestCancelled);
                 break;
             default:
-                MessageDialog.Result(this, "압축 파일에 오류가 있습니다", result);
+                MessageDialog.Result(this, MainText.TestFailed_Title, result);
                 break;
         }
     }
@@ -267,7 +266,7 @@ public partial class MainWindow
         if (choice == ConflictChoice.Ask)
         {
             // 묻기: 대상에 같은 이름이 있으면 먼저 묻는다(기본은 덮어쓰지 않음).
-            var conflicts = await RunAsync("대상 폴더 확인 중", destination, (_, cancel) =>
+            var conflicts = await RunAsync(MainText.CheckingDestination_Title, destination, (_, cancel) =>
             {
                 var hits = new List<string>();
                 if (!Directory.Exists(destination)) return hits;
@@ -286,10 +285,10 @@ public partial class MainWindow
             if (conflicts.Count > 0)
             {
                 var sample = conflicts.Take(50).ToList();
-                if (conflicts.Count > sample.Count) sample.Add($"… 외 {conflicts.Count - sample.Count:N0}개");
-                int answer = MessageDialog.Show(this, DialogKind.Question, "같은 이름의 파일이 이미 있습니다",
-                    $"대상 폴더에 같은 이름의 파일이 {conflicts.Count:N0}개 있습니다. 어떻게 할까요?", sample,
-                    ["덮어쓰기", "건너뛰기", "이름 바꾸기", "취소"], defaultIndex: 1, cancelIndex: 3);
+                if (conflicts.Count > sample.Count) sample.Add(string.Format(MainText.More_Items, conflicts.Count - sample.Count));
+                int answer = MessageDialog.Show(this, DialogKind.Question, MainText.Conflict_Title,
+                    string.Format(MainText.Conflict_Body, conflicts.Count), sample,
+                    [MainText.Replace_Button, MainText.Skip_Button, MainText.Rename_Button, MainText.Cancel_Button], defaultIndex: 1, cancelIndex: 3);
                 switch (answer)
                 {
                     case 0: policy = ConflictPolicy.Overwrite; break;
@@ -310,7 +309,7 @@ public partial class MainWindow
         }
 
         var options = new ExtractOptions { Conflict = policy, Only = only };
-        var result = await RunArchiveOperationAsync(a, "압축 푸는 중", a.FileName, (e, p, c) => e.Extract(a.FilePath, destination, options, p, c));
+        var result = await RunArchiveOperationAsync(a, MainText.Extracting_Title, a.FileName, (e, p, c) => e.Extract(a.FilePath, destination, options, p, c));
         switch (result.Status)
         {
             case OperationStatus.Succeeded:
@@ -322,16 +321,16 @@ public partial class MainWindow
                     break;
                 }
                 int open = MessageDialog.Show(this, result.Problems.Count > 0 ? DialogKind.Warning : DialogKind.Success,
-                    result.Problems.Count > 0 ? "압축을 풀었지만 확인할 점이 있습니다" : "압축을 풀었습니다",
+                    result.Problems.Count > 0 ? MainText.ExtractProblems_Title : MainText.ExtractDone_Title,
                     string.IsNullOrWhiteSpace(result.Message) ? destination : $"{result.Message}\n{destination}",
-                    result.Problems, ["폴더 열기", "닫기"]);
+                    result.Problems, [MainText.OpenFolder_Button, MainText.Close_Button]);
                 if (open == 0 || openAfter) OpenFolderInExplorer(destination);
                 break;
             case OperationStatus.Cancelled:
-                ShowNotice($"압축 풀기를 취소했습니다. 만든 파일은 지우고 덮어쓰던 파일은 되돌렸습니다: {destination}");
+                ShowNotice(string.Format(MainText.ExtractCancelled, destination));
                 break;
             default:
-                MessageDialog.Result(this, "압축을 풀지 못했습니다", result);
+                MessageDialog.Result(this, MainText.ExtractFailed_Title, result);
                 break;
         }
     }
@@ -342,9 +341,9 @@ public partial class MainWindow
     {
         var pick = new OpenFileDialog
         {
-            Title = "압축할 파일 선택 (폴더는 다음 대화상자에서 추가)",
+            Title = MainText.PickFilesToArchive_Title,
             Multiselect = true,
-            Filter = "모든 파일 (*.*)|*.*",
+            Filter = MainText.Filter_AllFiles,
             CheckFileExists = true,
         };
         if (pick.ShowDialog(this) != true || pick.FileNames.Length == 0) return;
@@ -358,7 +357,7 @@ public partial class MainWindow
         bool replace = dlg.ReplaceExisting && File.Exists(target);
         if (replace && options.VolumeSize is not null)
         {
-            MessageDialog.Error(this, "새로 압축할 수 없습니다", "분할 압축은 기존 파일을 바꿀 수 없습니다. 다른 이름을 고르세요.");
+            MessageDialog.Error(this, MainText.CreateBlocked_Title, MainText.Create_SplitReplace);
             return;
         }
 
@@ -367,7 +366,7 @@ public partial class MainWindow
         var work = replace
             ? Path.Combine(Path.GetDirectoryName(target)!, $".{Path.GetFileName(target)}.{Guid.NewGuid():N}.tmp{ext}")
             : target;
-        var result = await RunOperationAsync("압축하는 중", Path.GetFileName(target), (p, c) => engine.Create(work, sources, options, p, c));
+        var result = await RunOperationAsync(MainText.Creating_Title, Path.GetFileName(target), (p, c) => engine.Create(work, sources, options, p, c));
         if (result.Succeeded && replace)
         {
             try
@@ -376,7 +375,7 @@ public partial class MainWindow
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                result = OperationResult.Fail("만든 압축 파일을 대상 이름으로 옮기지 못했습니다.", ex.Message, work);
+                result = OperationResult.Fail(MainText.Create_MoveFailed, ex.Message, work);
             }
         }
         else if (!result.Succeeded && replace && File.Exists(work))
@@ -387,7 +386,7 @@ public partial class MainWindow
         switch (result.Status)
         {
             case OperationStatus.Succeeded:
-                if (result.Problems.Count > 0) MessageDialog.Result(this, "압축했지만 확인할 점이 있습니다", result);
+                if (result.Problems.Count > 0) MessageDialog.Result(this, MainText.CreateProblems_Title, result);
                 // 7Z 분할은 name.7z.001… 로 만들어진다.
                 var open = !File.Exists(target) && File.Exists(target + ".001") ? target + ".001" : target;
                 await OpenArchiveAsync(open, read: string.IsNullOrEmpty(options.Password) ? null : new ReadOptions { Password = options.Password });
@@ -396,17 +395,17 @@ public partial class MainWindow
             {
                 var leftovers = new[] { work, target }.Distinct().Where(p => replace ? p == work && File.Exists(p) : File.Exists(p)).ToList();
                 if (leftovers.Count == 0)
-                    ShowNotice("압축을 취소했습니다. 만들던 압축 파일을 남기지 않았습니다." + (replace ? " 기존 파일은 그대로입니다." : ""));
+                    ShowNotice(MainText.CreateCancelled + (replace ? MainText.CreateCancelled_ExistingKept : ""));
                 else
-                    MessageDialog.Show(this, DialogKind.Warning, "압축을 취소했지만 남은 파일이 있습니다",
-                        "다음 파일을 직접 지우세요.", leftovers, ["확인"]);
+                    MessageDialog.Show(this, DialogKind.Warning, MainText.CreateLeftovers_Title,
+                        MainText.CreateLeftovers_Body, leftovers, [MainText.OK_Button]);
                 break;
             }
             case OperationStatus.NotSupported:
-                MessageDialog.Result(this, "이 옵션으로는 아직 압축할 수 없습니다", result);
+                MessageDialog.Result(this, MainText.CreateNotSupported_Title, result);
                 break;
             default:
-                MessageDialog.Result(this, "압축하지 못했습니다", result);
+                MessageDialog.Result(this, MainText.CreateFailed_Title, result);
                 break;
         }
     }
@@ -416,7 +415,7 @@ public partial class MainWindow
     private async Task AddAsync()
     {
         if (_archive is not { Engine.Capabilities.Modify: true }) return;
-        var pick = new OpenFileDialog { Title = "압축 파일에 추가할 파일 선택", Multiselect = true, Filter = "모든 파일 (*.*)|*.*", CheckFileExists = true };
+        var pick = new OpenFileDialog { Title = MainText.PickFilesToAdd_Title, Multiselect = true, Filter = MainText.Filter_AllFiles, CheckFileExists = true };
         if (pick.ShowDialog(this) != true || pick.FileNames.Length == 0) return;
         await AddSourcesAsync(pick.FileNames);
     }
@@ -427,14 +426,14 @@ public partial class MainWindow
         if (_archive is not { Engine.Capabilities.Modify: true } a) return;
         if (sources.Any(s => string.Equals(Path.GetFullPath(s), a.FilePath, StringComparison.OrdinalIgnoreCase)))
         {
-            MessageDialog.Error(this, "파일을 추가할 수 없습니다", "열린 압축 파일 자신은 그 안에 추가할 수 없습니다.");
+            MessageDialog.Error(this, MainText.AddBlocked_Title, MainText.Add_Self);
             return;
         }
         var folder = _folder;
-        var where = folder.Length == 0 ? "최상위" : folder;
+        var where = folder.Length == 0 ? MainText.Add_TopLevel : folder;
         var before = Snapshot(a.FilePath);
-        var result = await RunArchiveOperationAsync(a, "파일 추가 중", $"{sources.Count:N0}개 → {where}", (e, p, c) => e.Add(a.FilePath, sources, folder, p, c));
-        await ReportModifyAsync(a, before, result, "파일을 추가하지 못했습니다", "파일 추가를 취소했습니다", Path.GetFileName(sources[0].TrimEnd(Path.DirectorySeparatorChar)));
+        var result = await RunArchiveOperationAsync(a, MainText.Adding_Title, string.Format(MainText.Adding_Detail, sources.Count, where), (e, p, c) => e.Add(a.FilePath, sources, folder, p, c));
+        await ReportModifyAsync(a, before, result, MainText.AddFailed_Title, MainText.AddCancelled_Title, Path.GetFileName(sources[0].TrimEnd(Path.DirectorySeparatorChar)));
     }
 
     private async Task DeleteAsync()
@@ -445,16 +444,16 @@ public partial class MainWindow
         if (S.ConfirmDelete)
         {
             var names = rows.Take(50).Select(r => r.IsDirectory ? r.Name + "/" : r.Name).ToList();
-            if (rows.Count > names.Count) names.Add($"… 외 {rows.Count - names.Count:N0}개");
-            int answer = MessageDialog.Show(this, DialogKind.Question, "선택한 항목을 압축 파일에서 삭제할까요?",
-                $"{rows.Count:N0}개 항목을 {a.FileName}에서 삭제합니다. 폴더는 안의 항목도 함께 삭제됩니다.", names,
-                ["삭제", "취소"], defaultIndex: 0, cancelIndex: 1);
+            if (rows.Count > names.Count) names.Add(string.Format(MainText.More_Items, rows.Count - names.Count));
+            int answer = MessageDialog.Show(this, DialogKind.Question, MainText.DeleteConfirm_Title,
+                string.Format(MainText.DeleteConfirm_Body, rows.Count, a.FileName), names,
+                [MainText.Delete_Button, MainText.Cancel_Button], defaultIndex: 0, cancelIndex: 1);
             if (answer != 0) return;
         }
         var paths = rows.Select(r => r.Path).ToList();
         var before = Snapshot(a.FilePath);
-        var result = await RunArchiveOperationAsync(a, "삭제하는 중", $"{paths.Count:N0}개 항목", (e, p, c) => e.Delete(a.FilePath, paths, p, c));
-        await ReportModifyAsync(a, before, result, "삭제하지 못했습니다", "삭제를 취소했습니다", null);
+        var result = await RunArchiveOperationAsync(a, MainText.Deleting_Title, string.Format(MainText.ItemCount, paths.Count), (e, p, c) => e.Delete(a.FilePath, paths, p, c));
+        await ReportModifyAsync(a, before, result, MainText.DeleteFailed_Title, MainText.DeleteCancelled_Title, null);
     }
 
     private async Task RenameAsync()
@@ -465,18 +464,18 @@ public partial class MainWindow
         var row = rows[0];
         var siblings = a.RowsIn(_folder).Where(r => r.Path != row.Path).Select(r => r.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
         var invalid = Path.GetInvalidFileNameChars();
-        var newName = InputDialog.Ask(this, "이름 바꾸기", $"'{row.Name}'의 새 이름:", row.Name, value =>
+        var newName = InputDialog.Ask(this, MainText.Rename_Title, string.Format(MainText.Rename_Prompt, row.Name), row.Name, value =>
         {
-            if (value.Length == 0) return "이름을 입력하세요.";
-            if (value is "." or "..") return "'.' 과 '..' 은 이름으로 쓸 수 없습니다. 다른 이름을 입력하세요.";
-            if (value.IndexOfAny(invalid) >= 0 || value.Contains('/')) return "이름에서 \\ / : * ? \" < > | 를 빼세요.";
-            if (value != row.Name && siblings.Contains(value)) return "같은 폴더에 같은 이름의 항목이 있습니다. 다른 이름을 입력하세요.";
+            if (value.Length == 0) return MainText.Rename_Empty;
+            if (value is "." or "..") return MainText.Rename_Dots;
+            if (value.IndexOfAny(invalid) >= 0 || value.Contains('/')) return MainText.Rename_InvalidChars;
+            if (value != row.Name && siblings.Contains(value)) return MainText.Rename_Duplicate;
             return null;
-        }, okLabel: "이름 바꾸기");
+        }, okLabel: MainText.Rename_Button);
         if (newName is null || newName == row.Name) return;
         var before = Snapshot(a.FilePath);
-        var result = await RunArchiveOperationAsync(a, "이름 바꾸는 중", $"{row.Name} → {newName}", (e, p, c) => e.Rename(a.FilePath, row.Path, newName, p, c));
-        await ReportModifyAsync(a, before, result, "이름을 바꾸지 못했습니다", "이름 바꾸기를 취소했습니다", newName);
+        var result = await RunArchiveOperationAsync(a, MainText.Renaming_Title, $"{row.Name} → {newName}", (e, p, c) => e.Rename(a.FilePath, row.Path, newName, p, c));
+        await ReportModifyAsync(a, before, result, MainText.RenameFailed_Title, MainText.RenameCancelled_Title, newName);
     }
 
     /// <summary>압축 파일 설명 편집(Ctrl+Shift+M) → engine.SetComment.</summary>
@@ -487,9 +486,9 @@ public partial class MainWindow
         if (text is null || text == (a.Comment ?? "")) return;
         var before = Snapshot(a.FilePath);
         var comment = text.Length == 0 ? null : text;
-        var result = await RunArchiveOperationAsync(a, "설명 저장 중", a.FileName, (e, _, c) => e.SetComment(a.FilePath, comment, c));
-        await ReportModifyAsync(a, before, result, result.Status == OperationStatus.NotSupported ? "이 형식은 설명을 저장할 수 없습니다" : "설명을 저장하지 못했습니다",
-            "설명 저장을 취소했습니다", null);
+        var result = await RunArchiveOperationAsync(a, MainText.SavingComment_Title, a.FileName, (e, _, c) => e.SetComment(a.FilePath, comment, c));
+        await ReportModifyAsync(a, before, result, result.Status == OperationStatus.NotSupported ? MainText.CommentNotSupported_Title : MainText.CommentFailed_Title,
+            MainText.CommentCancelled_Title, null);
     }
 
     private static (long Length, DateTime Written)? Snapshot(string path)
@@ -512,17 +511,17 @@ public partial class MainWindow
         switch (result.Status)
         {
             case OperationStatus.Succeeded:
-                if (result.Problems.Count > 0) MessageDialog.Result(this, "작업을 마쳤지만 확인할 점이 있습니다", result);
+                if (result.Problems.Count > 0) MessageDialog.Result(this, MainText.ModifyProblems_Title, result);
                 break;
             case OperationStatus.Cancelled:
             {
                 // 취소 뒤 실제로 압축 파일이 그대로인지 크기·수정 시각으로 확인해 알려 준다.
                 var after = Snapshot(a.FilePath);
                 if (before is not null && after == before)
-                    ShowNotice($"{cancelHeading}. 압축 파일은 바뀌지 않았습니다.");
+                    ShowNotice(string.Format(MainText.Modify_CancelledUnchanged, cancelHeading));
                 else
                     MessageDialog.Show(this, DialogKind.Warning, cancelHeading,
-                        $"{result.Message}\n확인 필요: 압축 파일의 크기나 수정 시각이 작업 전과 다릅니다.", null, ["확인"]);
+                        string.Format(MainText.Modify_CancelledChanged, result.Message), null, [MainText.OK_Button]);
                 break;
             }
             default:
@@ -549,16 +548,16 @@ public partial class MainWindow
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            MessageDialog.Error(this, "클립보드로 복사하지 못했습니다", $"임시 폴더를 만들 수 없습니다: {ex.Message}");
+            MessageDialog.Error(this, MainText.ClipboardCopyFailed_Title, string.Format(MainText.Clipboard_TempFailed, ex.Message));
             return;
         }
         var options = new ExtractOptions { Conflict = ConflictPolicy.Overwrite, Only = rows.Select(r => r.Path).ToList() };
-        var result = await RunArchiveOperationAsync(a, "클립보드로 복사하는 중", $"{rows.Count:N0}개 항목", (e, p, c) => e.Extract(a.FilePath, destination, options, p, c));
+        var result = await RunArchiveOperationAsync(a, MainText.CopyingToClipboard_Title, string.Format(MainText.ItemCount, rows.Count), (e, p, c) => e.Extract(a.FilePath, destination, options, p, c));
         if (!result.Succeeded)
         {
             TryDeleteDirectory(destination);
-            if (result.Status == OperationStatus.Cancelled) ShowNotice("클립보드 복사를 취소했습니다. 임시로 풀던 파일을 지웠습니다.");
-            else MessageDialog.Result(this, "클립보드로 복사하지 못했습니다", result);
+            if (result.Status == OperationStatus.Cancelled) ShowNotice(MainText.ClipboardCopyCancelled);
+            else MessageDialog.Result(this, MainText.ClipboardCopyFailed_Title, result);
             return;
         }
         var files = new StringCollection();
@@ -569,7 +568,7 @@ public partial class MainWindow
         }
         if (files.Count == 0)
         {
-            MessageDialog.Result(this, "클립보드로 복사할 파일이 없습니다", result);
+            MessageDialog.Result(this, MainText.ClipboardNothing_Title, result);
             return;
         }
         try
@@ -578,10 +577,10 @@ public partial class MainWindow
         }
         catch (ExternalException ex)
         {
-            MessageDialog.Error(this, "클립보드를 쓸 수 없습니다", ex.Message);
+            MessageDialog.Error(this, MainText.ClipboardWrite_Title, ex.Message);
             return;
         }
-        if (result.Problems.Count > 0) MessageDialog.Result(this, "복사했지만 확인할 점이 있습니다", result);
+        if (result.Problems.Count > 0) MessageDialog.Result(this, MainText.CopyProblems_Title, result);
         RefreshCommandState();
     }
 
@@ -595,12 +594,12 @@ public partial class MainWindow
         }
         catch (ExternalException ex)
         {
-            MessageDialog.Error(this, "클립보드를 읽을 수 없습니다", ex.Message);
+            MessageDialog.Error(this, MainText.ClipboardRead_Title, ex.Message);
             return;
         }
         if (files.Length == 0)
         {
-            ShowNotice("클립보드에 붙여 넣을 파일이 없습니다.");
+            ShowNotice(MainText.Clipboard_NoFiles);
             return;
         }
         await AddSourcesAsync(files);
@@ -619,7 +618,7 @@ public partial class MainWindow
         }
         catch (ExternalException ex)
         {
-            MessageDialog.Error(this, "클립보드를 쓸 수 없습니다", ex.Message);
+            MessageDialog.Error(this, MainText.ClipboardWrite_Title, ex.Message);
         }
     }
 
@@ -647,24 +646,24 @@ public partial class MainWindow
         var ext = Path.GetExtension(a.FilePath);
         var save = new SaveFileDialog
         {
-            Title = "다른 이름으로 저장",
-            Filter = ext.Length > 0 ? $"{ext.TrimStart('.').ToUpperInvariant()} 압축 파일 (*{ext})|*{ext}|모든 파일 (*.*)|*.*" : "모든 파일 (*.*)|*.*",
+            Title = MainText.SaveAs_Title,
+            Filter = ext.Length > 0 ? string.Format(MainText.Filter_SaveAs, ext.TrimStart('.').ToUpperInvariant(), ext) : MainText.Filter_AllFiles,
             DefaultExt = ext,
             AddExtension = ext.Length > 0,
             OverwritePrompt = true,
             InitialDirectory = Path.GetDirectoryName(a.FilePath),
-            FileName = Path.GetFileNameWithoutExtension(a.FilePath) + " - 복사본" + ext,
+            FileName = Path.GetFileNameWithoutExtension(a.FilePath) + MainText.SaveAs_CopySuffix + ext,
         };
         if (save.ShowDialog(this) != true) return;
         var target = Path.GetFullPath(save.FileName);
         if (string.Equals(target, a.FilePath, StringComparison.OrdinalIgnoreCase))
         {
-            MessageDialog.Error(this, "저장할 수 없습니다", "열린 압축 파일과 같은 경로입니다. 다른 이름이나 폴더를 고르세요.");
+            MessageDialog.Error(this, MainText.SaveBlocked_Title, MainText.SaveAs_SamePath);
             return;
         }
         var temp = Path.Combine(Path.GetDirectoryName(target)!, $".{Path.GetFileName(target)}.{Guid.NewGuid():N}.tmp");
         var source = a.FilePath;
-        var result = await RunOperationAsync("다른 이름으로 저장 중", Path.GetFileName(target), (p, c) =>
+        var result = await RunOperationAsync(MainText.SavingAs_Title, Path.GetFileName(target), (p, c) =>
         {
             try
             {
@@ -680,13 +679,13 @@ public partial class MainWindow
         switch (result.Status)
         {
             case OperationStatus.Succeeded:
-                ShowNotice($"다른 이름으로 저장했습니다: {target}");
+                ShowNotice(string.Format(MainText.SaveAs_Done, target));
                 break;
             case OperationStatus.Cancelled:
-                ShowNotice("저장을 취소했습니다. 대상 파일은 바뀌지 않았습니다.");
+                ShowNotice(MainText.SaveAs_Cancelled);
                 break;
             default:
-                MessageDialog.Result(this, "다른 이름으로 저장하지 못했습니다", result);
+                MessageDialog.Result(this, MainText.SaveAsFailed_Title, result);
                 break;
         }
     }
@@ -712,13 +711,13 @@ public partial class MainWindow
     {
         if (_archive is null) return;
         var path = _archive.FilePath;
-        int answer = MessageDialog.Show(this, DialogKind.Question, "압축 파일을 휴지통으로 보낼까요?",
-            $"{path}\n압축 파일을 닫고 휴지통으로 보냅니다. 휴지통에서 되살릴 수 있습니다.", null, ["휴지통으로 보내기", "취소"], defaultIndex: 0, cancelIndex: 1);
+        int answer = MessageDialog.Show(this, DialogKind.Question, MainText.DeleteArchive_Title,
+            string.Format(MainText.DeleteArchive_Body, path), null, [MainText.MoveToRecycleBin_Button, MainText.Cancel_Button], defaultIndex: 0, cancelIndex: 1);
         if (answer != 0) return;
         CloseArchive();
         var error = NativeMethods.MoveToRecycleBin(this, path);
-        if (error is null) ShowNotice($"휴지통으로 보냈습니다: {path}");
-        else MessageDialog.Error(this, "압축 파일을 삭제하지 못했습니다", $"{error}\n{path}");
+        if (error is null) ShowNotice(string.Format(MainText.RecycleDone, path));
+        else MessageDialog.Error(this, MainText.DeleteArchiveFailed_Title, $"{error}\n{path}");
     }
 
     private void StartNewWindow()
@@ -726,19 +725,23 @@ public partial class MainWindow
         var exe = Environment.ProcessPath;
         if (exe is null)
         {
-            MessageDialog.Error(this, "새 창을 띄울 수 없습니다", "실행 파일 경로를 알 수 없습니다.");
+            MessageDialog.Error(this, MainText.NewWindowFailed_Title, MainText.ExePathUnknown);
             return;
         }
-        StartProcess(new ProcessStartInfo(exe) { UseShellExecute = false }, "새 창을 띄울 수 없습니다");
+        StartProcess(new ProcessStartInfo(exe) { UseShellExecute = false }, MainText.NewWindowFailed_Title);
     }
 
-    /// <summary>도움말: 실행 파일 옆 HELP.md 를 연결된 프로그램으로, 연결이 없으면 메모장으로 연다.</summary>
+    /// <summary>
+    /// 도움말: 실행 파일 옆 도움말 문서(한국어 화면이면 HELP.md, 그 밖은 HELP.en.md)를 연결된 프로그램으로,
+    /// 연결이 없으면 메모장으로 연다.
+    /// </summary>
     private void OpenHelp()
     {
-        var help = Path.Combine(AppContext.BaseDirectory, "HELP.md");
+        var fileName = UiLanguage.Current.TwoLetterISOLanguageName == "ko" ? "HELP.md" : "HELP.en.md";
+        var help = Path.Combine(AppContext.BaseDirectory, fileName);
         if (!File.Exists(help))
         {
-            MessageDialog.Error(this, "도움말 파일이 없습니다", $"설치 폴더에 HELP.md 가 없습니다: {help}");
+            MessageDialog.Error(this, MainText.HelpMissing_Title, string.Format(MainText.HelpMissing_Body, fileName, help));
             return;
         }
         try
@@ -749,7 +752,7 @@ public partial class MainWindow
         {
             var psi = new ProcessStartInfo("notepad.exe") { UseShellExecute = false };
             psi.ArgumentList.Add(help);
-            StartProcess(psi, "도움말을 열 수 없습니다");
+            StartProcess(psi, MainText.HelpOpenFailed_Title);
         }
     }
 }

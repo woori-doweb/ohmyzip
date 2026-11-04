@@ -4,7 +4,26 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- 화면·오류 문구: Resources/*.resx = 영어(기본), *.ko.resx = 한국어 위성 어셈블리. -->
+    <NeutralLanguage>en</NeutralLanguage>
+    <SatelliteResourceLanguages>ko</SatelliteResourceLanguages>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\*.resx">
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedNamespace>OhMyZip.Core.Resources</StronglyTypedNamespace>
+      <StronglyTypedClassName>%(Filename)</StronglyTypedClassName>
+      <StronglyTypedFileName>$(IntermediateOutputPath)%(Filename).Designer.cs</StronglyTypedFileName>
+    </EmbeddedResource>
+    <!-- 번역본은 클래스를 만들지 않는다. -->
+    <EmbeddedResource Update="Resources\*.ko.resx">
+      <StronglyTypedLanguage></StronglyTypedLanguage>
+      <StronglyTypedNamespace></StronglyTypedNamespace>
+      <StronglyTypedClassName></StronglyTypedClassName>
+      <StronglyTypedFileName></StronglyTypedFileName>
+    </EmbeddedResource>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SharpCompress" Version="1.0.0" />

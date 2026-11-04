@@ -65,11 +65,13 @@ def main(version):
     leftovers = sorted(p.name for p in out.glob("*.pdb"))
     if leftovers:
         raise SystemExit(f"디버그 심볼이 남음: {leftovers}")
-    files = sorted(p for p in out.iterdir() if p.is_file())
-    (out / "SHA256SUMS.txt").write_text("".join(f"{sha(p)} *{p.name}\n" for p in files), encoding="utf-8")
+    # 하위 폴더(한국어 위성 어셈블리 ko/ 등)까지 넣는다.
+    files = sorted((p for p in out.rglob("*") if p.is_file()), key=lambda p: p.relative_to(out).as_posix())
+    (out / "SHA256SUMS.txt").write_text("".join(f"{sha(p)} *{p.relative_to(out).as_posix()}\n" for p in files), encoding="utf-8")
+    files.append(out / "SHA256SUMS.txt")
     with zipfile.ZipFile(pkg, "w", zipfile.ZIP_DEFLATED) as z:
-        for p in sorted(out.iterdir()):
-            z.write(p, f"ohmyZip-{version}/{p.name}")
+        for p in sorted(files, key=lambda p: p.relative_to(out).as_posix()):
+            z.write(p, f"ohmyZip-{version}/{p.relative_to(out).as_posix()}")
     line = f"{sha(pkg)} *{pkg.name}\n"
     pkg_sha.write_bytes(line.encode("ascii"))
     print((out / "SHA256SUMS.txt").read_text(encoding="utf-8"), end="")

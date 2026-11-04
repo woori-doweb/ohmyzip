@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
 using System.Text;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -92,7 +93,7 @@ internal static class ZipCentralDirectory
     {
         long length = s.Length;
         if (length < EocdLength)
-            throw new InvalidDataException("ZIP 끝 기록(EOCD)이 없습니다");
+            throw new InvalidDataException(EngineText.Zip_EocdMissing);
         int tailLength = (int)Math.Min(length, EocdLength + 0xFFFF);
         byte[] tail = new byte[tailLength];
         s.Position = length - tailLength;
@@ -103,7 +104,7 @@ internal static class ZipCentralDirectory
                 && i + EocdLength + BinaryPrimitives.ReadUInt16LittleEndian(tail.AsSpan(i + 20)) <= tailLength)
                 return length - tailLength + i;
         }
-        throw new InvalidDataException("ZIP 끝 기록(EOCD)이 없습니다");
+        throw new InvalidDataException(EngineText.Zip_EocdMissing);
     }
 
     public static ZipDirectory Read(Stream s, ZipVolumeSet volumes, int? codePage)
@@ -134,7 +135,7 @@ internal static class ZipCentralDirectory
                 s.Position = z64;
                 s.ReadExactly(rec);
                 if (BinaryPrimitives.ReadUInt32LittleEndian(rec) != Zip64EocdSignature)
-                    throw new InvalidDataException("ZIP64 끝 기록이 손상되었습니다");
+                    throw new InvalidDataException(EngineText.Zip_Zip64EocdDamaged);
                 cdDisk = BinaryPrimitives.ReadUInt32LittleEndian(rec.AsSpan(20));
                 count = (long)BinaryPrimitives.ReadUInt64LittleEndian(rec.AsSpan(32));
                 cdSize = (long)BinaryPrimitives.ReadUInt64LittleEndian(rec.AsSpan(40));
@@ -145,7 +146,7 @@ internal static class ZipCentralDirectory
 
         long cdStart = volumes.ToGlobal(cdDisk, cdOffset);
         if (cdSize < 0 || cdSize > int.MaxValue || cdStart < 0 || cdStart + cdSize > cdEnd)
-            throw new InvalidDataException("중앙 디렉터리 위치가 올바르지 않습니다");
+            throw new InvalidDataException(EngineText.Zip_CentralDirectoryLocationInvalid);
         byte[] cd = new byte[cdSize];
         s.Position = cdStart;
         s.ReadExactly(cd);
@@ -155,13 +156,13 @@ internal static class ZipCentralDirectory
         for (long n = 0; n < count; n++)
         {
             if (pos + 46 > cd.Length || BinaryPrimitives.ReadUInt32LittleEndian(cd.AsSpan(pos)) != CentralHeaderSignature)
-                throw new InvalidDataException("중앙 디렉터리가 손상되었습니다");
+                throw new InvalidDataException(EngineText.Zip_CentralDirectoryDamaged);
             ReadOnlySpan<byte> h = cd.AsSpan(pos);
             int nameLength = BinaryPrimitives.ReadUInt16LittleEndian(h[28..]);
             int extraLength = BinaryPrimitives.ReadUInt16LittleEndian(h[30..]);
             int entryCommentLength = BinaryPrimitives.ReadUInt16LittleEndian(h[32..]);
             if (pos + 46 + nameLength + extraLength + entryCommentLength > cd.Length)
-                throw new InvalidDataException("중앙 디렉터리가 손상되었습니다");
+                throw new InvalidDataException(EngineText.Zip_CentralDirectoryDamaged);
             byte[] nameBytes = h.Slice(46, nameLength).ToArray();
             byte[] extra = h.Slice(46 + nameLength, extraLength).ToArray();
             byte[] entryComment = h.Slice(46 + nameLength + extraLength, entryCommentLength).ToArray();
@@ -184,16 +185,16 @@ internal static class ZipCentralDirectory
                     return true;
                 }
                 if (size == 0xFFFFFFFF && !Take(out size))
-                    throw new InvalidDataException("ZIP64 확장 필드가 손상되었습니다");
+                    throw new InvalidDataException(EngineText.Zip_Zip64ExtraDamaged);
                 if (compressed == 0xFFFFFFFF && !Take(out compressed))
-                    throw new InvalidDataException("ZIP64 확장 필드가 손상되었습니다");
+                    throw new InvalidDataException(EngineText.Zip_Zip64ExtraDamaged);
                 if (offset == 0xFFFFFFFF && !Take(out offset))
-                    throw new InvalidDataException("ZIP64 확장 필드가 손상되었습니다");
+                    throw new InvalidDataException(EngineText.Zip_Zip64ExtraDamaged);
                 if (disk == 0xFFFF && p + 4 <= z64.Length)
                     disk = BinaryPrimitives.ReadUInt32LittleEndian(z64.AsSpan(p));
             }
             if (size < 0 || compressed < 0 || offset < 0)
-                throw new InvalidDataException("항목 크기가 올바르지 않습니다");
+                throw new InvalidDataException(EngineText.Common_ItemSizeInvalid);
 
             ZipAesInfo? aes = null;
             if (FindExtra(extra, ZipAes.ExtraId) is { Length: >= 7 } a && a[2] == 'A' && a[3] == 'E')
@@ -362,7 +363,7 @@ internal sealed class ZipArchiveReader : IDisposable
         Stream.Position = local;
         Stream.ReadExactly(fixedPart);
         if (BinaryPrimitives.ReadUInt32LittleEndian(fixedPart) != ZipCentralDirectory.LocalHeaderSignature)
-            throw new InvalidDataException($"{r.Name}: 지역 머리가 손상되었습니다");
+            throw new InvalidDataException(string.Format(EngineText.Zip_LocalHeaderDamaged, r.Name));
         int n = BinaryPrimitives.ReadUInt16LittleEndian(fixedPart.AsSpan(26));
         int m = BinaryPrimitives.ReadUInt16LittleEndian(fixedPart.AsSpan(28));
         byte[] header = new byte[30 + n + m];
@@ -370,7 +371,7 @@ internal sealed class ZipArchiveReader : IDisposable
         Stream.ReadExactly(header.AsSpan(30));
         dataStart = local + header.Length;
         if (dataStart + r.CompressedSize > Stream.Length)
-            throw new InvalidDataException($"{r.Name}: 데이터가 압축 파일 밖으로 나갑니다");
+            throw new InvalidDataException(string.Format(EngineText.Zip_DataOutsideArchive, r.Name));
         return header;
     }
 
@@ -386,13 +387,13 @@ internal sealed class ZipArchiveReader : IDisposable
         if (r.IsEncrypted)
         {
             if ((r.Flags & 0x0040) != 0)
-                throw new NotSupportedException("PKWARE 강력 암호화는 지원하지 않습니다");
+                throw new NotSupportedException(EngineText.Zip_StrongEncryptionUnsupported);
             if (string.IsNullOrEmpty(password))
                 throw new ZipPasswordException(missing: true);
             if (r.Method == ZipAes.Method)
             {
                 if (r.Aes is not { } info)
-                    throw new InvalidDataException($"{r.Name}: AES 확장 필드가 없습니다");
+                    throw new InvalidDataException(string.Format(EngineText.Zip_AesExtraMissing, r.Name));
                 data = aes = WinZipAesReadStream.Open(data, r.CompressedSize, info.Strength, password);
             }
             else
@@ -406,7 +407,7 @@ internal sealed class ZipArchiveReader : IDisposable
             0 => data,
             8 => new DeflateStream(data, CompressionMode.Decompress),
             9 => new SharpCompress.Compressors.Deflate64.Deflate64Stream(data, SharpCompress.Compressors.CompressionMode.Decompress),
-            _ => throw new NotSupportedException($"지원하지 않는 압축 방식: {ZipCentralDirectory.MethodName(r.ActualMethod)}"),
+            _ => throw new NotSupportedException(string.Format(EngineText.Common_MethodUnsupported, ZipCentralDirectory.MethodName(r.ActualMethod))),
         };
         return aes is null || content == data ? content : new DrainOnEndStream(content, aes);
     }

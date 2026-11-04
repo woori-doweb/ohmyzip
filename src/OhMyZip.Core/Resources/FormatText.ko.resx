@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Stream_ForwardOnly" xml:space="preserve">
+    <value>앞으로만 읽는 스트림입니다</value>
+  </data>
+  <data name="GZip_HeaderInvalid" xml:space="preserve">
+    <value>GZ 머리가 올바르지 않습니다</value>
+  </data>
+  <data name="GZip_TooShort" xml:space="preserve">
+    <value>GZ 파일이 너무 짧습니다</value>
+  </data>
+  <data name="GZip_NameTooLong" xml:space="preserve">
+    <value>GZ 이름이 너무 깁니다</value>
+  </data>
+  <data name="GZip_HeaderTruncated" xml:space="preserve">
+    <value>GZ 머리가 잘렸습니다</value>
+  </data>
+  <data name="Tar_Truncated" xml:space="preserve">
+    <value>TAR 가 잘렸습니다 (끝 블록 없음)</value>
+  </data>
+  <data name="Tar_EntrySizeInvalid" xml:space="preserve">
+    <value>TAR 항목 크기가 올바르지 않습니다</value>
+  </data>
+  <data name="Tar_ExtendedHeaderTooLarge" xml:space="preserve">
+    <value>TAR 확장 헤더가 너무 큽니다</value>
+  </data>
+  <data name="Tar_EntryDataTruncated" xml:space="preserve">
+    <value>TAR 항목 데이터가 잘렸습니다</value>
+  </data>
+  <data name="Tar_ChecksumMismatch" xml:space="preserve">
+    <value>TAR 헤더 체크섬 불일치</value>
+  </data>
+  <data name="Tar_NumberFieldInvalid" xml:space="preserve">
+    <value>TAR 헤더의 숫자 필드가 올바르지 않습니다</value>
+  </data>
+  <data name="Pax_HeaderInvalid" xml:space="preserve">
+    <value>PAX 확장 헤더가 올바르지 않습니다</value>
+  </data>
+  <data name="Tar_UnsupportedEntryType" xml:space="preserve">
+    <value>지원하지 않는 항목 종류(TAR 형식 '{0}')</value>
+  </data>
+  <data name="Tar_CannotCopyEntryType" xml:space="preserve">
+    <value>옮길 수 없는 TAR 항목 종류 '{0}': {1}</value>
+  </data>
+  <data name="List_ItemCount" xml:space="preserve">
+    <value>항목 {0}개</value>
+  </data>
+  <data name="Test_FilesOk" xml:space="preserve">
+    <value>파일 {0}개 이상 없음</value>
+  </data>
+  <data name="Test_DamagedItems" xml:space="preserve">
+    <value>손상된 항목 {0}개</value>
+  </data>
+  <data name="Check_SizeMismatch" xml:space="preserve">
+    <value>크기 불일치 (기대 {0}, 실제 {1})</value>
+  </data>
+  <data name="Check_SizeMismatchAt" xml:space="preserve">
+    <value>{0}: 크기 불일치 (기대 {1}, 실제 {2})</value>
+  </data>
+  <data name="Check_CrcMismatch" xml:space="preserve">
+    <value>CRC 불일치 (기대 {0:X8}, 실제 {1:X8})</value>
+  </data>
+  <data name="Check_CrcMismatchAt" xml:space="preserve">
+    <value>{0}: CRC 불일치 (기대 {1:X8}, 실제 {2:X8})</value>
+  </data>
+  <data name="Archive_OpenFailed" xml:space="preserve">
+    <value>{0} 압축 파일을 열 수 없습니다</value>
+  </data>
+  <data name="Archive_ReadFailed" xml:space="preserve">
+    <value>{0} 압축 파일을 읽을 수 없습니다</value>
+  </data>
+  <data name="Archive_Damaged" xml:space="preserve">
+    <value>{0} 압축 파일이 손상되었습니다</value>
+  </data>
+  <data name="Archive_TestFailed" xml:space="preserve">
+    <value>{0} 압축 파일을 검사할 수 없습니다</value>
+  </data>
+  <data name="Archive_PathInvalid" xml:space="preserve">
+    <value>압축 파일 경로가 올바르지 않습니다</value>
+  </data>
+  <data name="Archive_Missing" xml:space="preserve">
+    <value>압축 파일이 없습니다</value>
+  </data>
+  <data name="Volume_FirstMissing" xml:space="preserve">
+    <value>첫 조각이 없습니다</value>
+  </data>
+  <data name="Volume_Missing" xml:space="preserve">
+    <value>분할 조각이 없습니다: {0}</value>
+  </data>
+  <data name="Password_Required" xml:space="preserve">
+    <value>암호가 필요합니다</value>
+  </data>
+  <data name="Password_Wrong" xml:space="preserve">
+    <value>암호가 올바르지 않습니다</value>
+  </data>
+  <data name="Password_RequiredEncryptedList" xml:space="preserve">
+    <value>암호가 필요합니다 (파일 목록이 암호화된 {0})</value>
+  </data>
+  <data name="Password_WrongOrDamaged" xml:space="preserve">
+    <value>암호가 올바르지 않습니다 (또는 압축 파일 손상)</value>
+  </data>
+  <data name="Password_WrongOrDamagedRolledBack" xml:space="preserve">
+    <value>암호가 올바르지 않습니다 (또는 압축 파일 손상). 이번에 만든 파일을 지웠습니다</value>
+  </data>
+  <data name="Password_WrongUnchanged" xml:space="preserve">
+    <value>암호가 올바르지 않습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Extract_CancelledRolledBack" xml:space="preserve">
+    <value>해제를 취소했습니다. 이번에 만든 파일을 지웠습니다</value>
+  </data>
+  <data name="Extract_Aborted" xml:space="preserve">
+    <value>해제 중 오류로 중단했습니다</value>
+  </data>
+  <data name="Create_WrongFormat" xml:space="preserve">
+    <value>{0} 엔진은 {0} 만 만듭니다</value>
+  </data>
+  <data name="Create_LevelOutOfRange" xml:space="preserve">
+    <value>압축 수준은 0~9 사이여야 합니다</value>
+  </data>
+  <data name="Create_EncryptionUnsupported" xml:space="preserve">
+    <value>{0} 는 암호화를 지원하지 않습니다</value>
+  </data>
+  <data name="Create_SplitUnsupported" xml:space="preserve">
+    <value>{0} 는 분할 압축을 지원하지 않습니다</value>
+  </data>
+  <data name="Create_TarNoLevel" xml:space="preserve">
+    <value>TAR 는 압축하지 않으므로 압축 수준을 지정할 수 없습니다 (TAR.GZ 를 쓰세요)</value>
+  </data>
+  <data name="Create_FileExists" xml:space="preserve">
+    <value>같은 이름의 파일이 이미 있습니다</value>
+  </data>
+  <data name="Create_NoSources" xml:space="preserve">
+    <value>압축할 파일이 없습니다</value>
+  </data>
+  <data name="Create_FolderMissing" xml:space="preserve">
+    <value>압축 파일을 둘 폴더가 없습니다</value>
+  </data>
+  <data name="Create_GZipSingleFile" xml:space="preserve">
+    <value>GZ 는 파일 하나만 압축할 수 있습니다. 여러 파일·폴더는 TAR.GZ 를 쓰세요</value>
+  </data>
+  <data name="Create_SourcesNotFound" xml:space="preserve">
+    <value>압축할 원본을 찾을 수 없습니다</value>
+  </data>
+  <data name="Create_DuplicateNames" xml:space="preserve">
+    <value>원본 이름이 겹칩니다</value>
+  </data>
+  <data name="Create_Done" xml:space="preserve">
+    <value>항목 {0}개로 압축 파일을 만들었습니다</value>
+  </data>
+  <data name="Create_DoneSplit" xml:space="preserve">
+    <value>항목 {0}개로 분할 압축 파일 {1}조각을 만들었습니다</value>
+  </data>
+  <data name="Create_Cancelled" xml:space="preserve">
+    <value>압축을 취소했습니다</value>
+  </data>
+  <data name="Create_Failed" xml:space="preserve">
+    <value>압축 파일을 만들지 못했습니다</value>
+  </data>
+  <data name="Create_PasswordEmpty" xml:space="preserve">
+    <value>암호화하려면 암호를 입력하세요</value>
+  </data>
+  <data name="Create_SevenZipAesOnly" xml:space="preserve">
+    <value>7Z 암호는 AES-256 으로만 겁니다. 암호화 방식을 AES-256 으로 지정하세요</value>
+  </data>
+  <data name="Create_EncryptNamesNeedsPassword" xml:space="preserve">
+    <value>파일 이름 암호화는 암호가 있을 때만 쓸 수 있습니다</value>
+  </data>
+  <data name="Create_VolumeTooSmall" xml:space="preserve">
+    <value>분할 크기는 최소 {0} KiB 입니다</value>
+  </data>
+  <data name="Modify_GZipSingleFile" xml:space="preserve">
+    <value>GZ 는 파일 하나만 담으므로 고칠 수 없습니다</value>
+  </data>
+  <data name="Modify_SplitUnsupported" xml:space="preserve">
+    <value>분할된 7Z 는 고칠 수 없습니다. 풀어서 다시 만드세요</value>
+  </data>
+  <data name="Modify_Cancelled" xml:space="preserve">
+    <value>취소했습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Modify_Failed" xml:space="preserve">
+    <value>압축 파일을 고치지 못했습니다. 원본은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Modify_NameClash" xml:space="preserve">
+    <value>같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Modify_ItemNotInArchive" xml:space="preserve">
+    <value>압축 파일에 없는 항목입니다</value>
+  </data>
+  <data name="Add_TargetFolderInvalid" xml:space="preserve">
+    <value>대상 폴더 이름이 올바르지 않습니다</value>
+  </data>
+  <data name="Add_NoSources" xml:space="preserve">
+    <value>추가할 파일이 없습니다</value>
+  </data>
+  <data name="Add_SourcesNotFound" xml:space="preserve">
+    <value>추가할 원본을 찾을 수 없습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Add_DuplicateNames" xml:space="preserve">
+    <value>추가할 원본 이름이 겹칩니다</value>
+  </data>
+  <data name="Add_TargetIsFile" xml:space="preserve">
+    <value>대상 경로가 폴더가 아니라 파일입니다</value>
+  </data>
+  <data name="Add_AlreadyExists" xml:space="preserve">
+    <value>이미 있음: {0}</value>
+  </data>
+  <data name="Add_Done" xml:space="preserve">
+    <value>파일 {0}개를 추가했습니다</value>
+  </data>
+  <data name="Delete_NoItems" xml:space="preserve">
+    <value>지울 항목이 없습니다</value>
+  </data>
+  <data name="Delete_ItemMissing" xml:space="preserve">
+    <value>없는 항목: {0}</value>
+  </data>
+  <data name="Delete_Done" xml:space="preserve">
+    <value>항목 {0}개를 지웠습니다</value>
+  </data>
+  <data name="Rename_NoItem" xml:space="preserve">
+    <value>이름을 바꿀 항목이 없습니다</value>
+  </data>
+  <data name="Rename_NameInvalid" xml:space="preserve">
+    <value>새 이름이 올바르지 않습니다</value>
+  </data>
+  <data name="Rename_SameName" xml:space="preserve">
+    <value>이름이 같아 바꾸지 않았습니다</value>
+  </data>
+  <data name="Comment_Unsupported" xml:space="preserve">
+    <value>이 형식은 압축 파일 설명을 지원하지 않습니다</value>
+  </data>
+  <data name="Rar_CommentUnsupported" xml:space="preserve">
+    <value>RAR 압축 파일 설명은 지원하지 않습니다</value>
+  </data>
+  <data name="Rar_WriteUnsupported" xml:space="preserve">
+    <value>RAR 만들기·고치기는 지원하지 않습니다 (RAR 압축은 라이선스상 만들 수 없습니다)</value>
+  </data>
+  <data name="Source_PathInvalid" xml:space="preserve">
+    <value>경로가 올바르지 않음: {0}</value>
+  </data>
+  <data name="Source_Missing" xml:space="preserve">
+    <value>원본이 없음: {0}</value>
+  </data>
+  <data name="Aes_StreamFinished" xml:space="preserve">
+    <value>이미 끝난 암호화 스트림</value>
+  </data>
+</root>

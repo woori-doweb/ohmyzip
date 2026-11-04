@@ -1,0 +1,483 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Archives_UnknownFormat" xml:space="preserve">
+    <value>Unsupported or unknown archive format</value>
+  </data>
+  <data name="Common_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="Common_CrcMismatch" xml:space="preserve">
+    <value>{0}: CRC mismatch (expected {1:X8}, actual {2:X8})</value>
+  </data>
+  <data name="Common_ArchiveNotFound" xml:space="preserve">
+    <value>The archive can't be found.</value>
+  </data>
+  <data name="Common_ExtractCancelled" xml:space="preserve">
+    <value>Extraction was cancelled. The files created during this extraction were deleted.</value>
+  </data>
+  <data name="Common_CreateCancelled" xml:space="preserve">
+    <value>Archive creation was cancelled.</value>
+  </data>
+  <data name="Common_ModifyCancelled" xml:space="preserve">
+    <value>Cancelled. The archive wasn't changed.</value>
+  </data>
+  <data name="Common_ItemSizeInvalid" xml:space="preserve">
+    <value>An item size isn't valid.</value>
+  </data>
+  <data name="Common_MethodUnsupported" xml:space="preserve">
+    <value>Unsupported compression method: {0}</value>
+  </data>
+  <data name="Extract_TooManyItems" xml:space="preserve">
+    <value>There are more items than the extraction limit allows.</value>
+  </data>
+  <data name="Extract_TooManyItemsDetail" xml:space="preserve">
+    <value>Items: {0} (limit: {1})</value>
+  </data>
+  <data name="Extract_DestinationInvalid" xml:space="preserve">
+    <value>The destination folder path isn't valid.</value>
+  </data>
+  <data name="Extract_DestinationCreateFailed" xml:space="preserve">
+    <value>Can't create the destination folder.</value>
+  </data>
+  <data name="Extract_ItemLimitExceeded" xml:space="preserve">
+    <value>The item limit ({0}) was exceeded.</value>
+  </data>
+  <data name="Extract_Rejected" xml:space="preserve">
+    <value>Rejected: {0} — {1}</value>
+  </data>
+  <data name="Extract_OutsideDestination" xml:space="preserve">
+    <value>Path points outside the destination folder</value>
+  </data>
+  <data name="Extract_SymlinkItem" xml:space="preserve">
+    <value>Symbolic link item</value>
+  </data>
+  <data name="Extract_SkippedExisting" xml:space="preserve">
+    <value>Skipped (already exists): {0}</value>
+  </data>
+  <data name="Extract_FolderInTheWay" xml:space="preserve">
+    <value>{0}: Can't replace it because a folder with the same name exists.</value>
+  </data>
+  <data name="Extract_DecompressFailed" xml:space="preserve">
+    <value>{0}: Extraction failed — {1}</value>
+  </data>
+  <data name="Extract_WriteFailed" xml:space="preserve">
+    <value>{0}: Write failed — {1}</value>
+  </data>
+  <data name="Extract_TotalLimitExceeded" xml:space="preserve">
+    <value>The extracted data exceeded the limit of {0:N0} bytes (possible decompression bomb).</value>
+  </data>
+  <data name="Extract_FileInTheWay" xml:space="preserve">
+    <value>Can't create the folder because a file with the same name exists.</value>
+  </data>
+  <data name="Extract_ReparsePointPath" xml:space="preserve">
+    <value>Paths that go through a linked folder (reparse point) aren't extracted.</value>
+  </data>
+  <data name="Extract_PartialFailure" xml:space="preserve">
+    <value>Some items couldn't be extracted (problems: {0}, files extracted: {1}).</value>
+  </data>
+  <data name="Extract_DoneWithSkipped" xml:space="preserve">
+    <value>Files extracted: {0}, skipped: {1}</value>
+  </data>
+  <data name="Extract_Done" xml:space="preserve">
+    <value>Files extracted: {0}</value>
+  </data>
+  <data name="Extract_UndoFailed" xml:space="preserve">
+    <value>Couldn't undo: {0} — {1}</value>
+  </data>
+  <data name="Path_Absolute" xml:space="preserve">
+    <value>Absolute path item</value>
+  </data>
+  <data name="Path_DriveOrColon" xml:space="preserve">
+    <value>Path contains a drive letter or ':'</value>
+  </data>
+  <data name="Path_ParentFolder" xml:space="preserve">
+    <value>Path goes up to a parent folder ('..')</value>
+  </data>
+  <data name="Path_InvalidChars" xml:space="preserve">
+    <value>Contains characters that can't be used in file names</value>
+  </data>
+  <data name="Path_TrailingDotOrSpace" xml:space="preserve">
+    <value>Name ends with '.' or a space</value>
+  </data>
+  <data name="Path_DeviceName" xml:space="preserve">
+    <value>Reserved Windows device name</value>
+  </data>
+  <data name="Path_Empty" xml:space="preserve">
+    <value>Empty path</value>
+  </data>
+  <data name="Name_Empty" xml:space="preserve">
+    <value>The name can't be empty.</value>
+  </data>
+  <data name="Name_HasSeparator" xml:space="preserve">
+    <value>A name can't contain '/' or '\'.</value>
+  </data>
+  <data name="Volume_CannotSeekBackToWrite" xml:space="preserve">
+    <value>Can't go back to write anywhere except the first volume and the current volume.</value>
+  </data>
+  <data name="Volume_SeekOutOfRange" xml:space="preserve">
+    <value>Can't seek outside the split stream.</value>
+  </data>
+  <data name="Stream_SeekBeforeStart" xml:space="preserve">
+    <value>Can't seek before the start of the stream.</value>
+  </data>
+  <data name="Zip_PasswordRequired" xml:space="preserve">
+    <value>A password is required.</value>
+  </data>
+  <data name="Zip_PasswordWrong" xml:space="preserve">
+    <value>The password is incorrect.</value>
+  </data>
+  <data name="Aes_UnknownStrength" xml:space="preserve">
+    <value>Unknown AES strength {0}</value>
+  </data>
+  <data name="Aes_MacMismatch" xml:space="preserve">
+    <value>The AES authentication code (HMAC) doesn't match — the data is damaged or was changed.</value>
+  </data>
+  <data name="Aes_EntryTooShort" xml:space="preserve">
+    <value>The AES item is too short.</value>
+  </data>
+  <data name="Aes_EntryTruncated" xml:space="preserve">
+    <value>The AES item data is truncated.</value>
+  </data>
+  <data name="ZipCrypto_EntryTooShort" xml:space="preserve">
+    <value>The ZipCrypto item is too short.</value>
+  </data>
+  <data name="ZipCrypto_EntryTruncated" xml:space="preserve">
+    <value>The ZipCrypto item data is truncated.</value>
+  </data>
+  <data name="Zip_EocdMissing" xml:space="preserve">
+    <value>The ZIP end of central directory record (EOCD) is missing.</value>
+  </data>
+  <data name="Zip_Zip64EocdDamaged" xml:space="preserve">
+    <value>The ZIP64 end record is damaged.</value>
+  </data>
+  <data name="Zip_CentralDirectoryLocationInvalid" xml:space="preserve">
+    <value>The central directory location isn't valid.</value>
+  </data>
+  <data name="Zip_CentralDirectoryDamaged" xml:space="preserve">
+    <value>The central directory is damaged.</value>
+  </data>
+  <data name="Zip_Zip64ExtraDamaged" xml:space="preserve">
+    <value>The ZIP64 extra field is damaged.</value>
+  </data>
+  <data name="Zip_LocalHeaderDamaged" xml:space="preserve">
+    <value>{0}: The local header is damaged.</value>
+  </data>
+  <data name="Zip_DataOutsideArchive" xml:space="preserve">
+    <value>{0}: The data extends past the end of the archive.</value>
+  </data>
+  <data name="Zip_StrongEncryptionUnsupported" xml:space="preserve">
+    <value>ZIP strong encryption isn't supported.</value>
+  </data>
+  <data name="Zip_AesExtraMissing" xml:space="preserve">
+    <value>{0}: The AES extra field is missing.</value>
+  </data>
+  <data name="Zip_VolumeMissing" xml:space="preserve">
+    <value>A volume of the split archive is missing: {0}</value>
+  </data>
+  <data name="Zip_DiskNumberMissing" xml:space="preserve">
+    <value>Disk number {0} doesn't exist.</value>
+  </data>
+  <data name="Zip_VolumeSizeTooSmall" xml:space="preserve">
+    <value>The volume size is smaller than the archive's end record.</value>
+  </data>
+  <data name="Zip_FileExistsNamed" xml:space="preserve">
+    <value>A file with the same name already exists: {0}</value>
+  </data>
+  <data name="Zip_FileGrewPast4GiB" xml:space="preserve">
+    <value>{0}: The file grew past 4 GiB while it was being written.</value>
+  </data>
+  <data name="Zip_DataTruncated" xml:space="preserve">
+    <value>{0}: The data is truncated.</value>
+  </data>
+  <data name="Zip_ArchiveCommentTooLong" xml:space="preserve">
+    <value>The archive comment is longer than 65,535 bytes.</value>
+  </data>
+  <data name="Zip_OpenFailed" xml:space="preserve">
+    <value>Can't open the ZIP archive.</value>
+  </data>
+  <data name="Zip_ItemCount" xml:space="preserve">
+    <value>Items: {0}</value>
+  </data>
+  <data name="Zip_SizeMismatch" xml:space="preserve">
+    <value>{0}: Size mismatch (expected {1}, actual {2})</value>
+  </data>
+  <data name="Zip_TestPassed" xml:space="preserve">
+    <value>No problems found (files: {0}).</value>
+  </data>
+  <data name="Zip_DamagedItems" xml:space="preserve">
+    <value>Damaged items: {0}</value>
+  </data>
+  <data name="Zip_ExtractAborted" xml:space="preserve">
+    <value>Extraction stopped because of an error.</value>
+  </data>
+  <data name="Zip_SourcePathInvalid" xml:space="preserve">
+    <value>Invalid path: {0}</value>
+  </data>
+  <data name="Zip_SourceNotFound" xml:space="preserve">
+    <value>Source not found: {0}</value>
+  </data>
+  <data name="Zip_CreateZipOnly" xml:space="preserve">
+    <value>The ZIP engine can only create ZIP archives.</value>
+  </data>
+  <data name="Zip_LevelOutOfRange" xml:space="preserve">
+    <value>The compression level must be from 0 to 9.</value>
+  </data>
+  <data name="Zip_NameEncryptionUnsupported" xml:space="preserve">
+    <value>ZIP can't encrypt file names (use 7Z instead).</value>
+  </data>
+  <data name="Zip_EncryptionMethodRequired" xml:space="preserve">
+    <value>To use a password, choose an encryption method (AES-256).</value>
+  </data>
+  <data name="Zip_PasswordEmpty" xml:space="preserve">
+    <value>The password can't be empty.</value>
+  </data>
+  <data name="Zip_VolumeSizeMinimum" xml:space="preserve">
+    <value>The volume size must be at least 64 KiB.</value>
+  </data>
+  <data name="Zip_ArchivePathInvalid" xml:space="preserve">
+    <value>The archive path isn't valid.</value>
+  </data>
+  <data name="Zip_SplitNameMustEndWithZip" xml:space="preserve">
+    <value>The name of the last volume of a split ZIP archive must end with .zip.</value>
+  </data>
+  <data name="Zip_FileExists" xml:space="preserve">
+    <value>A file with the same name already exists.</value>
+  </data>
+  <data name="Zip_VolumeExists" xml:space="preserve">
+    <value>A volume with the same name already exists.</value>
+  </data>
+  <data name="Zip_NothingToCompress" xml:space="preserve">
+    <value>There are no files to add to the archive.</value>
+  </data>
+  <data name="Zip_OutputFolderMissing" xml:space="preserve">
+    <value>The folder for the archive doesn't exist.</value>
+  </data>
+  <data name="Zip_SourcesNotFound" xml:space="preserve">
+    <value>Can't find the files to add to the archive.</value>
+  </data>
+  <data name="Zip_DuplicateSourceName" xml:space="preserve">
+    <value>Two or more source items have the same name.</value>
+  </data>
+  <data name="Zip_CreatedSplit" xml:space="preserve">
+    <value>Created a split archive. Items: {0}, volumes: {1}</value>
+  </data>
+  <data name="Zip_Created" xml:space="preserve">
+    <value>Created the archive. Items: {0}</value>
+  </data>
+  <data name="Zip_CreateFailed" xml:space="preserve">
+    <value>Couldn't create the archive.</value>
+  </data>
+  <data name="Zip_SplitNotModifiable" xml:space="preserve">
+    <value>Split ZIP archives can't be modified. The archive wasn't changed.</value>
+  </data>
+  <data name="Zip_ModifyFailed" xml:space="preserve">
+    <value>Couldn't modify the archive. The original wasn't changed.</value>
+  </data>
+  <data name="Zip_TargetFolderInvalid" xml:space="preserve">
+    <value>The destination folder name isn't valid.</value>
+  </data>
+  <data name="Zip_NothingToAdd" xml:space="preserve">
+    <value>There are no files to add.</value>
+  </data>
+  <data name="Zip_AddSourcesNotFound" xml:space="preserve">
+    <value>Can't find the files to add. The archive wasn't changed.</value>
+  </data>
+  <data name="Zip_AddDuplicateName" xml:space="preserve">
+    <value>Two or more items to add have the same name.</value>
+  </data>
+  <data name="Zip_TargetIsFile" xml:space="preserve">
+    <value>The destination is a file, not a folder.</value>
+  </data>
+  <data name="Zip_AlreadyExists" xml:space="preserve">
+    <value>Already exists: {0}</value>
+  </data>
+  <data name="Zip_ItemExists" xml:space="preserve">
+    <value>An item with the same name already exists. The archive wasn't changed.</value>
+  </data>
+  <data name="Zip_Added" xml:space="preserve">
+    <value>Files added: {0}</value>
+  </data>
+  <data name="Zip_NothingToDelete" xml:space="preserve">
+    <value>There are no items to delete.</value>
+  </data>
+  <data name="Zip_ItemNotFound" xml:space="preserve">
+    <value>Item not found: {0}</value>
+  </data>
+  <data name="Zip_ItemNotInArchive" xml:space="preserve">
+    <value>The item isn't in the archive.</value>
+  </data>
+  <data name="Zip_Deleted" xml:space="preserve">
+    <value>Items deleted: {0}</value>
+  </data>
+  <data name="Zip_NothingToRename" xml:space="preserve">
+    <value>There's no item to rename.</value>
+  </data>
+  <data name="Zip_NewNameInvalid" xml:space="preserve">
+    <value>The new name isn't valid.</value>
+  </data>
+  <data name="Zip_RenameSameName" xml:space="preserve">
+    <value>The name is the same, so nothing was renamed.</value>
+  </data>
+  <data name="Zip_CommentTooLong" xml:space="preserve">
+    <value>The comment is too long (maximum 65,535 bytes in UTF-8).</value>
+  </data>
+  <data name="Zip_ByteCount" xml:space="preserve">
+    <value>{0} bytes</value>
+  </data>
+  <data name="Zip_CommentRemoved" xml:space="preserve">
+    <value>Removed the comment.</value>
+  </data>
+  <data name="Zip_CommentSaved" xml:space="preserve">
+    <value>Saved the comment.</value>
+  </data>
+  <data name="Repair_Method" xml:space="preserve">
+    <value>Recovery from local file headers, data descriptors, and CRCs</value>
+  </data>
+  <data name="Repair_NoLocalHeaders" xml:space="preserve">
+    <value>No local file headers were found to recover.</value>
+  </data>
+  <data name="Repair_TooManyItems" xml:space="preserve">
+    <value>There are more items to recover than the limit allows.</value>
+  </data>
+  <data name="Repair_NothingRecovered" xml:space="preserve">
+    <value>No items could be recovered.</value>
+  </data>
+  <data name="Repair_Recovered" xml:space="preserve">
+    <value>Items recovered: {0}</value>
+  </data>
+  <data name="Repair_RecoveredWithLost" xml:space="preserve">
+    <value>Items recovered: {0}. Items lost: {1}</value>
+  </data>
+  <data name="Repair_Cancelled" xml:space="preserve">
+    <value>The repair was cancelled.</value>
+  </data>
+  <data name="Repair_Error" xml:space="preserve">
+    <value>An error occurred while repairing the ZIP archive.</value>
+  </data>
+  <data name="Repair_FormatError" xml:space="preserve">
+    <value>A format error occurred while repairing the ZIP archive.</value>
+  </data>
+  <data name="Repair_WindowsOnly" xml:space="preserve">
+    <value>ZIP repair is supported only on Windows.</value>
+  </data>
+  <data name="Repair_CannotOpen" xml:space="preserve">
+    <value>Can't open the ZIP file.</value>
+  </data>
+  <data name="Repair_CannotOpenDetail" xml:space="preserve">
+    <value>Can't open the ZIP file: {0}</value>
+  </data>
+  <data name="Repair_ReparsePointInput" xml:space="preserve">
+    <value>An input that is a reparse point (link) isn't repaired.</value>
+  </data>
+  <data name="Repair_InputSizeUnknown" xml:space="preserve">
+    <value>Couldn't check the size of the input file.</value>
+  </data>
+  <data name="Repair_InputMissing" xml:space="preserve">
+    <value>The damaged ZIP file can't be found.</value>
+  </data>
+  <data name="Repair_InputAttributesUnknown" xml:space="preserve">
+    <value>Couldn't check the attributes of the input file.</value>
+  </data>
+  <data name="Repair_InputEmpty" xml:space="preserve">
+    <value>The ZIP file is empty.</value>
+  </data>
+  <data name="Repair_InputTooLarge" xml:space="preserve">
+    <value>The archive is larger than the repair limit.</value>
+  </data>
+  <data name="Repair_InputShrank" xml:space="preserve">
+    <value>The input file got shorter while it was being read.</value>
+  </data>
+  <data name="Repair_InputGrew" xml:space="preserve">
+    <value>The input file grew during the repair.</value>
+  </data>
+  <data name="Repair_InputChanged" xml:space="preserve">
+    <value>The input file changed during the repair.</value>
+  </data>
+  <data name="Repair_InputIsFolder" xml:space="preserve">
+    <value>The input path is a folder.</value>
+  </data>
+  <data name="Repair_OutputExists" xml:space="preserve">
+    <value>The output file already exists.</value>
+  </data>
+  <data name="Repair_SamePaths" xml:space="preserve">
+    <value>The input and output paths are the same.</value>
+  </data>
+  <data name="Repair_LocalItemLimit" xml:space="preserve">
+    <value>The number of local items exceeds the limit of {0}.</value>
+  </data>
+  <data name="Repair_TotalLimit" xml:space="preserve">
+    <value>The total recovered size exceeds the limit.</value>
+  </data>
+  <data name="Repair_LocalHeaderDamaged" xml:space="preserve">
+    <value>The local file header is damaged.</value>
+  </data>
+  <data name="Repair_LocalHeaderOutside" xml:space="preserve">
+    <value>The name or extra field of the local file header extends past the end of the file.</value>
+  </data>
+  <data name="Repair_NameEncodingInvalid" xml:space="preserve">
+    <value>The item name encoding isn't valid.</value>
+  </data>
+  <data name="Repair_Zip64SizesMissing" xml:space="preserve">
+    <value>The ZIP64 item sizes are missing.</value>
+  </data>
+  <data name="Repair_EncryptedSkipped" xml:space="preserve">
+    <value>Encrypted items aren't recovered.</value>
+  </data>
+  <data name="Repair_SizeLimit" xml:space="preserve">
+    <value>The uncompressed size exceeds the limit.</value>
+  </data>
+  <data name="Repair_CompressedSizeInvalid" xml:space="preserve">
+    <value>The compressed data size isn't valid.</value>
+  </data>
+  <data name="Repair_FolderSizeNotZero" xml:space="preserve">
+    <value>The folder item's size isn't 0.</value>
+  </data>
+  <data name="Repair_FolderDescriptorInvalid" xml:space="preserve">
+    <value>The folder's data descriptor isn't valid.</value>
+  </data>
+  <data name="Repair_DataOutside" xml:space="preserve">
+    <value>The compressed data extends past the end of the file.</value>
+  </data>
+  <data name="Repair_LengthMismatchHeader" xml:space="preserve">
+    <value>The compressed data length doesn't match the header.</value>
+  </data>
+  <data name="Repair_DescriptorNotFound" xml:space="preserve">
+    <value>Couldn't find the data descriptor.</value>
+  </data>
+  <data name="Repair_SizeMismatch" xml:space="preserve">
+    <value>The uncompressed size doesn't match.</value>
+  </data>
+  <data name="Repair_CrcMismatch" xml:space="preserve">
+    <value>The CRC doesn't match.</value>
+  </data>
+  <data name="Repair_StoredUnverified" xml:space="preserve">
+    <value>Couldn't verify the data descriptor or CRC of the stored item.</value>
+  </data>
+  <data name="Repair_LengthMismatchDescriptor" xml:space="preserve">
+    <value>The compressed data length doesn't match the data descriptor.</value>
+  </data>
+  <data name="Repair_StreamUnverified" xml:space="preserve">
+    <value>The CRC of this streamed item can't be verified.</value>
+  </data>
+  <data name="Repair_LargerThanHeader" xml:space="preserve">
+    <value>The uncompressed size is larger than the header says.</value>
+  </data>
+  <data name="Repair_DeflateEmpty" xml:space="preserve">
+    <value>The Deflate data is empty.</value>
+  </data>
+  <data name="Repair_DescriptorLocationInvalid" xml:space="preserve">
+    <value>The data descriptor location isn't valid.</value>
+  </data>
+</root>

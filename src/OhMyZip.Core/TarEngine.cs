@@ -3,6 +3,7 @@ using System.Formats.Tar;
 using System.Globalization;
 using System.IO.Compression;
 using System.Text;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -84,7 +85,7 @@ public sealed class TarEngine : IArchiveEngine
                 SeekOrigin.Current => _read + offset,
                 _ => Length + offset,
             };
-            return target == _read ? _read : throw new NotSupportedException("앞으로만 읽는 스트림입니다");
+            return target == _read ? _read : throw new NotSupportedException(FormatText.Stream_ForwardOnly);
         }
 
         public override void SetLength(long value) => throw new NotSupportedException();
@@ -101,7 +102,7 @@ public sealed class TarEngine : IArchiveEngine
         using var fs = OpenFile(path);
         Span<byte> head = stackalloc byte[10];
         if (fs.ReadAtLeast(head, 10, throwOnEndOfStream: false) < 10 || head[0] != 0x1F || head[1] != 0x8B || head[2] != 8)
-            throw new InvalidDataException("GZ 머리가 올바르지 않습니다");
+            throw new InvalidDataException(FormatText.GZip_HeaderInvalid);
         byte flags = head[3];
         uint mtime = BinaryPrimitives.ReadUInt32LittleEndian(head[4..]);
         if ((flags & 0x04) != 0)
@@ -114,7 +115,7 @@ public sealed class TarEngine : IArchiveEngine
         if ((flags & 0x08) != 0)
             name = DecodeName(ReadZeroTerminated(fs));
         if (fs.Length < 18)
-            throw new InvalidDataException("GZ 파일이 너무 짧습니다");
+            throw new InvalidDataException(FormatText.GZip_TooShort);
         fs.Seek(-8, SeekOrigin.End);
         Span<byte> tail = stackalloc byte[8];
         fs.ReadExactly(tail);
@@ -130,10 +131,10 @@ public sealed class TarEngine : IArchiveEngine
         {
             bytes.Add((byte)b);
             if (bytes.Count > 4096)
-                throw new InvalidDataException("GZ 이름이 너무 깁니다");
+                throw new InvalidDataException(FormatText.GZip_NameTooLong);
         }
         if (b < 0)
-            throw new InvalidDataException("GZ 머리가 잘렸습니다");
+            throw new InvalidDataException(FormatText.GZip_HeaderTruncated);
         return [.. bytes];
     }
 
@@ -213,7 +214,7 @@ public sealed class TarEngine : IArchiveEngine
             {
                 cancel.ThrowIfCancellationRequested();
                 if (stream.ReadAtLeast(_block, 512, throwOnEndOfStream: false) < 512)
-                    throw new InvalidDataException("TAR 가 잘렸습니다 (끝 블록 없음)");
+                    throw new InvalidDataException(FormatText.Tar_Truncated);
                 if (_block.AsSpan().IndexOfAnyExcept((byte)0) < 0)
                     return null;
                 VerifyChecksum(_block);
@@ -264,7 +265,7 @@ public sealed class TarEngine : IArchiveEngine
                 // 링크·장치·폴더·FIFO 의 크기 필드는 데이터 길이가 아니다.
                 long dataLength = type is '1' or '2' or '3' or '4' or '5' or '6' ? 0 : size;
                 if (dataLength < 0)
-                    throw new InvalidDataException("TAR 항목 크기가 올바르지 않습니다");
+                    throw new InvalidDataException(FormatText.Tar_EntrySizeInvalid);
                 _pending = (dataLength + 511) / 512 * 512;
                 return new RawTarEntry
                 {
@@ -287,7 +288,7 @@ public sealed class TarEngine : IArchiveEngine
         private byte[] ReadMeta(long size)
         {
             if (size is < 0 or > 1 << 20)
-                throw new InvalidDataException("TAR 확장 헤더가 너무 큽니다");
+                throw new InvalidDataException(FormatText.Tar_ExtendedHeaderTooLarge);
             byte[] data = new byte[size];
             stream.ReadExactly(data);
             Skip(stream, (512 - size % 512) % 512);
@@ -345,7 +346,7 @@ public sealed class TarEngine : IArchiveEngine
                     return 0;
                 int n = owner.ReadData(buffer[..(int)Math.Min(buffer.Length, _left)]);
                 if (n <= 0)
-                    throw new InvalidDataException("TAR 항목 데이터가 잘렸습니다");
+                    throw new InvalidDataException(FormatText.Tar_EntryDataTruncated);
                 _left -= n;
                 return n;
             }
@@ -387,7 +388,7 @@ public sealed class TarEngine : IArchiveEngine
         }
         long stored = ParseOctal(block.AsSpan(148, 8));
         if (stored != unsignedSum && stored != signedSum)
-            throw new InvalidDataException("TAR 헤더 체크섬 불일치");
+            throw new InvalidDataException(FormatText.Tar_ChecksumMismatch);
     }
 
     private static void Skip(Stream s, long count)
@@ -397,7 +398,7 @@ public sealed class TarEngine : IArchiveEngine
         {
             int n = s.Read(buffer, 0, (int)Math.Min(buffer.Length, count));
             if (n <= 0)
-                throw new InvalidDataException("TAR 항목 데이터가 잘렸습니다");
+                throw new InvalidDataException(FormatText.Tar_EntryDataTruncated);
             count -= n;
         }
     }
@@ -414,7 +415,7 @@ public sealed class TarEngine : IArchiveEngine
                 continue;
             }
             if (b is < (byte)'0' or > (byte)'7')
-                throw new InvalidDataException("TAR 헤더의 숫자 필드가 올바르지 않습니다");
+                throw new InvalidDataException(FormatText.Tar_NumberFieldInvalid);
             value = checked(value * 8 + (b - '0'));
         }
         return value;
@@ -442,7 +443,7 @@ public sealed class TarEngine : IArchiveEngine
             if (space < 0 || !int.TryParse(Encoding.ASCII.GetString(data, pos, space - pos), out int length)
                 || length <= space - pos + 1 || pos + length > data.Length)
             {
-                throw new InvalidDataException("PAX 확장 헤더가 올바르지 않습니다");
+                throw new InvalidDataException(FormatText.Pax_HeaderInvalid);
             }
             string record = Encoding.UTF8.GetString(data, space + 1, pos + length - space - 2);
             int eq = record.IndexOf('=');
@@ -481,7 +482,7 @@ public sealed class TarEngine : IArchiveEngine
             {
                 var info = ReadGZipInfo(archivePath);
                 var entry = new ArchiveEntry(GZipEntryName(archivePath, info), false, info.Size, info.CompressedSize, info.Modified, info.Crc, "Deflate", false);
-                return new ListResult(OperationResult.Ok("항목 1개"), [entry]);
+                return new ListResult(OperationResult.Ok(string.Format(FormatText.List_ItemCount, 1)), [entry]);
             }
             var entries = new List<ArchiveEntry>();
             var seen = new HashSet<string>(StringComparer.Ordinal);
@@ -495,7 +496,7 @@ public sealed class TarEngine : IArchiveEngine
                     entries.Add(new ArchiveEntry(path, dir, e.Size, e.Size, e.Modified, null, null, false));
             });
                 // DEF-02: 목록은 압축 파일에 기록된 항목만 돌려준다(경로로만 생기는 폴더는 앱이 트리에서 만든다).
-            return new ListResult(OperationResult.Ok($"항목 {entries.Count}개"), entries);
+            return new ListResult(OperationResult.Ok(string.Format(FormatText.List_ItemCount, entries.Count)), entries);
         }
         catch (OperationCanceledException)
         {
@@ -503,7 +504,7 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return new ListResult(OperationResult.Fail($"{FormatName} 압축 파일을 열 수 없습니다", ex.Message), []);
+            return new ListResult(OperationResult.Fail(string.Format(FormatText.Archive_OpenFailed, FormatName), ex.Message), []);
         }
     }
 
@@ -529,9 +530,9 @@ public sealed class TarEngine : IArchiveEngine
                     progress?.Report(new ProgressInfo(processed, 0, path));
                 }).CopyTo(Stream.Null);
                 if (size != e.Size)
-                    throw new InvalidDataException($"{path}: 크기 불일치 (기대 {e.Size}, 실제 {size})");
+                    throw new InvalidDataException(string.Format(FormatText.Check_SizeMismatchAt, path, e.Size, size));
             });
-            return OperationResult.Ok($"파일 {files}개 이상 없음");
+            return OperationResult.Ok(string.Format(FormatText.Test_FilesOk, files));
         }
         catch (OperationCanceledException)
         {
@@ -539,7 +540,7 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail($"{FormatName} 압축 파일이 손상되었습니다", ex.Message);
+            return OperationResult.Fail(string.Format(FormatText.Archive_Damaged, FormatName), ex.Message);
         }
     }
 
@@ -564,10 +565,10 @@ public sealed class TarEngine : IArchiveEngine
             }
         }
         if (crc.Value != info.Crc)
-            return OperationResult.Fail("GZ 압축 파일이 손상되었습니다", $"{name}: CRC 불일치 (기대 {info.Crc:X8}, 실제 {crc.Value:X8})");
+            return OperationResult.Fail(string.Format(FormatText.Archive_Damaged, "GZ"), string.Format(FormatText.Check_CrcMismatchAt, name, info.Crc, crc.Value));
         if ((uint)size != info.Size)
-            return OperationResult.Fail("GZ 압축 파일이 손상되었습니다", $"{name}: 크기 불일치 (기대 {info.Size}, 실제 {(uint)size})");
-        return OperationResult.Ok("파일 1개 이상 없음");
+            return OperationResult.Fail(string.Format(FormatText.Archive_Damaged, "GZ"), string.Format(FormatText.Check_SizeMismatchAt, name, info.Size, (uint)size));
+        return OperationResult.Ok(string.Format(FormatText.Test_FilesOk, 1));
     }
 
     public OperationResult Extract(string archivePath, string destinationDirectory, ExtractOptions options,
@@ -607,7 +608,7 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail($"{FormatName} 압축 파일을 열 수 없습니다", ex.Message);
+            return OperationResult.Fail(string.Format(FormatText.Archive_OpenFailed, FormatName), ex.Message);
         }
 
         var begin = ExtractSession.TryBegin(destinationDirectory, options, count, progress, cancel, total, out var session);
@@ -643,7 +644,7 @@ public sealed class TarEngine : IArchiveEngine
                             session.AddFile(e.Name, true, null, null, () => new MemoryStream());
                             break;
                         default:
-                            session.Reject(e.Name, $"지원하지 않는 항목 종류(TAR 형식 '{e.Type}')");
+                            session.Reject(e.Name, string.Format(FormatText.Tar_UnsupportedEntryType, e.Type));
                             break;
                     }
                 });
@@ -652,7 +653,7 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (OperationCanceledException)
         {
-            return session.Rollback(OperationResult.Cancelled("해제를 취소했습니다. 이번에 만든 파일을 지웠습니다"));
+            return session.Rollback(OperationResult.Cancelled(FormatText.Extract_CancelledRolledBack));
         }
         catch (ExtractLimitException ex)
         {
@@ -660,7 +661,7 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return session.Rollback(OperationResult.Fail("해제 중 오류로 중단했습니다", ex.Message));
+            return session.Rollback(OperationResult.Fail(FormatText.Extract_Aborted, ex.Message));
         }
     }
 
@@ -743,16 +744,16 @@ public sealed class TarEngine : IArchiveEngine
     {
         options ??= new CreateOptions { Format = _format };
         if (options.Format != _format)
-            return OperationResult.Unsupported($"{FormatName} 엔진은 {FormatName} 만 만듭니다");
+            return OperationResult.Unsupported(string.Format(FormatText.Create_WrongFormat, FormatName));
         if (options.Level is < 0 or > 9)
-            return OperationResult.Fail("압축 수준은 0~9 사이여야 합니다", options.Level.ToString());
+            return OperationResult.Fail(FormatText.Create_LevelOutOfRange, options.Level.ToString());
         if (!string.IsNullOrEmpty(options.Password) || options.Encryption != EncryptionMethod.None || options.EncryptNames)
-            return OperationResult.Unsupported($"{FormatName} 는 암호화를 지원하지 않습니다");
+            return OperationResult.Unsupported(string.Format(FormatText.Create_EncryptionUnsupported, FormatName));
         if (options.VolumeSize is not null)
-            return OperationResult.Unsupported($"{FormatName} 는 분할 압축을 지원하지 않습니다");
+            return OperationResult.Unsupported(string.Format(FormatText.Create_SplitUnsupported, FormatName));
         // TAR 는 압축하지 않는다: 기본값(5)과 0(저장)만 받고 다른 수준은 조용히 무시하지 않는다.
         if (_format == ArchiveFormat.Tar && options.Level is not (0 or 5))
-            return OperationResult.Unsupported("TAR 는 압축하지 않으므로 압축 수준을 지정할 수 없습니다 (TAR.GZ 를 쓰세요)");
+            return OperationResult.Unsupported(FormatText.Create_TarNoLevel);
 
         string full;
         try
@@ -761,24 +762,24 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("압축 파일 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail(FormatText.Archive_PathInvalid, ex.Message);
         }
         if (File.Exists(full) || Directory.Exists(full))
-            return OperationResult.Fail("같은 이름의 파일이 이미 있습니다", full);
+            return OperationResult.Fail(FormatText.Create_FileExists, full);
         if (sources.Count == 0)
-            return OperationResult.Fail("압축할 파일이 없습니다");
+            return OperationResult.Fail(FormatText.Create_NoSources);
         if (!Directory.Exists(Path.GetDirectoryName(full)))
-            return OperationResult.Fail("압축 파일을 둘 폴더가 없습니다", Path.GetDirectoryName(full) ?? full);
+            return OperationResult.Fail(FormatText.Create_FolderMissing, Path.GetDirectoryName(full) ?? full);
         if (_format == ArchiveFormat.GZip && (sources.Count != 1 || !File.Exists(sources[0])))
-            return OperationResult.Unsupported("GZ 는 파일 하나만 압축할 수 있습니다. 여러 파일·폴더는 TAR.GZ 를 쓰세요");
+            return OperationResult.Unsupported(FormatText.Create_GZipSingleFile);
 
         string temp = AtomicFile.TempSibling(full);
         var problems = new List<string>();
         var items = SourceTree.Expand(sources, "", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { full, temp }, problems);
         if (problems.Count > 0)
-            return new OperationResult(OperationStatus.Failed, "압축할 원본을 찾을 수 없습니다", problems);
+            return new OperationResult(OperationStatus.Failed, FormatText.Create_SourcesNotFound, problems);
         if (SourceTree.DuplicateName(items) is { } dup)
-            return OperationResult.Fail("원본 이름이 겹칩니다", dup);
+            return OperationResult.Fail(FormatText.Create_DuplicateNames, dup);
         var wp = new WriteProgress(SourceTree.TotalBytes(items), progress, cancel);
         try
         {
@@ -798,15 +799,15 @@ public sealed class TarEngine : IArchiveEngine
             }
             cancel.ThrowIfCancellationRequested();
             AtomicFile.Commit(temp, full, overwrite: false);
-            return OperationResult.Ok($"항목 {items.Count}개로 압축 파일을 만들었습니다");
+            return OperationResult.Ok(string.Format(FormatText.Create_Done, items.Count));
         }
         catch (OperationCanceledException)
         {
-            return OperationResult.Cancelled("압축을 취소했습니다");
+            return OperationResult.Cancelled(FormatText.Create_Cancelled);
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("압축 파일을 만들지 못했습니다", ex.Message);
+            return OperationResult.Fail(FormatText.Create_Failed, ex.Message);
         }
         finally
         {
@@ -892,23 +893,23 @@ public sealed class TarEngine : IArchiveEngine
         Func<ArchiveIndex, IEnumerable<SourceEntry>> extra, string successMessage, IProgress<ProgressInfo>? progress, CancellationToken cancel)
     {
         if (_format == ArchiveFormat.GZip)
-            return OperationResult.Unsupported("GZ 는 파일 하나만 담으므로 고칠 수 없습니다");
+            return OperationResult.Unsupported(FormatText.Modify_GZipSingleFile);
         string full;
         ArchiveIndex index;
         try
         {
             full = Path.GetFullPath(archivePath);
             if (!File.Exists(full))
-                return OperationResult.Fail("압축 파일이 없습니다", archivePath);
+                return OperationResult.Fail(FormatText.Archive_Missing, archivePath);
             index = Index(full, cancel);
         }
         catch (OperationCanceledException)
         {
-            return OperationResult.Cancelled("취소했습니다. 압축 파일은 바뀌지 않았습니다");
+            return OperationResult.Cancelled(FormatText.Modify_Cancelled);
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail($"{FormatName} 압축 파일을 열 수 없습니다", ex.Message);
+            return OperationResult.Fail(string.Format(FormatText.Archive_OpenFailed, FormatName), ex.Message);
         }
         if (validate(index) is { } invalid)
             return invalid;
@@ -939,11 +940,11 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (OperationCanceledException)
         {
-            return OperationResult.Cancelled("취소했습니다. 압축 파일은 바뀌지 않았습니다");
+            return OperationResult.Cancelled(FormatText.Modify_Cancelled);
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("압축 파일을 고치지 못했습니다. 원본은 바뀌지 않았습니다", ex.Message);
+            return OperationResult.Fail(FormatText.Modify_Failed, ex.Message);
         }
         finally
         {
@@ -968,7 +969,7 @@ public sealed class TarEngine : IArchiveEngine
                 '3' => TarEntryType.CharacterDevice,
                 '4' => TarEntryType.BlockDevice,
                 '6' => TarEntryType.Fifo,
-                _ => throw new InvalidDataException($"옮길 수 없는 TAR 항목 종류 '{e.Type}': {e.Name}"),
+                _ => throw new InvalidDataException(string.Format(FormatText.Tar_CannotCopyEntryType, e.Type, e.Name)),
             },
         };
         var copy = new PaxTarEntry(type, name)
@@ -990,12 +991,12 @@ public sealed class TarEngine : IArchiveEngine
     public OperationResult Add(string archivePath, IReadOnlyList<string> sources, string targetFolder = "", IProgress<ProgressInfo>? progress = null, CancellationToken cancel = default)
     {
         if (_format == ArchiveFormat.GZip)
-            return OperationResult.Unsupported("GZ 는 파일 하나만 담으므로 고칠 수 없습니다");
+            return OperationResult.Unsupported(FormatText.Modify_GZipSingleFile);
         string folder = SafePaths.ToDisplayPath(targetFolder ?? "");
         if (folder.Length > 0 && (!SafePaths.TryGetSafeRelative(folder, out string safeFolder, out _) || safeFolder != folder))
-            return OperationResult.Fail("대상 폴더 이름이 올바르지 않습니다", folder);
+            return OperationResult.Fail(FormatText.Add_TargetFolderInvalid, folder);
         if (sources.Count == 0)
-            return OperationResult.Fail("추가할 파일이 없습니다");
+            return OperationResult.Fail(FormatText.Add_NoSources);
         string prefix = folder.Length == 0 ? "" : folder + "/";
         var problems = new List<string>();
         string fullArchive;
@@ -1005,29 +1006,29 @@ public sealed class TarEngine : IArchiveEngine
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("압축 파일 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail(FormatText.Archive_PathInvalid, ex.Message);
         }
         var items = SourceTree.Expand(sources, prefix, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { fullArchive }, problems);
         if (problems.Count > 0)
-            return new OperationResult(OperationStatus.Failed, "추가할 원본을 찾을 수 없습니다. 압축 파일은 바뀌지 않았습니다", problems);
+            return new OperationResult(OperationStatus.Failed, FormatText.Add_SourcesNotFound, problems);
         if (SourceTree.DuplicateName(items) is { } dup)
-            return OperationResult.Fail("추가할 원본 이름이 겹칩니다", dup);
+            return OperationResult.Fail(FormatText.Add_DuplicateNames, dup);
         int fileCount = items.Count(i => !i.IsDirectory);
 
         return Rewrite(archivePath,
             validate: index =>
             {
                 if (folder.Length > 0 && index.All.Contains(folder) && !index.Folders.Contains(folder))
-                    return OperationResult.Fail("대상 경로가 폴더가 아니라 파일입니다", folder);
+                    return OperationResult.Fail(FormatText.Add_TargetIsFile, folder);
                 var existing = new HashSet<string>(index.All, StringComparer.OrdinalIgnoreCase);
-                var clash = items.Where(i => existing.Contains(i.EntryName)).Select(i => $"이미 있음: {i.EntryName}").ToArray();
-                return clash.Length > 0 ? OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다", clash) : null;
+                var clash = items.Where(i => existing.Contains(i.EntryName)).Select(i => string.Format(FormatText.Add_AlreadyExists, i.EntryName)).ToArray();
+                return clash.Length > 0 ? OperationResult.Fail(FormatText.Modify_NameClash, clash) : null;
             },
             map: path => path,
             extra: index => folder.Length > 0 && !index.Folders.Contains(folder)
                 ? [new SourceEntry(folder, null, true), .. items]
                 : items,
-            successMessage: $"파일 {fileCount}개를 추가했습니다",
+            successMessage: string.Format(FormatText.Add_Done, fileCount),
             progress,
             cancel);
     }
@@ -1036,16 +1037,16 @@ public sealed class TarEngine : IArchiveEngine
     {
         var targets = entryPaths.Select(SafePaths.ToDisplayPath).Where(p => p.Length > 0).Distinct(StringComparer.Ordinal).ToList();
         if (targets.Count == 0)
-            return OperationResult.Fail("지울 항목이 없습니다");
+            return OperationResult.Fail(FormatText.Delete_NoItems);
         return Rewrite(archivePath,
             validate: index =>
             {
-                var missing = targets.Where(t => !index.All.Contains(t)).Select(t => $"없는 항목: {t}").ToArray();
-                return missing.Length > 0 ? OperationResult.Fail("압축 파일에 없는 항목입니다", missing) : null;
+                var missing = targets.Where(t => !index.All.Contains(t)).Select(t => string.Format(FormatText.Delete_ItemMissing, t)).ToArray();
+                return missing.Length > 0 ? OperationResult.Fail(FormatText.Modify_ItemNotInArchive, missing) : null;
             },
             map: path => targets.Any(t => SafePaths.IsSelfOrDescendant(path, t)) ? null : path,
             extra: _ => [],
-            successMessage: $"항목 {targets.Count}개를 지웠습니다",
+            successMessage: string.Format(FormatText.Delete_Done, targets.Count),
             progress,
             cancel);
     }
@@ -1054,22 +1055,22 @@ public sealed class TarEngine : IArchiveEngine
     {
         string old = SafePaths.ToDisplayPath(entryPath ?? "");
         if (old.Length == 0)
-            return OperationResult.Fail("이름을 바꿀 항목이 없습니다");
+            return OperationResult.Fail(FormatText.Rename_NoItem);
         if (SafePaths.ValidateLeafName(newName) is { } nameError)
-            return OperationResult.Fail("새 이름이 올바르지 않습니다", nameError);
+            return OperationResult.Fail(FormatText.Rename_NameInvalid, nameError);
         string parent = SafePaths.ParentOf(old);
         string renamed = parent.Length == 0 ? newName : parent + "/" + newName;
         if (renamed == old)
-            return OperationResult.Ok("이름이 같아 바꾸지 않았습니다");
+            return OperationResult.Ok(FormatText.Rename_SameName);
 
         return Rewrite(archivePath,
             validate: index =>
             {
                 if (!index.All.Contains(old))
-                    return OperationResult.Fail("압축 파일에 없는 항목입니다", old);
+                    return OperationResult.Fail(FormatText.Modify_ItemNotInArchive, old);
                 bool caseOnly = string.Equals(renamed, old, StringComparison.OrdinalIgnoreCase);
                 if (!caseOnly && new HashSet<string>(index.All, StringComparer.OrdinalIgnoreCase).Contains(renamed))
-                    return OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다", renamed);
+                    return OperationResult.Fail(FormatText.Modify_NameClash, renamed);
                 return null;
             },
             map: path => SafePaths.IsSelfOrDescendant(path, old) ? renamed + path[old.Length..] : path,
@@ -1080,5 +1081,5 @@ public sealed class TarEngine : IArchiveEngine
     }
 
     public OperationResult SetComment(string archivePath, string? comment, CancellationToken cancel = default)
-        => OperationResult.Unsupported("이 형식은 압축 파일 설명을 지원하지 않습니다");
+        => OperationResult.Unsupported(FormatText.Comment_Unsupported);
 }

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using OhMyZip.App.Settings;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App.Dialogs;
@@ -25,7 +26,7 @@ public partial class CreateArchiveDialog : Window
 
     public static readonly IReadOnlyList<string> LevelLabels =
     [
-        "0 - 저장(압축 안 함)", "1 - 가장 빠름", "2", "3 - 빠름", "4", "5 - 보통", "6", "7 - 높음", "8", "9 - 최고",
+        DialogText.Create_Level0, DialogText.Create_Level1, "2", DialogText.Create_Level3, "4", DialogText.Create_Level5, "6", DialogText.Create_Level7, "8", DialogText.Create_Level9,
     ];
 
     private const long Mb = 1024L * 1024;
@@ -33,12 +34,12 @@ public partial class CreateArchiveDialog : Window
     /// <summary>분할 크기 선택지. null = 분할 안 함, -1 = 직접 입력.</summary>
     private static readonly (string Label, long? Bytes)[] SplitPresets =
     [
-        ("분할 안 함", null),
+        (DialogText.Create_SplitNone, null),
         ("10 MB", 10 * Mb),
         ("100 MB", 100 * Mb),
         ("700 MB (CD)", 700 * Mb),
-        ("4,000 MB (FAT32 한도 이하)", 4000 * Mb),
-        ("직접 입력", -1),
+        (DialogText.Create_SplitFat32, 4000 * Mb),
+        (DialogText.Create_SplitCustom, -1),
     ];
 
     private readonly List<string> _sources = [];
@@ -87,7 +88,7 @@ public partial class CreateArchiveDialog : Window
         var dir = Path.GetDirectoryName(first.TrimEnd(Path.DirectorySeparatorChar)) ?? "";
         string stem = _sources.Count == 1
             ? (Directory.Exists(first) ? Path.GetFileName(first.TrimEnd(Path.DirectorySeparatorChar)) : Path.GetFileNameWithoutExtension(first))
-            : (Path.GetFileName(dir.TrimEnd(Path.DirectorySeparatorChar)) is { Length: > 0 } d ? d : "새 압축");
+            : (Path.GetFileName(dir.TrimEnd(Path.DirectorySeparatorChar)) is { Length: > 0 } d ? d : DialogText.Create_DefaultName);
         return Path.Combine(dir, stem + ext);
     }
 
@@ -126,16 +127,16 @@ public partial class CreateArchiveDialog : Window
         if (!split) SplitBox.SelectedIndex = 0;
 
         var notes = new List<string>();
-        if (!caps.Create) notes.Add($"\u26A0 {label} 형식으로 만들기는 아직 지원하지 않습니다(엔진 준비 중).");
+        if (!caps.Create) notes.Add("\u26A0 " + string.Format(DialogText.Create_FormatNotSupported, label));
         else
         {
             var missing = new List<string>();
-            if (!caps.Encrypt) missing.Add("암호");
-            if (!caps.Split) missing.Add("분할");
-            if (missing.Count > 0) notes.Add($"{label} 형식은 아직 {string.Join("·", missing)} 기능을 지원하지 않아 해당 옵션을 껐습니다.");
+            if (!caps.Encrypt) missing.Add(DialogText.Create_FeaturePassword);
+            if (!caps.Split) missing.Add(DialogText.Create_FeatureSplit);
+            if (missing.Count > 0) notes.Add(string.Format(DialogText.Create_FeaturesOff, label, string.Join(DialogText.Create_FeatureSeparator, missing)));
         }
-        if (_format == ArchiveFormat.Tar) notes.Add("TAR 는 압축하지 않고 묶기만 합니다(레벨 없음).");
-        if (_format == ArchiveFormat.GZip) notes.Add("GZ 는 파일 하나만 담을 수 있습니다.");
+        if (_format == ArchiveFormat.Tar) notes.Add(DialogText.Create_TarNote);
+        if (_format == ArchiveFormat.GZip) notes.Add(DialogText.Create_GzNote);
         FormatStatus.Text = string.Join(" ", notes);
         FormatStatus.Visibility = notes.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -181,7 +182,7 @@ public partial class CreateArchiveDialog : Window
     private void UpdatePasswordError()
     {
         bool mismatch = Confirm.Length > 0 && Password != Confirm;
-        PasswordError.Text = mismatch ? "\u26A0 암호와 암호 확인이 다릅니다. 두 칸에 같은 암호를 입력하세요." : "";
+        PasswordError.Text = mismatch ? "\u26A0 " + DialogText.Create_PasswordMismatch : "";
         PasswordError.Visibility = mismatch ? Visibility.Visible : Visibility.Collapsed;
     }
 
@@ -196,7 +197,7 @@ public partial class CreateArchiveDialog : Window
 
     private void OnAddFiles(object sender, RoutedEventArgs e)
     {
-        var pick = new OpenFileDialog { Title = "압축할 파일 추가", Multiselect = true, Filter = "모든 파일 (*.*)|*.*", CheckFileExists = true };
+        var pick = new OpenFileDialog { Title = DialogText.Create_AddFiles_Title, Multiselect = true, Filter = DialogText.Filter_AllFiles, CheckFileExists = true };
         if (pick.ShowDialog(this) != true) return;
         bool wasEmpty = _sources.Count == 0;
         foreach (var f in pick.FileNames) AddSource(f);
@@ -205,7 +206,7 @@ public partial class CreateArchiveDialog : Window
 
     private void OnAddFolder(object sender, RoutedEventArgs e)
     {
-        var pick = new OpenFolderDialog { Title = "압축할 폴더 추가", Multiselect = true };
+        var pick = new OpenFolderDialog { Title = DialogText.Create_AddFolder_Title, Multiselect = true };
         if (pick.ShowDialog(this) != true) return;
         bool wasEmpty = _sources.Count == 0;
         foreach (var f in pick.FolderNames) AddSource(f);
@@ -228,8 +229,8 @@ public partial class CreateArchiveDialog : Window
         var current = TargetBox.Text.Trim();
         var save = new SaveFileDialog
         {
-            Title = "새 압축 파일 저장",
-            Filter = $"{label} 압축 파일 (*{ext})|*{ext}",
+            Title = DialogText.Create_Save_Title,
+            Filter = string.Format(DialogText.Create_SaveFilter, label, ext),
             DefaultExt = ext,
             AddExtension = true,
             OverwritePrompt = false, // 덮어쓰기는 '압축' 을 누를 때 한 번만 묻는다.
@@ -255,33 +256,33 @@ public partial class CreateArchiveDialog : Window
     {
         ErrorText.Visibility = Visibility.Collapsed;
         var caps = Archives.CapabilitiesOf(_format);
-        if (!caps.Create) { ShowError("이 형식으로는 아직 만들 수 없습니다. 형식에서 다른 항목을 고르세요."); return; }
-        if (_sources.Count == 0) { ShowError("압축할 파일이나 폴더를 추가하세요."); return; }
+        if (!caps.Create) { ShowError(DialogText.Create_FormatCannotCreate); return; }
+        if (_sources.Count == 0) { ShowError(DialogText.Create_NoSources); return; }
 
         var ext = Archives.DefaultExtension(_format);
         var text = TargetBox.Text.Trim();
-        if (text.Length == 0) { ShowError("압축 파일 경로를 입력하세요.", TargetBox); return; }
+        if (text.Length == 0) { ShowError(DialogText.Create_TargetRequired, TargetBox); return; }
         if (!text.EndsWith(ext, StringComparison.OrdinalIgnoreCase)) text += ext;
         string target;
         try
         {
-            if (!Path.IsPathFullyQualified(text)) { ShowError("압축 파일 경로는 드라이브부터 시작하는 전체 경로로 입력하세요.", TargetBox); return; }
+            if (!Path.IsPathFullyQualified(text)) { ShowError(DialogText.Create_TargetNotFull, TargetBox); return; }
             target = Path.GetFullPath(text);
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            ShowError("압축 파일 경로가 올바르지 않습니다.", TargetBox);
+            ShowError(DialogText.Create_TargetInvalid, TargetBox);
             return;
         }
         var targetDir = Path.GetDirectoryName(target);
-        if (string.IsNullOrEmpty(targetDir) || !Directory.Exists(targetDir)) { ShowError("저장할 폴더가 없습니다.", TargetBox); return; }
-        if (Directory.Exists(target)) { ShowError("같은 이름의 폴더가 있습니다.", TargetBox); return; }
+        if (string.IsNullOrEmpty(targetDir) || !Directory.Exists(targetDir)) { ShowError(DialogText.Create_TargetFolderMissing, TargetBox); return; }
+        if (Directory.Exists(target)) { ShowError(DialogText.Create_TargetIsFolder, TargetBox); return; }
         foreach (var s in _sources)
         {
-            if (string.Equals(s, target, StringComparison.OrdinalIgnoreCase)) { ShowError("압축할 파일과 같은 경로에는 저장할 수 없습니다. 다른 이름이나 폴더를 고르세요.", TargetBox); return; }
+            if (string.Equals(s, target, StringComparison.OrdinalIgnoreCase)) { ShowError(DialogText.Create_TargetIsSource, TargetBox); return; }
             if (Directory.Exists(s) && target.StartsWith(s.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
             {
-                ShowError("압축할 폴더 안에는 압축 파일을 저장할 수 없습니다. 그 폴더 밖의 위치를 고르세요.", TargetBox);
+                ShowError(DialogText.Create_TargetInsideSource, TargetBox);
                 return;
             }
         }
@@ -289,12 +290,12 @@ public partial class CreateArchiveDialog : Window
         string? password = null;
         if (EncryptGroup.IsEnabled && Password.Length > 0)
         {
-            if (Password != Confirm) { UpdatePasswordError(); ShowError("암호와 암호 확인이 다릅니다. 두 칸에 같은 암호를 입력하세요."); return; }
+            if (Password != Confirm) { UpdatePasswordError(); ShowError(DialogText.Create_PasswordMismatch); return; }
             password = Password;
         }
         else if (EncryptGroup.IsEnabled && Confirm.Length > 0)
         {
-            ShowError("암호를 입력하세요.");
+            ShowError(DialogText.Password_Enter);
             return;
         }
 
@@ -306,7 +307,7 @@ public partial class CreateArchiveDialog : Window
             {
                 if (!double.TryParse(SplitCustomBox.Text.Trim(), NumberStyles.Float, CultureInfo.CurrentCulture, out var mb) || mb < 0.0625 || mb > 1_000_000)
                 {
-                    ShowError("분할 크기는 0.0625(64KB) 이상 1,000,000 이하의 MB 값으로 입력하세요.", SplitCustomBox);
+                    ShowError(DialogText.Create_SplitSizeInvalid, SplitCustomBox);
                     return;
                 }
                 volume = (long)(mb * Mb);
@@ -316,9 +317,9 @@ public partial class CreateArchiveDialog : Window
         bool replace = File.Exists(target);
         if (replace)
         {
-            int answer = MessageDialog.Show(this, DialogKind.Warning, "같은 이름의 압축 파일이 이미 있습니다",
-                $"{target}\n새 압축이 성공하면 기존 파일을 바꿉니다. 실패하거나 취소하면 기존 파일은 그대로입니다.", null,
-                ["바꾸기", "취소"], defaultIndex: -1, cancelIndex: 1);
+            int answer = MessageDialog.Show(this, DialogKind.Warning, DialogText.Create_Exists_Title,
+                string.Format(DialogText.Create_ExistsBody, target), null,
+                [DialogText.Replace_Button, DialogText.Cancel_Button], defaultIndex: -1, cancelIndex: 1);
             if (answer != 0) return;
         }
 

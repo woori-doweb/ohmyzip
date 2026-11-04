@@ -1,0 +1,483 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Archives_UnknownFormat" xml:space="preserve">
+    <value>지원하지 않거나 알 수 없는 압축 파일 형식</value>
+  </data>
+  <data name="Common_Cancelled" xml:space="preserve">
+    <value>취소됨</value>
+  </data>
+  <data name="Common_CrcMismatch" xml:space="preserve">
+    <value>{0}: CRC 불일치 (기대 {1:X8}, 실제 {2:X8})</value>
+  </data>
+  <data name="Common_ArchiveNotFound" xml:space="preserve">
+    <value>압축 파일이 없습니다</value>
+  </data>
+  <data name="Common_ExtractCancelled" xml:space="preserve">
+    <value>해제를 취소했습니다. 이번에 만든 파일을 지웠습니다</value>
+  </data>
+  <data name="Common_CreateCancelled" xml:space="preserve">
+    <value>압축을 취소했습니다</value>
+  </data>
+  <data name="Common_ModifyCancelled" xml:space="preserve">
+    <value>취소했습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Common_ItemSizeInvalid" xml:space="preserve">
+    <value>항목 크기가 올바르지 않습니다</value>
+  </data>
+  <data name="Common_MethodUnsupported" xml:space="preserve">
+    <value>지원하지 않는 압축 방식: {0}</value>
+  </data>
+  <data name="Extract_TooManyItems" xml:space="preserve">
+    <value>항목 수 한도를 넘었습니다</value>
+  </data>
+  <data name="Extract_TooManyItemsDetail" xml:space="preserve">
+    <value>항목 {0}개 &gt; 한도 {1}개</value>
+  </data>
+  <data name="Extract_DestinationInvalid" xml:space="preserve">
+    <value>대상 폴더 경로가 올바르지 않습니다</value>
+  </data>
+  <data name="Extract_DestinationCreateFailed" xml:space="preserve">
+    <value>대상 폴더를 만들 수 없습니다</value>
+  </data>
+  <data name="Extract_ItemLimitExceeded" xml:space="preserve">
+    <value>항목 수 한도({0}개)를 넘었습니다</value>
+  </data>
+  <data name="Extract_Rejected" xml:space="preserve">
+    <value>거부: {0} — {1}</value>
+  </data>
+  <data name="Extract_OutsideDestination" xml:space="preserve">
+    <value>대상 폴더 밖을 가리키는 경로</value>
+  </data>
+  <data name="Extract_SymlinkItem" xml:space="preserve">
+    <value>심볼릭 링크 항목</value>
+  </data>
+  <data name="Extract_SkippedExisting" xml:space="preserve">
+    <value>건너뜀(이미 있음): {0}</value>
+  </data>
+  <data name="Extract_FolderInTheWay" xml:space="preserve">
+    <value>{0}: 같은 이름의 폴더가 있어 덮어쓸 수 없습니다</value>
+  </data>
+  <data name="Extract_DecompressFailed" xml:space="preserve">
+    <value>{0}: 해제 실패 — {1}</value>
+  </data>
+  <data name="Extract_WriteFailed" xml:space="preserve">
+    <value>{0}: 쓰기 실패 — {1}</value>
+  </data>
+  <data name="Extract_TotalLimitExceeded" xml:space="preserve">
+    <value>해제 총량 한도({0:N0} 바이트)를 넘었습니다 (압축 폭탄 의심)</value>
+  </data>
+  <data name="Extract_FileInTheWay" xml:space="preserve">
+    <value>같은 이름의 파일이 있어 폴더를 만들 수 없습니다</value>
+  </data>
+  <data name="Extract_ReparsePointPath" xml:space="preserve">
+    <value>링크(재분석 지점) 폴더를 거치는 경로는 풀지 않습니다</value>
+  </data>
+  <data name="Extract_PartialFailure" xml:space="preserve">
+    <value>일부 항목을 풀지 못했습니다 (문제 {0}건, 파일 {1}개 해제)</value>
+  </data>
+  <data name="Extract_DoneWithSkipped" xml:space="preserve">
+    <value>파일 {0}개 해제, {1}개 건너뜀</value>
+  </data>
+  <data name="Extract_Done" xml:space="preserve">
+    <value>파일 {0}개 해제</value>
+  </data>
+  <data name="Extract_UndoFailed" xml:space="preserve">
+    <value>되돌리기 실패: {0} — {1}</value>
+  </data>
+  <data name="Path_Absolute" xml:space="preserve">
+    <value>절대 경로 항목</value>
+  </data>
+  <data name="Path_DriveOrColon" xml:space="preserve">
+    <value>드라이브 문자 또는 ':' 가 든 경로</value>
+  </data>
+  <data name="Path_ParentFolder" xml:space="preserve">
+    <value>상위 폴더('..')로 나가는 경로</value>
+  </data>
+  <data name="Path_InvalidChars" xml:space="preserve">
+    <value>파일 이름에 쓸 수 없는 문자</value>
+  </data>
+  <data name="Path_TrailingDotOrSpace" xml:space="preserve">
+    <value>끝이 '.' 또는 공백인 이름</value>
+  </data>
+  <data name="Path_DeviceName" xml:space="preserve">
+    <value>Windows 장치 이름</value>
+  </data>
+  <data name="Path_Empty" xml:space="preserve">
+    <value>빈 경로</value>
+  </data>
+  <data name="Name_Empty" xml:space="preserve">
+    <value>이름이 비어 있습니다</value>
+  </data>
+  <data name="Name_HasSeparator" xml:space="preserve">
+    <value>이름에 '/' 나 '\' 를 쓸 수 없습니다</value>
+  </data>
+  <data name="Volume_CannotSeekBackToWrite" xml:space="preserve">
+    <value>첫 조각과 현재 조각 밖으로는 되돌아가 쓸 수 없습니다</value>
+  </data>
+  <data name="Volume_SeekOutOfRange" xml:space="preserve">
+    <value>분할 스트림 범위 밖으로 이동할 수 없습니다</value>
+  </data>
+  <data name="Stream_SeekBeforeStart" xml:space="preserve">
+    <value>스트림 앞으로 이동할 수 없습니다</value>
+  </data>
+  <data name="Zip_PasswordRequired" xml:space="preserve">
+    <value>암호가 필요합니다</value>
+  </data>
+  <data name="Zip_PasswordWrong" xml:space="preserve">
+    <value>암호가 올바르지 않습니다</value>
+  </data>
+  <data name="Aes_UnknownStrength" xml:space="preserve">
+    <value>알 수 없는 AES 강도 {0}</value>
+  </data>
+  <data name="Aes_MacMismatch" xml:space="preserve">
+    <value>AES 인증 코드(HMAC)가 맞지 않습니다 — 데이터가 손상되었거나 바뀌었습니다</value>
+  </data>
+  <data name="Aes_EntryTooShort" xml:space="preserve">
+    <value>AES 항목이 너무 짧습니다</value>
+  </data>
+  <data name="Aes_EntryTruncated" xml:space="preserve">
+    <value>AES 항목 데이터가 잘렸습니다</value>
+  </data>
+  <data name="ZipCrypto_EntryTooShort" xml:space="preserve">
+    <value>ZipCrypto 항목이 너무 짧습니다</value>
+  </data>
+  <data name="ZipCrypto_EntryTruncated" xml:space="preserve">
+    <value>ZipCrypto 항목 데이터가 잘렸습니다</value>
+  </data>
+  <data name="Zip_EocdMissing" xml:space="preserve">
+    <value>ZIP 끝 기록(EOCD)이 없습니다</value>
+  </data>
+  <data name="Zip_Zip64EocdDamaged" xml:space="preserve">
+    <value>ZIP64 끝 기록이 손상되었습니다</value>
+  </data>
+  <data name="Zip_CentralDirectoryLocationInvalid" xml:space="preserve">
+    <value>중앙 디렉터리 위치가 올바르지 않습니다</value>
+  </data>
+  <data name="Zip_CentralDirectoryDamaged" xml:space="preserve">
+    <value>중앙 디렉터리가 손상되었습니다</value>
+  </data>
+  <data name="Zip_Zip64ExtraDamaged" xml:space="preserve">
+    <value>ZIP64 확장 필드가 손상되었습니다</value>
+  </data>
+  <data name="Zip_LocalHeaderDamaged" xml:space="preserve">
+    <value>{0}: 지역 머리가 손상되었습니다</value>
+  </data>
+  <data name="Zip_DataOutsideArchive" xml:space="preserve">
+    <value>{0}: 데이터가 압축 파일 밖으로 나갑니다</value>
+  </data>
+  <data name="Zip_StrongEncryptionUnsupported" xml:space="preserve">
+    <value>PKWARE 강력 암호화는 지원하지 않습니다</value>
+  </data>
+  <data name="Zip_AesExtraMissing" xml:space="preserve">
+    <value>{0}: AES 확장 필드가 없습니다</value>
+  </data>
+  <data name="Zip_VolumeMissing" xml:space="preserve">
+    <value>분할 압축 파일의 조각이 없습니다: {0}</value>
+  </data>
+  <data name="Zip_DiskNumberMissing" xml:space="preserve">
+    <value>없는 디스크 번호 {0}</value>
+  </data>
+  <data name="Zip_VolumeSizeTooSmall" xml:space="preserve">
+    <value>분할 크기가 압축 파일 끝 기록보다 작습니다</value>
+  </data>
+  <data name="Zip_FileExistsNamed" xml:space="preserve">
+    <value>같은 이름의 파일이 이미 있습니다: {0}</value>
+  </data>
+  <data name="Zip_FileGrewPast4GiB" xml:space="preserve">
+    <value>{0}: 쓰는 도중 파일이 4 GiB 를 넘게 커졌습니다</value>
+  </data>
+  <data name="Zip_DataTruncated" xml:space="preserve">
+    <value>{0}: 데이터가 잘렸습니다</value>
+  </data>
+  <data name="Zip_ArchiveCommentTooLong" xml:space="preserve">
+    <value>압축 파일 설명이 65535 바이트를 넘습니다</value>
+  </data>
+  <data name="Zip_OpenFailed" xml:space="preserve">
+    <value>ZIP 압축 파일을 열 수 없습니다</value>
+  </data>
+  <data name="Zip_ItemCount" xml:space="preserve">
+    <value>항목 {0}개</value>
+  </data>
+  <data name="Zip_SizeMismatch" xml:space="preserve">
+    <value>{0}: 크기 불일치 (기대 {1}, 실제 {2})</value>
+  </data>
+  <data name="Zip_TestPassed" xml:space="preserve">
+    <value>파일 {0}개 이상 없음</value>
+  </data>
+  <data name="Zip_DamagedItems" xml:space="preserve">
+    <value>손상된 항목 {0}개</value>
+  </data>
+  <data name="Zip_ExtractAborted" xml:space="preserve">
+    <value>해제 중 오류로 중단했습니다</value>
+  </data>
+  <data name="Zip_SourcePathInvalid" xml:space="preserve">
+    <value>경로가 올바르지 않음: {0}</value>
+  </data>
+  <data name="Zip_SourceNotFound" xml:space="preserve">
+    <value>원본이 없음: {0}</value>
+  </data>
+  <data name="Zip_CreateZipOnly" xml:space="preserve">
+    <value>ZIP 엔진은 ZIP 만 만듭니다</value>
+  </data>
+  <data name="Zip_LevelOutOfRange" xml:space="preserve">
+    <value>압축 수준은 0~9 사이여야 합니다</value>
+  </data>
+  <data name="Zip_NameEncryptionUnsupported" xml:space="preserve">
+    <value>ZIP 은 파일 이름을 암호화할 수 없습니다 (7Z 를 쓰세요)</value>
+  </data>
+  <data name="Zip_EncryptionMethodRequired" xml:space="preserve">
+    <value>암호를 쓰려면 암호화 방식(AES-256)을 지정해야 합니다</value>
+  </data>
+  <data name="Zip_PasswordEmpty" xml:space="preserve">
+    <value>암호가 비어 있습니다</value>
+  </data>
+  <data name="Zip_VolumeSizeMinimum" xml:space="preserve">
+    <value>분할 크기는 64 KiB 이상이어야 합니다</value>
+  </data>
+  <data name="Zip_ArchivePathInvalid" xml:space="preserve">
+    <value>압축 파일 경로가 올바르지 않습니다</value>
+  </data>
+  <data name="Zip_SplitNameMustEndWithZip" xml:space="preserve">
+    <value>분할 ZIP 의 마지막 조각 이름은 .zip 으로 끝나야 합니다</value>
+  </data>
+  <data name="Zip_FileExists" xml:space="preserve">
+    <value>같은 이름의 파일이 이미 있습니다</value>
+  </data>
+  <data name="Zip_VolumeExists" xml:space="preserve">
+    <value>같은 이름의 분할 조각이 이미 있습니다</value>
+  </data>
+  <data name="Zip_NothingToCompress" xml:space="preserve">
+    <value>압축할 파일이 없습니다</value>
+  </data>
+  <data name="Zip_OutputFolderMissing" xml:space="preserve">
+    <value>압축 파일을 둘 폴더가 없습니다</value>
+  </data>
+  <data name="Zip_SourcesNotFound" xml:space="preserve">
+    <value>압축할 원본을 찾을 수 없습니다</value>
+  </data>
+  <data name="Zip_DuplicateSourceName" xml:space="preserve">
+    <value>원본 이름이 겹칩니다</value>
+  </data>
+  <data name="Zip_CreatedSplit" xml:space="preserve">
+    <value>항목 {0}개로 분할 압축 파일 {1}조각을 만들었습니다</value>
+  </data>
+  <data name="Zip_Created" xml:space="preserve">
+    <value>항목 {0}개로 압축 파일을 만들었습니다</value>
+  </data>
+  <data name="Zip_CreateFailed" xml:space="preserve">
+    <value>압축 파일을 만들지 못했습니다</value>
+  </data>
+  <data name="Zip_SplitNotModifiable" xml:space="preserve">
+    <value>분할 ZIP 은 고칠 수 없습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Zip_ModifyFailed" xml:space="preserve">
+    <value>압축 파일을 고치지 못했습니다. 원본은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Zip_TargetFolderInvalid" xml:space="preserve">
+    <value>대상 폴더 이름이 올바르지 않습니다</value>
+  </data>
+  <data name="Zip_NothingToAdd" xml:space="preserve">
+    <value>추가할 파일이 없습니다</value>
+  </data>
+  <data name="Zip_AddSourcesNotFound" xml:space="preserve">
+    <value>추가할 원본을 찾을 수 없습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Zip_AddDuplicateName" xml:space="preserve">
+    <value>추가할 원본 이름이 겹칩니다</value>
+  </data>
+  <data name="Zip_TargetIsFile" xml:space="preserve">
+    <value>대상 경로가 폴더가 아니라 파일입니다</value>
+  </data>
+  <data name="Zip_AlreadyExists" xml:space="preserve">
+    <value>이미 있음: {0}</value>
+  </data>
+  <data name="Zip_ItemExists" xml:space="preserve">
+    <value>같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다</value>
+  </data>
+  <data name="Zip_Added" xml:space="preserve">
+    <value>파일 {0}개를 추가했습니다</value>
+  </data>
+  <data name="Zip_NothingToDelete" xml:space="preserve">
+    <value>지울 항목이 없습니다</value>
+  </data>
+  <data name="Zip_ItemNotFound" xml:space="preserve">
+    <value>없는 항목: {0}</value>
+  </data>
+  <data name="Zip_ItemNotInArchive" xml:space="preserve">
+    <value>압축 파일에 없는 항목입니다</value>
+  </data>
+  <data name="Zip_Deleted" xml:space="preserve">
+    <value>항목 {0}개를 지웠습니다</value>
+  </data>
+  <data name="Zip_NothingToRename" xml:space="preserve">
+    <value>이름을 바꿀 항목이 없습니다</value>
+  </data>
+  <data name="Zip_NewNameInvalid" xml:space="preserve">
+    <value>새 이름이 올바르지 않습니다</value>
+  </data>
+  <data name="Zip_RenameSameName" xml:space="preserve">
+    <value>이름이 같아 바꾸지 않았습니다</value>
+  </data>
+  <data name="Zip_CommentTooLong" xml:space="preserve">
+    <value>설명이 너무 깁니다 (UTF-8 65535 바이트 이하)</value>
+  </data>
+  <data name="Zip_ByteCount" xml:space="preserve">
+    <value>{0} 바이트</value>
+  </data>
+  <data name="Zip_CommentRemoved" xml:space="preserve">
+    <value>설명을 지웠습니다</value>
+  </data>
+  <data name="Zip_CommentSaved" xml:space="preserve">
+    <value>설명을 저장했습니다</value>
+  </data>
+  <data name="Repair_Method" xml:space="preserve">
+    <value>지역 파일 머리·데이터 설명자·CRC 기반 복구</value>
+  </data>
+  <data name="Repair_NoLocalHeaders" xml:space="preserve">
+    <value>복구할 지역 파일 머리를 찾지 못했습니다</value>
+  </data>
+  <data name="Repair_TooManyItems" xml:space="preserve">
+    <value>복구 항목 수가 한도를 초과했습니다</value>
+  </data>
+  <data name="Repair_NothingRecovered" xml:space="preserve">
+    <value>복구에 성공한 항목이 없습니다</value>
+  </data>
+  <data name="Repair_Recovered" xml:space="preserve">
+    <value>항목 {0}개를 복구했습니다</value>
+  </data>
+  <data name="Repair_RecoveredWithLost" xml:space="preserve">
+    <value>항목 {0}개를 복구했습니다. 손실 {1}개</value>
+  </data>
+  <data name="Repair_Cancelled" xml:space="preserve">
+    <value>복구를 취소했습니다</value>
+  </data>
+  <data name="Repair_Error" xml:space="preserve">
+    <value>ZIP 복구 중 오류가 발생했습니다</value>
+  </data>
+  <data name="Repair_FormatError" xml:space="preserve">
+    <value>ZIP 복구 중 형식 오류가 발생했습니다</value>
+  </data>
+  <data name="Repair_WindowsOnly" xml:space="preserve">
+    <value>ZIP 복구는 Windows에서 지원합니다</value>
+  </data>
+  <data name="Repair_CannotOpen" xml:space="preserve">
+    <value>ZIP 파일을 열 수 없습니다</value>
+  </data>
+  <data name="Repair_CannotOpenDetail" xml:space="preserve">
+    <value>ZIP 파일을 열 수 없습니다: {0}</value>
+  </data>
+  <data name="Repair_ReparsePointInput" xml:space="preserve">
+    <value>재분석 지점 입력은 복구하지 않습니다</value>
+  </data>
+  <data name="Repair_InputSizeUnknown" xml:space="preserve">
+    <value>입력 파일 크기를 확인하지 못했습니다</value>
+  </data>
+  <data name="Repair_InputMissing" xml:space="preserve">
+    <value>손상된 ZIP 파일이 없습니다</value>
+  </data>
+  <data name="Repair_InputAttributesUnknown" xml:space="preserve">
+    <value>입력 파일 속성을 확인하지 못했습니다</value>
+  </data>
+  <data name="Repair_InputEmpty" xml:space="preserve">
+    <value>ZIP 파일이 비어 있습니다</value>
+  </data>
+  <data name="Repair_InputTooLarge" xml:space="preserve">
+    <value>압축 파일이 복구 입력 한도를 초과했습니다</value>
+  </data>
+  <data name="Repair_InputShrank" xml:space="preserve">
+    <value>입력 파일이 읽는 도중 짧아졌습니다</value>
+  </data>
+  <data name="Repair_InputGrew" xml:space="preserve">
+    <value>입력 파일이 복구 중 커졌습니다</value>
+  </data>
+  <data name="Repair_InputChanged" xml:space="preserve">
+    <value>입력 파일이 복구 중 변경되었습니다</value>
+  </data>
+  <data name="Repair_InputIsFolder" xml:space="preserve">
+    <value>입력 경로가 폴더입니다</value>
+  </data>
+  <data name="Repair_OutputExists" xml:space="preserve">
+    <value>출력 파일이 이미 존재합니다</value>
+  </data>
+  <data name="Repair_SamePaths" xml:space="preserve">
+    <value>입력과 출력 경로가 같습니다</value>
+  </data>
+  <data name="Repair_LocalItemLimit" xml:space="preserve">
+    <value>지역 항목 수가 {0}개 한도를 초과했습니다</value>
+  </data>
+  <data name="Repair_TotalLimit" xml:space="preserve">
+    <value>복구 총량 한도를 초과했습니다</value>
+  </data>
+  <data name="Repair_LocalHeaderDamaged" xml:space="preserve">
+    <value>지역 파일 머리가 손상되었습니다</value>
+  </data>
+  <data name="Repair_LocalHeaderOutside" xml:space="preserve">
+    <value>지역 파일 머리의 이름·확장 필드가 파일 밖으로 나갑니다</value>
+  </data>
+  <data name="Repair_NameEncodingInvalid" xml:space="preserve">
+    <value>항목 이름 인코딩이 올바르지 않습니다</value>
+  </data>
+  <data name="Repair_Zip64SizesMissing" xml:space="preserve">
+    <value>ZIP64 항목 크기가 없습니다</value>
+  </data>
+  <data name="Repair_EncryptedSkipped" xml:space="preserve">
+    <value>암호화된 항목은 복구하지 않습니다</value>
+  </data>
+  <data name="Repair_SizeLimit" xml:space="preserve">
+    <value>압축 해제 크기가 한도를 초과했습니다</value>
+  </data>
+  <data name="Repair_CompressedSizeInvalid" xml:space="preserve">
+    <value>압축 데이터 크기가 올바르지 않습니다</value>
+  </data>
+  <data name="Repair_FolderSizeNotZero" xml:space="preserve">
+    <value>폴더 항목 크기가 0이 아닙니다</value>
+  </data>
+  <data name="Repair_FolderDescriptorInvalid" xml:space="preserve">
+    <value>폴더 데이터 설명자가 올바르지 않습니다</value>
+  </data>
+  <data name="Repair_DataOutside" xml:space="preserve">
+    <value>압축 데이터가 파일 밖으로 나갑니다</value>
+  </data>
+  <data name="Repair_LengthMismatchHeader" xml:space="preserve">
+    <value>압축 데이터 길이가 헤더와 일치하지 않습니다</value>
+  </data>
+  <data name="Repair_DescriptorNotFound" xml:space="preserve">
+    <value>데이터 설명자를 찾지 못했습니다</value>
+  </data>
+  <data name="Repair_SizeMismatch" xml:space="preserve">
+    <value>압축 해제 크기가 일치하지 않습니다</value>
+  </data>
+  <data name="Repair_CrcMismatch" xml:space="preserve">
+    <value>CRC가 일치하지 않습니다</value>
+  </data>
+  <data name="Repair_StoredUnverified" xml:space="preserve">
+    <value>저장 항목의 데이터 설명자 또는 CRC를 확인하지 못했습니다</value>
+  </data>
+  <data name="Repair_LengthMismatchDescriptor" xml:space="preserve">
+    <value>압축 데이터 길이가 설명자와 일치하지 않습니다</value>
+  </data>
+  <data name="Repair_StreamUnverified" xml:space="preserve">
+    <value>CRC를 확인할 수 없는 스트림 항목입니다</value>
+  </data>
+  <data name="Repair_LargerThanHeader" xml:space="preserve">
+    <value>압축 해제 크기가 헤더보다 큽니다</value>
+  </data>
+  <data name="Repair_DeflateEmpty" xml:space="preserve">
+    <value>Deflate 데이터가 비어 있습니다</value>
+  </data>
+  <data name="Repair_DescriptorLocationInvalid" xml:space="preserve">
+    <value>데이터 설명자 위치가 올바르지 않습니다</value>
+  </data>
+</root>

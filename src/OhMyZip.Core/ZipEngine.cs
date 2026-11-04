@@ -1,4 +1,5 @@
 using System.Text;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -24,7 +25,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
 
     private static OperationResult OpenFailure(Exception ex) => ex is ZipVolumeMissingException missing
         ? OperationResult.Fail(missing.Message, missing.FileName)
-        : OperationResult.Fail("ZIP 압축 파일을 열 수 없습니다", ex.Message);
+        : OperationResult.Fail(EngineText.Zip_OpenFailed, ex.Message);
 
     public ListResult List(string archivePath, CancellationToken cancel = default)
     {
@@ -44,7 +45,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
                 entries.Add(new ArchiveEntry(path, dir, dir ? 0 : r.Size, dir ? 0 : r.CompressedSize,
                     r.Modified, r.ExpectedCrc, dir ? null : r.DisplayMethod, r.IsEncrypted));
             }
-            return new ListResult(OperationResult.Ok($"항목 {entries.Count}개"), entries, zip.Directory.Comment);
+            return new ListResult(OperationResult.Ok(string.Format(EngineText.Zip_ItemCount, entries.Count)), entries, zip.Directory.Comment);
         }
         catch (OperationCanceledException)
         {
@@ -89,9 +90,9 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
                         }
                     }
                     if (e.ExpectedCrc is { } expected && crc.Value != expected)
-                        problems.Add($"{path}: CRC 불일치 (기대 {expected:X8}, 실제 {crc.Value:X8})");
+                        problems.Add(string.Format(EngineText.Common_CrcMismatch, path, expected, crc.Value));
                     else if (size != e.Size)
-                        problems.Add($"{path}: 크기 불일치 (기대 {e.Size}, 실제 {size})");
+                        problems.Add(string.Format(EngineText.Zip_SizeMismatch, path, e.Size, size));
                 }
                 catch (Exception ex) when (ex is InvalidDataException or IOException or NotSupportedException or SharpCompress.Common.SharpCompressException)
                 {
@@ -99,8 +100,8 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
                 }
             }
             return problems.Count == 0
-                ? OperationResult.Ok($"파일 {files.Count}개 이상 없음")
-                : new OperationResult(OperationStatus.Failed, $"손상된 항목 {problems.Count}개", problems);
+                ? OperationResult.Ok(string.Format(EngineText.Zip_TestPassed, files.Count))
+                : new OperationResult(OperationStatus.Failed, string.Format(EngineText.Zip_DamagedItems, problems.Count), problems);
         }
         catch (OperationCanceledException)
         {
@@ -164,7 +165,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
             }
             catch (OperationCanceledException)
             {
-                return session.Rollback(OperationResult.Cancelled("해제를 취소했습니다. 이번에 만든 파일을 지웠습니다"));
+                return session.Rollback(OperationResult.Cancelled(EngineText.Common_ExtractCancelled));
             }
             catch (ZipPasswordException ex)
             {
@@ -176,7 +177,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
             }
             catch (Exception ex)
             {
-                return session.Rollback(OperationResult.Fail("해제 중 오류로 중단했습니다", ex.Message));
+                return session.Rollback(OperationResult.Fail(EngineText.Zip_ExtractAborted, ex.Message));
             }
         }
     }
@@ -198,7 +199,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
             }
             catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
             {
-                problems.Add($"경로가 올바르지 않음: {source}");
+                problems.Add(string.Format(EngineText.Zip_SourcePathInvalid, source));
                 continue;
             }
             string name = Path.GetFileName(full);
@@ -212,7 +213,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
             }
             else
             {
-                problems.Add($"원본이 없음: {source}");
+                problems.Add(string.Format(EngineText.Zip_SourceNotFound, source));
             }
         }
         return items;
@@ -275,18 +276,18 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
     {
         options ??= new CreateOptions();
         if (options.Format != ArchiveFormat.Zip)
-            return OperationResult.Unsupported("ZIP 엔진은 ZIP 만 만듭니다");
+            return OperationResult.Unsupported(EngineText.Zip_CreateZipOnly);
         if (options.Level is < 0 or > 9)
-            return OperationResult.Fail("압축 수준은 0~9 사이여야 합니다", options.Level.ToString());
+            return OperationResult.Fail(EngineText.Zip_LevelOutOfRange, options.Level.ToString());
         if (options.EncryptNames)
-            return OperationResult.Unsupported("ZIP 은 파일 이름을 암호화할 수 없습니다 (7Z 를 쓰세요)");
+            return OperationResult.Unsupported(EngineText.Zip_NameEncryptionUnsupported);
         bool hasPassword = !string.IsNullOrEmpty(options.Password);
         if (options.Encryption == EncryptionMethod.None && hasPassword)
-            return OperationResult.Unsupported("암호를 쓰려면 암호화 방식(AES-256)을 지정해야 합니다");
+            return OperationResult.Unsupported(EngineText.Zip_EncryptionMethodRequired);
         if (options.Encryption == EncryptionMethod.Aes256 && !hasPassword)
-            return OperationResult.Fail("암호가 비어 있습니다");
+            return OperationResult.Fail(EngineText.Zip_PasswordEmpty);
         if (options.VolumeSize is { } volume && volume < ZipVolumeWriter.MinVolumeSize)
-            return OperationResult.Fail("분할 크기는 64 KiB 이상이어야 합니다", volume.ToString());
+            return OperationResult.Fail(EngineText.Zip_VolumeSizeMinimum, volume.ToString());
         string full;
         try
         {
@@ -294,25 +295,25 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("압축 파일 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail(EngineText.Zip_ArchivePathInvalid, ex.Message);
         }
         if (options.VolumeSize is not null && !string.Equals(Path.GetExtension(full), ".zip", StringComparison.OrdinalIgnoreCase))
-            return OperationResult.Fail("분할 ZIP 의 마지막 조각 이름은 .zip 으로 끝나야 합니다", full);
+            return OperationResult.Fail(EngineText.Zip_SplitNameMustEndWithZip, full);
         if (File.Exists(full) || Directory.Exists(full))
-            return OperationResult.Fail("같은 이름의 파일이 이미 있습니다", full);
+            return OperationResult.Fail(EngineText.Zip_FileExists, full);
         if (options.VolumeSize is not null && File.Exists(ZipVolumeSet.PartPath(full, 1)))
-            return OperationResult.Fail("같은 이름의 분할 조각이 이미 있습니다", ZipVolumeSet.PartPath(full, 1));
+            return OperationResult.Fail(EngineText.Zip_VolumeExists, ZipVolumeSet.PartPath(full, 1));
         if (sources.Count == 0)
-            return OperationResult.Fail("압축할 파일이 없습니다");
+            return OperationResult.Fail(EngineText.Zip_NothingToCompress);
         if (!Directory.Exists(Path.GetDirectoryName(full)))
-            return OperationResult.Fail("압축 파일을 둘 폴더가 없습니다", Path.GetDirectoryName(full) ?? full);
+            return OperationResult.Fail(EngineText.Zip_OutputFolderMissing, Path.GetDirectoryName(full) ?? full);
 
         var problems = new List<string>();
         var items = Expand(sources, "", new HashSet<string>(StringComparer.OrdinalIgnoreCase) { full }, problems);
         if (problems.Count > 0)
-            return new OperationResult(OperationStatus.Failed, "압축할 원본을 찾을 수 없습니다", problems);
+            return new OperationResult(OperationStatus.Failed, EngineText.Zip_SourcesNotFound, problems);
         if (DuplicateName(items) is { } dup)
-            return OperationResult.Fail("원본 이름이 겹칩니다", dup);
+            return OperationResult.Fail(EngineText.Zip_DuplicateSourceName, dup);
         ZipVolumeWriter? output = null;
         try
         {
@@ -323,16 +324,16 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
             cancel.ThrowIfCancellationRequested();
             var parts = output.Commit(overwrite: false);
             return OperationResult.Ok(parts.Count > 1
-                ? $"항목 {items.Count}개로 분할 압축 파일 {parts.Count}조각을 만들었습니다"
-                : $"항목 {items.Count}개로 압축 파일을 만들었습니다");
+                ? string.Format(EngineText.Zip_CreatedSplit, items.Count, parts.Count)
+                : string.Format(EngineText.Zip_Created, items.Count));
         }
         catch (OperationCanceledException)
         {
-            return OperationResult.Cancelled("압축을 취소했습니다");
+            return OperationResult.Cancelled(EngineText.Common_CreateCancelled);
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("압축 파일을 만들지 못했습니다", ex.Message);
+            return OperationResult.Fail(EngineText.Zip_CreateFailed, ex.Message);
         }
         finally
         {
@@ -375,7 +376,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
         {
             full = Path.GetFullPath(archivePath);
             if (!File.Exists(full))
-                return OperationResult.Fail("압축 파일이 없습니다", archivePath);
+                return OperationResult.Fail(EngineText.Common_ArchiveNotFound, archivePath);
             zip = OpenRead(full);
         }
         catch (Exception ex)
@@ -389,7 +390,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
             using (zip)
             {
                 if (zip.Volumes.IsSplit)
-                    return OperationResult.Unsupported("분할 ZIP 은 고칠 수 없습니다. 압축 파일은 바뀌지 않았습니다");
+                    return OperationResult.Unsupported(EngineText.Zip_SplitNotModifiable);
                 if (validate(zip) is { } invalid)
                     return invalid;
                 output = ZipVolumeWriter.Create(full, null);
@@ -403,7 +404,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (OperationCanceledException)
         {
-            return OperationResult.Cancelled("취소했습니다. 압축 파일은 바뀌지 않았습니다");
+            return OperationResult.Cancelled(EngineText.Common_ModifyCancelled);
         }
         catch (ZipPasswordException ex)
         {
@@ -411,7 +412,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("압축 파일을 고치지 못했습니다. 원본은 바뀌지 않았습니다", ex.Message);
+            return OperationResult.Fail(EngineText.Zip_ModifyFailed, ex.Message);
         }
         finally
         {
@@ -442,17 +443,17 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
     {
         string folder = SafePaths.ToDisplayPath(targetFolder ?? "");
         if (folder.Length > 0 && (!SafePaths.TryGetSafeRelative(folder, out string safeFolder, out _) || safeFolder != folder))
-            return OperationResult.Fail("대상 폴더 이름이 올바르지 않습니다", folder);
+            return OperationResult.Fail(EngineText.Zip_TargetFolderInvalid, folder);
         if (sources.Count == 0)
-            return OperationResult.Fail("추가할 파일이 없습니다");
+            return OperationResult.Fail(EngineText.Zip_NothingToAdd);
         string prefix = folder.Length == 0 ? "" : folder + "/";
         var problems = new List<string>();
         string fullArchive = Path.GetFullPath(archivePath);
         var items = Expand(sources, prefix, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { fullArchive }, problems);
         if (problems.Count > 0)
-            return new OperationResult(OperationStatus.Failed, "추가할 원본을 찾을 수 없습니다. 압축 파일은 바뀌지 않았습니다", problems);
+            return new OperationResult(OperationStatus.Failed, EngineText.Zip_AddSourcesNotFound, problems);
         if (DuplicateName(items) is { } dup)
-            return OperationResult.Fail("추가할 원본 이름이 겹칩니다", dup);
+            return OperationResult.Fail(EngineText.Zip_AddDuplicateName, dup);
         int fileCount = items.Count(i => !i.IsDirectory);
         string? password = string.IsNullOrEmpty(_read.Password) ? null : _read.Password;
         bool addFolder = false;
@@ -462,14 +463,14 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
             {
                 var (all, folders) = Index(zip);
                 if (folder.Length > 0 && all.Contains(folder) && !folders.Contains(folder))
-                    return OperationResult.Fail("대상 경로가 폴더가 아니라 파일입니다", folder);
+                    return OperationResult.Fail(EngineText.Zip_TargetIsFile, folder);
                 var existing = new HashSet<string>(all, StringComparer.OrdinalIgnoreCase);
                 var clash = items
                     .Where(i => existing.Contains(i.EntryName.TrimEnd('/')))
-                    .Select(i => $"이미 있음: {i.EntryName.TrimEnd('/')}")
+                    .Select(i => string.Format(EngineText.Zip_AlreadyExists, i.EntryName.TrimEnd('/')))
                     .ToArray();
                 if (clash.Length > 0)
-                    return OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다", clash);
+                    return OperationResult.Fail(EngineText.Zip_ItemExists, clash);
                 if (zip.IsEncrypted)
                 {
                     if (password is null)
@@ -487,7 +488,7 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
                 WriteItems(writer, items, new CreateOptions().Level, password, progress, cancel);
             },
             comment: null,
-            successMessage: $"파일 {fileCount}개를 추가했습니다",
+            successMessage: string.Format(EngineText.Zip_Added, fileCount),
             cancel);
     }
 
@@ -495,19 +496,19 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
     {
         var targets = entryPaths.Select(SafePaths.ToDisplayPath).Where(p => p.Length > 0).Distinct(StringComparer.Ordinal).ToList();
         if (targets.Count == 0)
-            return OperationResult.Fail("지울 항목이 없습니다");
+            return OperationResult.Fail(EngineText.Zip_NothingToDelete);
         return Modify(archivePath,
             validate: zip =>
             {
                 var all = Index(zip).All;
-                var missing = targets.Where(t => !all.Contains(t)).Select(t => $"없는 항목: {t}").ToArray();
-                return missing.Length > 0 ? OperationResult.Fail("압축 파일에 없는 항목입니다", missing) : null;
+                var missing = targets.Where(t => !all.Contains(t)).Select(t => string.Format(EngineText.Zip_ItemNotFound, t)).ToArray();
+                return missing.Length > 0 ? OperationResult.Fail(EngineText.Zip_ItemNotInArchive, missing) : null;
             },
             write: (zip, writer) => CopyExisting(zip, writer,
                 skip: e => targets.Any(t => SafePaths.IsSelfOrDescendant(SafePaths.ToDisplayPath(e.Name), t)),
                 rename: _ => null, progress, cancel),
             comment: null,
-            successMessage: $"항목 {targets.Count}개를 지웠습니다",
+            successMessage: string.Format(EngineText.Zip_Deleted, targets.Count),
             cancel);
     }
 
@@ -515,23 +516,23 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
     {
         string old = SafePaths.ToDisplayPath(entryPath ?? "");
         if (old.Length == 0)
-            return OperationResult.Fail("이름을 바꿀 항목이 없습니다");
+            return OperationResult.Fail(EngineText.Zip_NothingToRename);
         if (SafePaths.ValidateLeafName(newName) is { } nameError)
-            return OperationResult.Fail("새 이름이 올바르지 않습니다", nameError);
+            return OperationResult.Fail(EngineText.Zip_NewNameInvalid, nameError);
         string parent = SafePaths.ParentOf(old);
         string renamed = parent.Length == 0 ? newName : parent + "/" + newName;
         if (renamed == old)
-            return OperationResult.Ok("이름이 같아 바꾸지 않았습니다");
+            return OperationResult.Ok(EngineText.Zip_RenameSameName);
 
         return Modify(archivePath,
             validate: zip =>
             {
                 var all = Index(zip).All;
                 if (!all.Contains(old))
-                    return OperationResult.Fail("압축 파일에 없는 항목입니다", old);
+                    return OperationResult.Fail(EngineText.Zip_ItemNotInArchive, old);
                 bool caseOnly = string.Equals(renamed, old, StringComparison.OrdinalIgnoreCase);
                 if (!caseOnly && new HashSet<string>(all, StringComparer.OrdinalIgnoreCase).Contains(renamed))
-                    return OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다", renamed);
+                    return OperationResult.Fail(EngineText.Zip_ItemExists, renamed);
                 return null;
             },
             write: (zip, writer) => CopyExisting(zip, writer, skip: _ => false,
@@ -553,12 +554,12 @@ public sealed class ZipEngine(ReadOptions? read = null) : IArchiveEngine
     {
         byte[] bytes = Encoding.UTF8.GetBytes(comment ?? "");
         if (bytes.Length > MaxCommentBytes)
-            return OperationResult.Fail("설명이 너무 깁니다 (UTF-8 65535 바이트 이하)", $"{bytes.Length} 바이트");
+            return OperationResult.Fail(EngineText.Zip_CommentTooLong, string.Format(EngineText.Zip_ByteCount, bytes.Length));
         return Modify(archivePath,
             validate: _ => null,
             write: (zip, writer) => CopyExisting(zip, writer, _ => false, _ => null, null, cancel),
             comment: bytes,
-            successMessage: bytes.Length == 0 ? "설명을 지웠습니다" : "설명을 저장했습니다",
+            successMessage: bytes.Length == 0 ? EngineText.Zip_CommentRemoved : EngineText.Zip_CommentSaved,
             cancel);
     }
 }

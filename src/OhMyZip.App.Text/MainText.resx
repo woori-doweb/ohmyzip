@@ -1,0 +1,596 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MenuBar_Name" xml:space="preserve">
+    <value>Menu bar</value>
+  </data>
+  <data name="Toolbar_Name" xml:space="preserve">
+    <value>Toolbar</value>
+  </data>
+  <data name="FindBox_Name" xml:space="preserve">
+    <value>Find files</value>
+  </data>
+  <data name="FindBox_ToolTip" xml:space="preserve">
+    <value>Find by name in the whole archive (Ctrl+F) — * ? wildcards, Esc to clear, Enter to go to the results</value>
+  </data>
+  <data name="StatusBar_Name" xml:space="preserve">
+    <value>Status bar</value>
+  </data>
+  <data name="Status_FolderHelp" xml:space="preserve">
+    <value>Folders: number of folder entries stored in the archive (folders implied only by paths appear in the tree but aren't counted)</value>
+  </data>
+  <data name="FolderTree_Name" xml:space="preserve">
+    <value>Folder tree</value>
+  </data>
+  <data name="Up_Name" xml:space="preserve">
+    <value>Up one level</value>
+  </data>
+  <data name="Up_ToolTip" xml:space="preserve">
+    <value>Up one level (Backspace)</value>
+  </data>
+  <data name="PathText_Name" xml:space="preserve">
+    <value>Current folder path</value>
+  </data>
+  <data name="CommentPane_Heading" xml:space="preserve">
+    <value>Archive comment</value>
+  </data>
+  <data name="FileList_Name" xml:space="preserve">
+    <value>File list</value>
+  </data>
+  <data name="Column_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Column_PackedSize" xml:space="preserve">
+    <value>Packed Size</value>
+  </data>
+  <data name="Column_Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="Column_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Column_Modified" xml:space="preserve">
+    <value>Date Modified</value>
+  </data>
+  <data name="Column_Method" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="Column_Encryption" xml:space="preserve">
+    <value>Encryption</value>
+  </data>
+  <data name="Column_Attributes" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="Column_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Column_ExtraInfo" xml:space="preserve">
+    <value>Extra Info</value>
+  </data>
+  <data name="FindResults_Name" xml:space="preserve">
+    <value>Find results</value>
+  </data>
+  <data name="Start_Prompt" xml:space="preserve">
+    <value>Drag an archive here or press Open (Ctrl+O)</value>
+  </data>
+  <data name="StartOpen_Button" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="StartNewArchive_Button" xml:space="preserve">
+    <value>New Archive</value>
+  </data>
+  <data name="Start_ReturnHint" xml:space="preserve">
+    <value>Press F6 to return to the open archive</value>
+  </data>
+  <data name="AppLogo_Name" xml:space="preserve">
+    <value>ohmyZip logo</value>
+  </data>
+  <data name="Menu_NotImplementedToolTip" xml:space="preserve">
+    <value>This feature isn't available yet.</value>
+  </data>
+  <data name="ExtractMore_Button" xml:space="preserve">
+    <value>Extract Options</value>
+  </data>
+  <data name="ExtractMore_Name" xml:space="preserve">
+    <value>Choose how to extract</value>
+  </data>
+  <data name="ExtractMore_ToolTip" xml:space="preserve">
+    <value>Choose how to extract: Extract… / Smart Extract</value>
+  </data>
+  <data name="OperationFailed_Title" xml:space="preserve">
+    <value>Couldn't Complete the Operation</value>
+  </data>
+  <data name="Status_NoArchive" xml:space="preserve">
+    <value>No archive is open</value>
+  </data>
+  <data name="Status_Summary" xml:space="preserve">
+    <value>Files: {0:N0}, Folders: {1:N0}, Archive size: {2:N0} bytes</value>
+  </data>
+  <data name="Comment_None" xml:space="preserve">
+    <value>No comment</value>
+  </data>
+  <data name="Disabled_Busy" xml:space="preserve">
+    <value>Another operation is in progress.</value>
+  </data>
+  <data name="Disabled_FormatUnknown" xml:space="preserve">
+    <value>current</value>
+  </data>
+  <data name="Disabled_NoArchive" xml:space="preserve">
+    <value>No archive is open.</value>
+  </data>
+  <data name="Disabled_StartScreen" xml:space="preserve">
+    <value>Available after you close the start screen (F6).</value>
+  </data>
+  <data name="Disabled_FindResults" xml:space="preserve">
+    <value>Not available in find results — press Enter to go to the item's location.</value>
+  </data>
+  <data name="Disabled_ReadOnly" xml:space="preserve">
+    <value>Archives in the {0} format are read-only — adding, deleting, and renaming aren't supported yet.</value>
+  </data>
+  <data name="Disabled_NoCommentEdit" xml:space="preserve">
+    <value>The {0} format doesn't support editing the archive comment yet.</value>
+  </data>
+  <data name="Disabled_NoTest" xml:space="preserve">
+    <value>The {0} format doesn't support testing yet.</value>
+  </data>
+  <data name="Disabled_NoExtract" xml:space="preserve">
+    <value>The {0} format doesn't support extracting yet.</value>
+  </data>
+  <data name="Clipboard_NoFiles" xml:space="preserve">
+    <value>The clipboard has no files to paste.</value>
+  </data>
+  <data name="Disabled_SelectItem" xml:space="preserve">
+    <value>Select an item in the list.</value>
+  </data>
+  <data name="Disabled_SelectOne" xml:space="preserve">
+    <value>Select one item in the list to rename.</value>
+  </data>
+  <data name="Disabled_Updating" xml:space="preserve">
+    <value>Checking for or downloading an update. Try again when it finishes.</value>
+  </data>
+  <data name="OpenArchiveFailed_Title" xml:space="preserve">
+    <value>Can't Open the Archive</value>
+  </data>
+  <data name="SaveSettingsFailed_Title" xml:space="preserve">
+    <value>Couldn't Save Settings</value>
+  </data>
+  <data name="OpenArchive_Title" xml:space="preserve">
+    <value>Open Archive</value>
+  </data>
+  <data name="Filter_Open" xml:space="preserve">
+    <value>Archives (*.zip;*.7z;*.tar;*.gz;*.tgz;*.rar)|*.zip;*.7z;*.tar;*.gz;*.tgz;*.rar|ZIP archives (*.zip)|*.zip|7Z archives (*.7z)|*.7z|All files (*.*)|*.*</value>
+  </data>
+  <data name="Filter_AllFiles" xml:space="preserve">
+    <value>All files (*.*)|*.*</value>
+  </data>
+  <data name="Filter_SaveAs" xml:space="preserve">
+    <value>{0} archive (*{1})|*{1}|All files (*.*)|*.*</value>
+  </data>
+  <data name="OpenNamedFailed_Title" xml:space="preserve">
+    <value>Can't Open {0}</value>
+  </data>
+  <data name="Open_FolderNotArchive" xml:space="preserve">
+    <value>Folders can't be opened. Choose an archive inside the folder.</value>
+  </data>
+  <data name="Open_FileNotFound" xml:space="preserve">
+    <value>File not found: {0}
+Check the path, or choose the file again with Open (Ctrl+O).</value>
+  </data>
+  <data name="Opening_Title" xml:space="preserve">
+    <value>Opening Archive</value>
+  </data>
+  <data name="Open_UnknownFormat" xml:space="preserve">
+    <value>This archive format is unsupported or unrecognized. Open a ZIP, 7Z, RAR, TAR, GZ, or TGZ file.</value>
+  </data>
+  <data name="OpenedWithProblems_Title" xml:space="preserve">
+    <value>{0} Opened with Warnings</value>
+  </data>
+  <data name="OK_Button" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Cancel_Button" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Close_Button" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="PasswordCancelled" xml:space="preserve">
+    <value>Password entry was canceled. Nothing was changed.</value>
+  </data>
+  <data name="ExplorerFailed_Title" xml:space="preserve">
+    <value>Can't Open File Explorer</value>
+  </data>
+  <data name="Testing_Title" xml:space="preserve">
+    <value>Testing Archive</value>
+  </data>
+  <data name="TestOk_Title" xml:space="preserve">
+    <value>No Errors Found in the Archive</value>
+  </data>
+  <data name="TestOk_Body" xml:space="preserve">
+    <value>{0} — files checked: {1:N0}.</value>
+  </data>
+  <data name="TestProblems_Title" xml:space="preserve">
+    <value>Test Finished with Warnings</value>
+  </data>
+  <data name="TestCancelled" xml:space="preserve">
+    <value>Test canceled. No files were changed.</value>
+  </data>
+  <data name="TestFailed_Title" xml:space="preserve">
+    <value>Errors Found in the Archive</value>
+  </data>
+  <data name="CheckingDestination_Title" xml:space="preserve">
+    <value>Checking Destination Folder</value>
+  </data>
+  <data name="More_Items" xml:space="preserve">
+    <value>… and {0:N0} more</value>
+  </data>
+  <data name="Conflict_Title" xml:space="preserve">
+    <value>Files with the Same Names Already Exist</value>
+  </data>
+  <data name="Conflict_Body" xml:space="preserve">
+    <value>Files with the same names in the destination folder: {0:N0}. What do you want to do?</value>
+  </data>
+  <data name="Replace_Button" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="Skip_Button" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Rename_Button" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Extracting_Title" xml:space="preserve">
+    <value>Extracting</value>
+  </data>
+  <data name="ExtractProblems_Title" xml:space="preserve">
+    <value>Extracted with Warnings</value>
+  </data>
+  <data name="ExtractDone_Title" xml:space="preserve">
+    <value>Extraction Complete</value>
+  </data>
+  <data name="OpenFolder_Button" xml:space="preserve">
+    <value>Open Folder</value>
+  </data>
+  <data name="ExtractCancelled" xml:space="preserve">
+    <value>Extraction canceled. New files were removed and replaced files were restored: {0}</value>
+  </data>
+  <data name="ExtractFailed_Title" xml:space="preserve">
+    <value>Couldn't Extract the Archive</value>
+  </data>
+  <data name="PickFilesToArchive_Title" xml:space="preserve">
+    <value>Select Files to Archive (Add Folders in the Next Dialog)</value>
+  </data>
+  <data name="CreateBlocked_Title" xml:space="preserve">
+    <value>Can't Create the Archive</value>
+  </data>
+  <data name="Create_SplitReplace" xml:space="preserve">
+    <value>A split archive can't replace an existing file. Choose a different name.</value>
+  </data>
+  <data name="Creating_Title" xml:space="preserve">
+    <value>Creating Archive</value>
+  </data>
+  <data name="Create_MoveFailed" xml:space="preserve">
+    <value>Couldn't move the new archive to the target name.</value>
+  </data>
+  <data name="CreateProblems_Title" xml:space="preserve">
+    <value>Archive Created with Warnings</value>
+  </data>
+  <data name="CreateCancelled" xml:space="preserve">
+    <value>Archive creation canceled. The partial archive was not kept.</value>
+  </data>
+  <data name="CreateCancelled_ExistingKept" xml:space="preserve">
+    <value> The existing file is unchanged.</value>
+  </data>
+  <data name="CreateLeftovers_Title" xml:space="preserve">
+    <value>Archive Creation Canceled, but Files Remain</value>
+  </data>
+  <data name="CreateLeftovers_Body" xml:space="preserve">
+    <value>Delete the following files manually.</value>
+  </data>
+  <data name="CreateNotSupported_Title" xml:space="preserve">
+    <value>Can't Create an Archive with These Options Yet</value>
+  </data>
+  <data name="CreateFailed_Title" xml:space="preserve">
+    <value>Couldn't Create the Archive</value>
+  </data>
+  <data name="PickFilesToAdd_Title" xml:space="preserve">
+    <value>Select Files to Add to the Archive</value>
+  </data>
+  <data name="AddBlocked_Title" xml:space="preserve">
+    <value>Can't Add Files</value>
+  </data>
+  <data name="Add_Self" xml:space="preserve">
+    <value>The open archive can't be added to itself.</value>
+  </data>
+  <data name="Add_TopLevel" xml:space="preserve">
+    <value>top level</value>
+  </data>
+  <data name="Adding_Title" xml:space="preserve">
+    <value>Adding Files</value>
+  </data>
+  <data name="Adding_Detail" xml:space="preserve">
+    <value>Items: {0:N0} → {1}</value>
+  </data>
+  <data name="AddFailed_Title" xml:space="preserve">
+    <value>Couldn't Add Files</value>
+  </data>
+  <data name="AddCancelled_Title" xml:space="preserve">
+    <value>Adding Files Canceled</value>
+  </data>
+  <data name="DeleteConfirm_Title" xml:space="preserve">
+    <value>Delete the Selected Items from the Archive?</value>
+  </data>
+  <data name="DeleteConfirm_Body" xml:space="preserve">
+    <value>Items to delete from {1}: {0:N0}. Deleting a folder also deletes the items in it.</value>
+  </data>
+  <data name="Delete_Button" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Deleting_Title" xml:space="preserve">
+    <value>Deleting</value>
+  </data>
+  <data name="ItemCount" xml:space="preserve">
+    <value>Items: {0:N0}</value>
+  </data>
+  <data name="DeleteFailed_Title" xml:space="preserve">
+    <value>Couldn't Delete</value>
+  </data>
+  <data name="DeleteCancelled_Title" xml:space="preserve">
+    <value>Deletion Canceled</value>
+  </data>
+  <data name="Rename_Title" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Rename_Prompt" xml:space="preserve">
+    <value>New name for '{0}':</value>
+  </data>
+  <data name="Rename_Empty" xml:space="preserve">
+    <value>Enter a name.</value>
+  </data>
+  <data name="Rename_Dots" xml:space="preserve">
+    <value>'.' and '..' can't be used as names. Enter a different name.</value>
+  </data>
+  <data name="Rename_InvalidChars" xml:space="preserve">
+    <value>Remove \ / : * ? " &lt; &gt; | from the name.</value>
+  </data>
+  <data name="Rename_Duplicate" xml:space="preserve">
+    <value>An item with the same name already exists in this folder. Enter a different name.</value>
+  </data>
+  <data name="Renaming_Title" xml:space="preserve">
+    <value>Renaming</value>
+  </data>
+  <data name="RenameFailed_Title" xml:space="preserve">
+    <value>Couldn't Rename</value>
+  </data>
+  <data name="RenameCancelled_Title" xml:space="preserve">
+    <value>Rename Canceled</value>
+  </data>
+  <data name="SavingComment_Title" xml:space="preserve">
+    <value>Saving Comment</value>
+  </data>
+  <data name="CommentNotSupported_Title" xml:space="preserve">
+    <value>This Format Can't Store a Comment</value>
+  </data>
+  <data name="CommentFailed_Title" xml:space="preserve">
+    <value>Couldn't Save the Comment</value>
+  </data>
+  <data name="CommentCancelled_Title" xml:space="preserve">
+    <value>Saving Comment Canceled</value>
+  </data>
+  <data name="ModifyProblems_Title" xml:space="preserve">
+    <value>Operation Finished with Warnings</value>
+  </data>
+  <data name="Modify_CancelledUnchanged" xml:space="preserve">
+    <value>{0}. The archive was not changed.</value>
+  </data>
+  <data name="Modify_CancelledChanged" xml:space="preserve">
+    <value>{0}
+Check needed: the archive's size or modification time differs from before the operation.</value>
+  </data>
+  <data name="ClipboardCopyFailed_Title" xml:space="preserve">
+    <value>Couldn't Copy to the Clipboard</value>
+  </data>
+  <data name="Clipboard_TempFailed" xml:space="preserve">
+    <value>Can't create a temporary folder: {0}</value>
+  </data>
+  <data name="CopyingToClipboard_Title" xml:space="preserve">
+    <value>Copying to Clipboard</value>
+  </data>
+  <data name="ClipboardCopyCancelled" xml:space="preserve">
+    <value>Clipboard copy canceled. The temporarily extracted files were removed.</value>
+  </data>
+  <data name="ClipboardNothing_Title" xml:space="preserve">
+    <value>No Files to Copy to the Clipboard</value>
+  </data>
+  <data name="ClipboardWrite_Title" xml:space="preserve">
+    <value>Can't Write to the Clipboard</value>
+  </data>
+  <data name="CopyProblems_Title" xml:space="preserve">
+    <value>Copied with Warnings</value>
+  </data>
+  <data name="ClipboardRead_Title" xml:space="preserve">
+    <value>Can't Read the Clipboard</value>
+  </data>
+  <data name="SaveAs_Title" xml:space="preserve">
+    <value>Save As</value>
+  </data>
+  <data name="SaveAs_CopySuffix" xml:space="preserve">
+    <value> - Copy</value>
+  </data>
+  <data name="SaveBlocked_Title" xml:space="preserve">
+    <value>Can't Save</value>
+  </data>
+  <data name="SaveAs_SamePath" xml:space="preserve">
+    <value>This is the same path as the open archive. Choose a different name or folder.</value>
+  </data>
+  <data name="SavingAs_Title" xml:space="preserve">
+    <value>Saving a Copy</value>
+  </data>
+  <data name="SaveAs_Done" xml:space="preserve">
+    <value>Saved as: {0}</value>
+  </data>
+  <data name="SaveAs_Cancelled" xml:space="preserve">
+    <value>Save canceled. The target file was not changed.</value>
+  </data>
+  <data name="SaveAsFailed_Title" xml:space="preserve">
+    <value>Couldn't Save the Archive Under a New Name</value>
+  </data>
+  <data name="DeleteArchive_Title" xml:space="preserve">
+    <value>Move the Archive to the Recycle Bin?</value>
+  </data>
+  <data name="DeleteArchive_Body" xml:space="preserve">
+    <value>{0}
+The archive will be closed and moved to the Recycle Bin. You can restore it from the Recycle Bin.</value>
+  </data>
+  <data name="MoveToRecycleBin_Button" xml:space="preserve">
+    <value>Move to Recycle Bin</value>
+  </data>
+  <data name="RecycleDone" xml:space="preserve">
+    <value>Moved to the Recycle Bin: {0}</value>
+  </data>
+  <data name="DeleteArchiveFailed_Title" xml:space="preserve">
+    <value>Couldn't Delete the Archive</value>
+  </data>
+  <data name="NewWindowFailed_Title" xml:space="preserve">
+    <value>Can't Open a New Window</value>
+  </data>
+  <data name="ExePathUnknown" xml:space="preserve">
+    <value>The program's file path is unknown.</value>
+  </data>
+  <data name="HelpMissing_Title" xml:space="preserve">
+    <value>Help File Not Found</value>
+  </data>
+  <data name="HelpMissing_Body" xml:space="preserve">
+    <value>{0} is missing from the installation folder: {1}</value>
+  </data>
+  <data name="HelpOpenFailed_Title" xml:space="preserve">
+    <value>Can't Open Help</value>
+  </data>
+  <data name="Update_Downloaded" xml:space="preserve">
+    <value>Version {0} has been downloaded. It will be installed when you close ohmyZip.</value>
+  </data>
+  <data name="Update_Checking" xml:space="preserve">
+    <value>Checking for updates…</value>
+  </data>
+  <data name="Update_Timeout" xml:space="preserve">
+    <value>The update server didn't respond within {0:0} seconds.</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>You have the latest version ({0}).</value>
+  </data>
+  <data name="UpdateCheckFailed_Title" xml:space="preserve">
+    <value>Can't Check for Updates</value>
+  </data>
+  <data name="UpdateCheckFailed_Body" xml:space="preserve">
+    <value>{0}
+Check your internet connection, then choose Help &gt; Check for Updates… again. If it still fails, you can download the new version from the releases page: https://github.com/{1}/releases</value>
+  </data>
+  <data name="UpdateInstall_Title" xml:space="preserve">
+    <value>Install Version {0}?</value>
+  </data>
+  <data name="UpdateInstall_Body" xml:space="preserve">
+    <value>Current version: {0}
+New version: {1}
+
+What's new:
+{2}
+
+Update downloads and installs the new version, then restarts ohmyZip.</value>
+  </data>
+  <data name="Update_Button" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UpdateDownloadCancelled" xml:space="preserve">
+    <value>Update download canceled. ohmyZip was not changed.</value>
+  </data>
+  <data name="UpdateDownloadFailed_Title" xml:space="preserve">
+    <value>Couldn't Download the Update</value>
+  </data>
+  <data name="UpdateDownloadFailed_Body" xml:space="preserve">
+    <value>{0}
+Check your internet connection, then choose Help &gt; Check for Updates… again.</value>
+  </data>
+  <data name="UpdateInstallFailed_Title" xml:space="preserve">
+    <value>Couldn't Install the Update</value>
+  </data>
+  <data name="UpdateInstallFailed_NoAccess" xml:space="preserve">
+    <value>You don't have permission to write to the installation folder: {0}
+Run ohmyZip as administrator and update again, or move ohmyZip to a folder you can write to (for example, your user folder) and install it there. You can also download the archive from the releases page and extract it yourself: {1}</value>
+  </data>
+  <data name="UpdateDownloading_Title" xml:space="preserve">
+    <value>Downloading Update</value>
+  </data>
+  <data name="UpdateInstalled_Title" xml:space="preserve">
+    <value>Version {0} Installed</value>
+  </data>
+  <data name="UpdateInstalled_Body" xml:space="preserve">
+    <value>Start ohmyZip again to run the new version.</value>
+  </data>
+  <data name="UpdateRestartFailed_Title" xml:space="preserve">
+    <value>Couldn't Start the New Version</value>
+  </data>
+  <data name="UpdateRestartFailed_Body" xml:space="preserve">
+    <value>The update is installed. Close ohmyZip and start it again.
+{0}</value>
+  </data>
+  <data name="UpdateNotes_None" xml:space="preserve">
+    <value>(No description — release page: {0})</value>
+  </data>
+  <data name="UpdateNotes_More" xml:space="preserve">
+    <value>{0}
+… and {1:N0} more lines — full notes: {2}</value>
+  </data>
+  <data name="Find_NoMatch" xml:space="preserve">
+    <value>No items match '{0}' (searched the whole archive).</value>
+  </data>
+  <data name="Find_Truncated" xml:space="preserve">
+    <value>Results for '{0}': showing only the first {1:N0} — narrow your search. Enter = go to location, Esc = clear</value>
+  </data>
+  <data name="Find_Count" xml:space="preserve">
+    <value>Results for '{0}': {1:N0} (whole archive). Enter = go to location, Esc = clear</value>
+  </data>
+  <data name="FileTypes_RegisterFailed" xml:space="preserve">
+    <value>ohmyZip: couldn't register file associations — {0}</value>
+  </data>
+  <data name="FileTypes_UnregisterFailed" xml:space="preserve">
+    <value>ohmyZip: couldn't unregister file associations — {0}</value>
+  </data>
+  <data name="Recycle_Failed" xml:space="preserve">
+    <value>Couldn't move the file to the Recycle Bin (error code 0x{0:X}).</value>
+  </data>
+  <data name="Recycle_Aborted" xml:space="preserve">
+    <value>Moving to the Recycle Bin was interrupted.</value>
+  </data>
+  <data name="Recycle_StillExists" xml:space="preserve">
+    <value>The file is still there.</value>
+  </data>
+  <data name="Entry_Encrypted" xml:space="preserve">
+    <value>Encrypted</value>
+  </data>
+  <data name="Entry_EncryptedMethod" xml:space="preserve">
+    <value>Encrypted ({0})</value>
+  </data>
+  <data name="FileType_Folder" xml:space="preserve">
+    <value>File folder</value>
+  </data>
+  <data name="FileType_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="FileType_Extension" xml:space="preserve">
+    <value>{0} File</value>
+  </data>
+  <data name="Token_InvalidHex" xml:space="preserve">
+    <value>Not a #RRGGBB color: {0}</value>
+  </data>
+</root>

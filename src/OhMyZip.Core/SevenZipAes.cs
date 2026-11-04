@@ -1,6 +1,7 @@
 using System.Buffers.Binary;
 using System.Security.Cryptography;
 using System.Text;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -95,7 +96,7 @@ internal sealed class AesEncryptStream : Stream
     public override void Write(ReadOnlySpan<byte> buffer)
     {
         if (_finished)
-            throw new InvalidOperationException("이미 끝난 암호화 스트림");
+            throw new InvalidOperationException(FormatText.Aes_StreamFinished);
         InputBytes += buffer.Length;
         while (buffer.Length > 0)
         {

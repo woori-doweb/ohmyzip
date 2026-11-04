@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -114,9 +115,7 @@ public static class Archives
 /// <summary>판별하지 못한 파일용 엔진. 어떤 작업도 예외 없이 실패 결과를 돌려준다.</summary>
 internal sealed class UnknownFormatEngine : IArchiveEngine
 {
-    private const string Message = "지원하지 않거나 알 수 없는 압축 파일 형식";
-
-    private static OperationResult Failure() => OperationResult.Fail(Message);
+    private static OperationResult Failure() => OperationResult.Fail(EngineText.Archives_UnknownFormat);
 
     public FormatCapabilities Capabilities { get; } = new(false, false, false, false, false, false, false, false);
 

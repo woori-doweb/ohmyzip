@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Controls;
 using OhMyZip.App.Settings;
+using OhMyZip.App.Text;
 using OhMyZip.App.Theme;
 
 namespace OhMyZip.App.Dialogs;
@@ -32,7 +33,7 @@ public static class SimpleDialogs
         root.Children.Add(body);
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 18, 0, 0) };
         var ok = new Button { Content = okLabel, IsDefault = true, Style = (Style)owner.FindResource("Oz.Button") };
-        var cancel = new Button { Content = "취소", IsCancel = true, Style = (Style)owner.FindResource("Oz.Button") };
+        var cancel = new Button { Content = DialogText.Cancel_Button, IsCancel = true, Style = (Style)owner.FindResource("Oz.Button") };
         AutomationProperties.SetAutomationId(ok, automationId + "-Ok");
         AutomationProperties.SetAutomationId(cancel, automationId + "-Cancel");
         ok.Click += (_, _) => window.DialogResult = true;
@@ -54,8 +55,8 @@ public static class SimpleDialogs
     /// <summary>툴바 버튼 설정: 버튼마다 표시/숨김. 반환값은 숨길 명령 키 목록(취소면 null).</summary>
     public static List<string>? ToolbarButtons(Window owner, IReadOnlyList<(string Key, string Label)> buttons, IReadOnlyCollection<string> hidden)
     {
-        var (window, body) = Frame(owner, "툴바 버튼 설정", "OZ-ToolbarButtonsDialog", 360, "적용");
-        body.Children.Add(new TextBlock { Text = "툴바에 보일 버튼을 고르세요. 숨긴 명령도 메뉴와 단축키로 쓸 수 있습니다.", TextWrapping = TextWrapping.Wrap });
+        var (window, body) = Frame(owner, DialogText.Toolbar_Title, "OZ-ToolbarButtonsDialog", 360, DialogText.Apply_Button);
+        body.Children.Add(new TextBlock { Text = DialogText.Toolbar_Prompt, TextWrapping = TextWrapping.Wrap });
         var boxes = new List<(string Key, CheckBox Box)>();
         foreach (var (key, label) in buttons)
         {
@@ -69,13 +70,13 @@ public static class SimpleDialogs
     /// <summary>색상 설정: 앱 내부 테마 재정의(환경 설정 일반과 같은 값). 취소면 null.</summary>
     public static AppTheme? ColorTheme(Window owner, AppTheme current)
     {
-        var (window, body) = Frame(owner, "색상 설정", "OZ-ThemeDialog", 360, "적용");
+        var (window, body) = Frame(owner, DialogText.Theme_Title, "OZ-ThemeDialog", 360, DialogText.Apply_Button);
         body.Children.Add(new TextBlock
         {
-            Text = "ohmyZip 창의 색만 바꿉니다(앱 내부 설정). 고대비 테마가 켜져 있으면 항상 시스템 색을 씁니다.",
+            Text = DialogText.Theme_Prompt,
             TextWrapping = TextWrapping.Wrap,
         });
-        var options = new[] { (AppTheme.System, "시스템 설정 따르기", "OZ-Theme-System"), (AppTheme.Light, "라이트", "OZ-Theme-Light"), (AppTheme.Dark, "다크", "OZ-Theme-Dark") };
+        var options = new[] { (AppTheme.System, DialogText.Theme_System, "OZ-Theme-System"), (AppTheme.Light, DialogText.Theme_Light, "OZ-Theme-Light"), (AppTheme.Dark, DialogText.Theme_Dark, "OZ-Theme-Dark") };
         var radios = new List<(AppTheme Value, RadioButton Radio)>();
         foreach (var (value, label, id) in options)
         {
@@ -92,8 +93,8 @@ public static class SimpleDialogs
     /// <summary>압축 파일 설명 편집(여러 줄). 취소면 null, 빈 문자열은 설명 삭제.</summary>
     public static string? Comment(Window owner, string archiveName, string? current)
     {
-        var (window, body) = Frame(owner, "압축 파일 설명 편집", "OZ-CommentDialog", 520, "저장");
-        body.Children.Add(new TextBlock { Text = $"{archiveName} 의 설명(비우면 설명을 지웁니다):", TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 6) });
+        var (window, body) = Frame(owner, DialogText.Comment_Title, "OZ-CommentDialog", 520, DialogText.Save_Button);
+        body.Children.Add(new TextBlock { Text = string.Format(DialogText.Comment_Prompt, archiveName), TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 6) });
         var box = new TextBox
         {
             Text = current ?? "",
@@ -107,7 +108,7 @@ public static class SimpleDialogs
         box.SetResourceReference(Control.ForegroundProperty, ThemeManager.Text);
         box.SetResourceReference(Control.BorderBrushProperty, ThemeManager.Border);
         box.SetResourceReference(TextBox.CaretBrushProperty, ThemeManager.Text);
-        AutomationProperties.SetName(box, "압축 파일 설명");
+        AutomationProperties.SetName(box, DialogText.Comment_Name);
         AutomationProperties.SetAutomationId(box, "OZ-Comment-Text");
         body.Children.Add(box);
         window.Loaded += (_, _) => { box.Focus(); box.CaretIndex = box.Text.Length; };

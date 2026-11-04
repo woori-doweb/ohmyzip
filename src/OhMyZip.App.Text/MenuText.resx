@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PendingSuffix" xml:space="preserve">
+    <value> (Coming Soon)</value>
+  </data>
+  <data name="Error_CommandNotImplemented" xml:space="preserve">
+    <value>Command not implemented: {0}</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>_Edit</value>
+  </data>
+  <data name="Menu_Find" xml:space="preserve">
+    <value>F_ind</value>
+  </data>
+  <data name="Menu_Settings" xml:space="preserve">
+    <value>_Settings</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>_View</value>
+  </data>
+  <data name="Menu_Tools" xml:space="preserve">
+    <value>_Tools</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>_Help</value>
+  </data>
+  <data name="Submenu_Toolbar" xml:space="preserve">
+    <value>Toolbar</value>
+  </data>
+  <data name="Submenu_FileList" xml:space="preserve">
+    <value>File List</value>
+  </data>
+  <data name="Submenu_Columns" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="Label_OpenArchive" xml:space="preserve">
+    <value>Open Archive…</value>
+  </data>
+  <data name="Label_NewArchive" xml:space="preserve">
+    <value>New Archive…</value>
+  </data>
+  <data name="Label_CloseArchive" xml:space="preserve">
+    <value>Close Archive</value>
+  </data>
+  <data name="Label_SaveAs" xml:space="preserve">
+    <value>Save As…</value>
+  </data>
+  <data name="Label_DeleteArchive" xml:space="preserve">
+    <value>Delete Archive</value>
+  </data>
+  <data name="Label_SecureDeleteArchive" xml:space="preserve">
+    <value>Secure Delete Archive</value>
+  </data>
+  <data name="Label_OpenContainingFolder" xml:space="preserve">
+    <value>Open Containing Folder</value>
+  </data>
+  <data name="Label_TestArchive" xml:space="preserve">
+    <value>Test Archive</value>
+  </data>
+  <data name="Label_ScanForMalware" xml:space="preserve">
+    <value>Scan Archive for Malware</value>
+  </data>
+  <data name="Label_Extract" xml:space="preserve">
+    <value>Extract…</value>
+  </data>
+  <data name="Label_SmartExtract" xml:space="preserve">
+    <value>Smart Extract</value>
+  </data>
+  <data name="Label_NewWindow" xml:space="preserve">
+    <value>New Window</value>
+  </data>
+  <data name="Label_NewWindowAdmin" xml:space="preserve">
+    <value>New Window (Administrator)</value>
+  </data>
+  <data name="Label_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Label_Rename" xml:space="preserve">
+    <value>Rename…</value>
+  </data>
+  <data name="Label_AddFiles" xml:space="preserve">
+    <value>Add Files…</value>
+  </data>
+  <data name="Label_DeleteFiles" xml:space="preserve">
+    <value>Delete Files</value>
+  </data>
+  <data name="Label_EditComment" xml:space="preserve">
+    <value>Edit Archive Comment…</value>
+  </data>
+  <data name="Label_CopyToClipboard" xml:space="preserve">
+    <value>Copy Files to Clipboard</value>
+  </data>
+  <data name="Label_PasteFromClipboard" xml:space="preserve">
+    <value>Paste Files from Clipboard</value>
+  </data>
+  <data name="Label_CopyPath" xml:space="preserve">
+    <value>Copy File Path to Clipboard</value>
+  </data>
+  <data name="Label_FindFiles" xml:space="preserve">
+    <value>Find Files</value>
+  </data>
+  <data name="Label_Settings" xml:space="preserve">
+    <value>Settings…</value>
+  </data>
+  <data name="Label_Register" xml:space="preserve">
+    <value>Register Product…</value>
+  </data>
+  <data name="Label_Unregister" xml:space="preserve">
+    <value>Unregister Product…</value>
+  </data>
+  <data name="Label_PasswordManager" xml:space="preserve">
+    <value>Password Manager…</value>
+  </data>
+  <data name="Label_StartScreen" xml:space="preserve">
+    <value>Start Screen</value>
+  </data>
+  <data name="Label_FolderTree" xml:space="preserve">
+    <value>Folder Tree</value>
+  </data>
+  <data name="Label_ArchiveComment" xml:space="preserve">
+    <value>Archive Comment</value>
+  </data>
+  <data name="Label_ImagePreview" xml:space="preserve">
+    <value>Preview Image Files</value>
+  </data>
+  <data name="Label_StatusBar" xml:space="preserve">
+    <value>Status Bar</value>
+  </data>
+  <data name="Label_ToolbarLarge" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="Label_ToolbarSmall" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="Label_ToolbarClassic" xml:space="preserve">
+    <value>Classic</value>
+  </data>
+  <data name="Label_ToolbarHide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Label_ToolbarButtons" xml:space="preserve">
+    <value>Customize Toolbar…</value>
+  </data>
+  <data name="Label_ListDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Label_ListSimple" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Label_ListIcons" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="Label_ListLargeIcons" xml:space="preserve">
+    <value>Large Icons</value>
+  </data>
+  <data name="Label_ColumnPackedSize" xml:space="preserve">
+    <value>Packed Size</value>
+  </data>
+  <data name="Label_ColumnSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="Label_ColumnType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Label_ColumnModified" xml:space="preserve">
+    <value>Date Modified</value>
+  </data>
+  <data name="Label_ColumnMethod" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="Label_ColumnEncryption" xml:space="preserve">
+    <value>Encryption</value>
+  </data>
+  <data name="Label_ColumnAttributes" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="Label_ColumnDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Label_ColumnExtraInfo" xml:space="preserve">
+    <value>Extra Info</value>
+  </data>
+  <data name="Label_AlwaysOnTop" xml:space="preserve">
+    <value>Always on Top</value>
+  </data>
+  <data name="Label_ColorTheme" xml:space="preserve">
+    <value>Color Theme…</value>
+  </data>
+  <data name="Label_RepairArchive" xml:space="preserve">
+    <value>Repair Archive…</value>
+  </data>
+  <data name="Label_RecoverPassword" xml:space="preserve">
+    <value>Recover Password…</value>
+  </data>
+  <data name="Label_About" xml:space="preserve">
+    <value>About ohmyZip</value>
+  </data>
+  <data name="Label_CheckForUpdates" xml:space="preserve">
+    <value>Check for Updates…</value>
+  </data>
+  <data name="Label_OpenInstallFolder" xml:space="preserve">
+    <value>Open Installation Folder</value>
+  </data>
+  <data name="Label_OpenHelp" xml:space="preserve">
+    <value>Open Help Page</value>
+  </data>
+  <data name="Label_OpenForum" xml:space="preserve">
+    <value>Open Discussion Forum</value>
+  </data>
+  <data name="Label_OpenHomepage" xml:space="preserve">
+    <value>Open Website</value>
+  </data>
+  <data name="Toolbar_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Toolbar_NewArchive" xml:space="preserve">
+    <value>New Archive</value>
+  </data>
+  <data name="Toolbar_Extract" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="Toolbar_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Toolbar_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Toolbar_Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+</root>

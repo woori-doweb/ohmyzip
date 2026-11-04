@@ -65,7 +65,7 @@ jobs:
       - name: Test
         if: steps.version.outputs.skip != 'true'
         # 나머지 시험은 저장소 밖 fixtures 가 필요해 여기서는 돌리지 않는다.
-        run: dotnet test tests/OhMyZip.Core.Tests -c Release --no-build --filter "FullyQualifiedName~DesignTokenTests|FullyQualifiedName~AppUpdaterTests"
+        run: dotnet test tests/OhMyZip.Core.Tests -c Release --no-build --filter "FullyQualifiedName~DesignTokenTests|FullyQualifiedName~AppUpdaterTests|FullyQualifiedName~LocalizationTests"
 
       - name: Package
         if: steps.version.outputs.skip != 'true'

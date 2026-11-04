@@ -1,14 +1,15 @@
 using System.Buffers.Binary;
 using System.Security.Cryptography;
 using System.Text;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
 /// <summary>암호가 없거나 틀렸을 때. 메시지에 암호를 넣지 않는다.</summary>
 internal sealed class ZipPasswordException(bool missing) : Exception(missing ? MissingMessage : WrongMessage)
 {
-    public const string MissingMessage = "암호가 필요합니다";
-    public const string WrongMessage = "암호가 올바르지 않습니다";
+    public static string MissingMessage => EngineText.Zip_PasswordRequired;
+    public static string WrongMessage => EngineText.Zip_PasswordWrong;
 
     public bool Missing { get; } = missing;
 }
@@ -32,7 +33,7 @@ internal static class ZipAes
         1 => 16,
         2 => 24,
         3 => 32,
-        _ => throw new NotSupportedException($"알 수 없는 AES 강도 {strength}"),
+        _ => throw new NotSupportedException(string.Format(EngineText.Aes_UnknownStrength, strength)),
     };
 
     public static int SaltLength(byte strength) => KeyLength(strength) / 2;
@@ -166,7 +167,7 @@ internal sealed class WinZipAesWriteStream : Stream
 /// </summary>
 internal sealed class WinZipAesReadStream : Stream
 {
-    public const string MacMismatch = "AES 인증 코드(HMAC)가 맞지 않습니다 — 데이터가 손상되었거나 바뀌었습니다";
+    public static string MacMismatch => EngineText.Aes_MacMismatch;
 
     private readonly Stream _inner;
     private readonly AesCtr _ctr;
@@ -188,7 +189,7 @@ internal sealed class WinZipAesReadStream : Stream
         int saltLength = ZipAes.SaltLength(strength);
         long cipherLength = compressedSize - saltLength - ZipAes.VerifierLength - ZipAes.MacLength;
         if (cipherLength < 0)
-            throw new InvalidDataException("AES 항목이 너무 짧습니다");
+            throw new InvalidDataException(EngineText.Aes_EntryTooShort);
         byte[] salt = new byte[saltLength];
         byte[] stored = new byte[ZipAes.VerifierLength];
         raw.ReadExactly(salt);
@@ -211,7 +212,7 @@ internal sealed class WinZipAesReadStream : Stream
         int want = (int)Math.Min(buffer.Length, _remaining);
         int n = _inner.Read(buffer[..want]);
         if (n <= 0)
-            throw new InvalidDataException("AES 항목 데이터가 잘렸습니다");
+            throw new InvalidDataException(EngineText.Aes_EntryTruncated);
         _mac.AppendData(buffer[..n]);
         _ctr.Transform(buffer[..n]);
         _remaining -= n;
@@ -302,7 +303,7 @@ internal sealed class ZipCryptoReadStream : Stream
     public static ZipCryptoReadStream Open(Stream raw, long compressedSize, string password, byte check)
     {
         if (compressedSize < HeaderLength)
-            throw new InvalidDataException("ZipCrypto 항목이 너무 짧습니다");
+            throw new InvalidDataException(EngineText.ZipCrypto_EntryTooShort);
         var stream = new ZipCryptoReadStream(raw, compressedSize - HeaderLength);
         foreach (byte b in Encoding.UTF8.GetBytes(password))
             stream.Update(b);
@@ -340,7 +341,7 @@ internal sealed class ZipCryptoReadStream : Stream
             return 0;
         int n = _inner.Read(buffer[..(int)Math.Min(buffer.Length, _remaining)]);
         if (n <= 0)
-            throw new InvalidDataException("ZipCrypto 항목 데이터가 잘렸습니다");
+            throw new InvalidDataException(EngineText.ZipCrypto_EntryTruncated);
         Decrypt(buffer[..n]);
         _remaining -= n;
         return n;

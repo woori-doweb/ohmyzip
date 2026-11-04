@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using OhMyZip.App.Text;
 using OhMyZip.Core;
 
 namespace OhMyZip.App.Dialogs;
@@ -19,11 +20,11 @@ public partial class MessageDialog : Window
         _result = cancelIndex;
         (IconGlyph.Text, KindText.Text) = kind switch
         {
-            DialogKind.Success => ("\uE930", "완료"),
-            DialogKind.Warning => ("\uE7BA", "경고"),
-            DialogKind.Error => ("\uEA39", "오류"),
-            DialogKind.Question => ("\uE9CE", "확인"),
-            _ => ("\uE946", "정보"),
+            DialogKind.Success => ("\uE930", DialogText.Message_KindSuccess),
+            DialogKind.Warning => ("\uE7BA", DialogText.Message_KindWarning),
+            DialogKind.Error => ("\uEA39", DialogText.Message_KindError),
+            DialogKind.Question => ("\uE9CE", DialogText.Message_KindQuestion),
+            _ => ("\uE946", DialogText.Message_KindInfo),
         };
         IconGlyph.SetResourceReference(TextBlock.ForegroundProperty, kind == DialogKind.Error ? Theme.ThemeManager.Error : Theme.ThemeManager.Text);
         HeadingText.Text = (kind is DialogKind.Error or DialogKind.Warning ? KindText.Text + ": " : "") + heading;
@@ -64,10 +65,10 @@ public partial class MessageDialog : Window
     }
 
     public static void Info(Window? owner, string heading, string body = "", IReadOnlyList<string>? problems = null) =>
-        Show(owner, DialogKind.Info, heading, body, problems, ["확인"]);
+        Show(owner, DialogKind.Info, heading, body, problems, [DialogText.Ok_Button]);
 
     public static void Error(Window? owner, string heading, string body, IReadOnlyList<string>? problems = null) =>
-        Show(owner, DialogKind.Error, heading, body, problems, ["확인"]);
+        Show(owner, DialogKind.Error, heading, body, problems, [DialogText.Ok_Button]);
 
     /// <summary>엔진 결과를 상태에 맞는 아이콘으로 보여 준다.</summary>
     public static void Result(Window? owner, string heading, OperationResult result)
@@ -78,6 +79,6 @@ public partial class MessageDialog : Window
             OperationStatus.Cancelled => DialogKind.Info,
             _ => DialogKind.Error,
         };
-        Show(owner, kind, heading, result.Message, result.Problems, ["확인"]);
+        Show(owner, kind, heading, result.Message, result.Problems, [DialogText.Ok_Button]);
     }
 }

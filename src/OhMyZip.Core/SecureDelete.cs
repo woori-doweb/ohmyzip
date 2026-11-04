@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
+using OhMyZip.Core.Resources;
 
 namespace OhMyZip.Core;
 
@@ -9,8 +10,6 @@ namespace OhMyZip.Core;
 public static class SecureDelete
 {
     private const int BufferSize = 81920;
-    private const string SsdCaveat = "SSD 에서는 완전 삭제를 보장할 수 없음";
-    private const string PartialOverwriteWarning = "내용이 일부 덮어써졌을 수 있습니다";
     private const int FileRenameInfo = 3;
     private const int FileDispositionInfo = 4;
     private const uint GenericRead = 0x80000000;
@@ -72,7 +71,7 @@ public static class SecureDelete
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("삭제할 파일 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail(ServiceText.Shred_InvalidPath, ex.Message);
         }
 
         // This check deliberately precedes opening the file: a pre-cancelled request must not
@@ -80,28 +79,28 @@ public static class SecureDelete
         if (cancel.IsCancellationRequested)
             return OperationResult.Cancelled();
         if (!OperatingSystem.IsWindows())
-            return OperationResult.Unsupported("완전 삭제 서비스는 Windows에서만 지원합니다");
+            return OperationResult.Unsupported(ServiceText.Shred_WindowsOnly);
 
         FileAttributes attributes;
         try
         {
             if (Directory.Exists(fullPath))
-                return OperationResult.Fail("폴더는 완전 삭제할 수 없습니다");
+                return OperationResult.Fail(ServiceText.Shred_FolderNotAllowed);
             if (!File.Exists(fullPath))
-                return OperationResult.Fail("삭제할 파일이 없습니다");
+                return OperationResult.Fail(ServiceText.Shred_FileMissing);
             attributes = File.GetAttributes(fullPath);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
         {
-            return OperationResult.Fail("삭제할 파일을 확인할 수 없습니다", ex.Message);
+            return OperationResult.Fail(ServiceText.Shred_CannotCheck, ex.Message);
         }
 
         if ((attributes & FileAttributes.Directory) != 0)
-            return OperationResult.Fail("폴더는 완전 삭제할 수 없습니다");
+            return OperationResult.Fail(ServiceText.Shred_FolderNotAllowed);
         if ((attributes & FileAttributes.ReparsePoint) != 0)
-            return OperationResult.Fail("재분석 지점(링크)은 완전 삭제하지 않습니다");
+            return OperationResult.Fail(ServiceText.Shred_ReparsePoint);
         if ((attributes & FileAttributes.ReadOnly) != 0)
-            return OperationResult.Fail("읽기 전용 파일은 완전 삭제하지 않습니다");
+            return OperationResult.Fail(ServiceText.Shred_ReadOnly);
 
         string renamedPath;
         bool overwriteStarted = false;
@@ -142,17 +141,17 @@ public static class SecureDelete
                 if (!TryRenameByHandle(input.SafeFileHandle, renamedPath, out string renameError))
                 {
                     // Do not close the validated handle and then race a path-based move.
-                    return OperationResult.Fail("파일 이름을 바꾸지 못해 완전 삭제하지 않았습니다",
-                        renameError, PartialOverwriteWarning);
+                    return OperationResult.Fail(ServiceText.Shred_RenameFailed,
+                        renameError, ServiceText.Shred_PartialOverwrite);
                 }
                 if (!TryDeleteByHandle(input.SafeFileHandle, out string deleteError))
                 {
-                    return OperationResult.Fail("파일 이름을 바꾼 뒤 삭제하지 못했습니다", deleteError,
-                        PartialOverwriteWarning, $"이름이 바뀐 경로: {renamedPath}");
+                    return OperationResult.Fail(ServiceText.Shred_DeleteAfterRenameFailed, deleteError,
+                        ServiceText.Shred_PartialOverwrite, string.Format(ServiceText.Shred_RenamedPath, renamedPath));
                 }
             }
 
-            return OperationResult.Ok("파일을 덮어쓰고 삭제했습니다. " + SsdCaveat);
+            return OperationResult.Ok(ServiceText.Shred_Done);
         }
         catch (OperationCanceledException)
         {
@@ -161,8 +160,8 @@ public static class SecureDelete
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
         {
             return overwriteStarted
-                ? OperationResult.Fail("파일을 완전히 삭제하지 못했습니다 — " + PartialOverwriteWarning, ex.Message)
-                : OperationResult.Fail("파일을 완전히 삭제하지 못했습니다", ex.Message);
+                ? OperationResult.Fail(ServiceText.Shred_FailedPartial, ex.Message)
+                : OperationResult.Fail(ServiceText.Shred_Failed, ex.Message);
         }
     }
 
@@ -171,20 +170,20 @@ public static class SecureDelete
         try
         {
             if (!GetFileInformationByHandle(input.SafeFileHandle, out ByHandleFileInformation information))
-                return OperationResult.Fail("삭제 대상 파일 정보를 확인하지 못했습니다", LastErrorMessage());
+                return OperationResult.Fail(ServiceText.Shred_CannotReadInfo, LastErrorMessage());
             if ((information.FileAttributes & FileAttributes.Directory) != 0)
-                return OperationResult.Fail("폴더는 완전 삭제할 수 없습니다");
+                return OperationResult.Fail(ServiceText.Shred_FolderNotAllowed);
             if ((information.FileAttributes & FileAttributes.ReparsePoint) != 0)
-                return OperationResult.Fail("재분석 지점(링크)은 완전 삭제하지 않습니다");
+                return OperationResult.Fail(ServiceText.Shred_ReparsePoint);
             if ((information.FileAttributes & FileAttributes.ReadOnly) != 0)
-                return OperationResult.Fail("읽기 전용 파일은 완전 삭제하지 않습니다");
+                return OperationResult.Fail(ServiceText.Shred_ReadOnly);
             if (information.NumberOfLinks > 1)
-                return OperationResult.Fail("하드 링크가 여러 개인 파일은 완전 삭제하지 않습니다");
+                return OperationResult.Fail(ServiceText.Shred_HardLinks);
             return null;
         }
         catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or BadImageFormatException)
         {
-            return OperationResult.Fail("삭제 대상 파일 정보를 확인하지 못했습니다", ex.Message);
+            return OperationResult.Fail(ServiceText.Shred_CannotReadInfo, ex.Message);
         }
     }
 
@@ -202,7 +201,7 @@ public static class SecureDelete
         {
             int error = Marshal.GetLastWin32Error();
             handle.Dispose();
-            throw new IOException("삭제할 파일을 열 수 없습니다", new System.ComponentModel.Win32Exception(error));
+            throw new IOException(ServiceText.Shred_CannotOpen, new System.ComponentModel.Win32Exception(error));
         }
         return new FileStream(handle, FileAccess.ReadWrite, BufferSize, isAsync: false);
     }
@@ -270,6 +269,6 @@ public static class SecureDelete
 
     private static OperationResult CancelledAfterOverwrite(bool overwriteStarted) =>
         overwriteStarted
-            ? OperationResult.Cancelled("취소됨 — " + PartialOverwriteWarning)
+            ? OperationResult.Cancelled(ServiceText.Shred_CanceledPartial)
             : OperationResult.Cancelled();
 }
