@@ -209,20 +209,47 @@ public partial class MainWindow
             Close();
             return;
         }
-        var psi = new ProcessStartInfo(exe) { UseShellExecute = false };
-        if (Directory.Exists(App.StartupDirectory)) psi.WorkingDirectory = App.StartupDirectory;
-        foreach (var arg in App.StartupArgs) psi.ArgumentList.Add(arg);
-        try
+        if (StartSelf(exe, App.StartupArgs) is { } error)
         {
-            using var _ = Process.Start(psi);
-        }
-        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or FileNotFoundException)
-        {
-            MessageDialog.Error(this, MainText.UpdateRestartFailed_Title,
-                string.Format(MainText.UpdateRestartFailed_Body, ex.Message));
+            MessageDialog.Error(this, MainText.UpdateRestartFailed_Title, string.Format(MainText.UpdateRestartFailed_Body, error));
             return;
         }
         Close();
+    }
+
+    /// <summary>
+    /// 환경 설정에서 언어를 바꾸고 다시 시작을 고른 뒤: 받아 둔 업데이트가 있으면 먼저 설치하고
+    /// (새 프로세스가 파일을 잡기 전에), 열어 둔 압축 파일을 인자로 새로 시작한 뒤 이 창을 닫는다.
+    /// </summary>
+    private void RestartForLanguage()
+    {
+        var exe = App.ExecutablePath;
+        string[] args = _archive is not null && File.Exists(_archive.FilePath) ? [_archive.FilePath] : [];
+        if (exe is not null) App.InstallPendingUpdate();
+        var error = exe is null ? MainText.ExePathUnknown : StartSelf(exe, args);
+        if (error is not null)
+        {
+            MessageDialog.Error(this, MainText.LanguageRestartFailed_Title, string.Format(MainText.LanguageRestartFailed_Body, error));
+            return;
+        }
+        Close();
+    }
+
+    /// <summary>이 실행 파일을 인자 배열로 새로 시작한다(시작할 때의 작업 폴더). 실패하면 그 이유, 성공하면 null.</summary>
+    private static string? StartSelf(string exe, IEnumerable<string> args)
+    {
+        var psi = new ProcessStartInfo(exe) { UseShellExecute = false };
+        if (Directory.Exists(App.StartupDirectory)) psi.WorkingDirectory = App.StartupDirectory;
+        foreach (var arg in args) psi.ArgumentList.Add(arg);
+        try
+        {
+            using var _ = Process.Start(psi);
+            return null;
+        }
+        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException or FileNotFoundException)
+        {
+            return ex.Message;
+        }
     }
 
     private void SetUpdating(bool value)

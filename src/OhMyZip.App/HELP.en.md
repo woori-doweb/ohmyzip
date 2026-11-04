@@ -79,5 +79,5 @@ These are shown on the menus with "(Coming Soon)" and can't be clicked.
 - Repair Archive, Recover Password
 - Open Discussion Forum, Open Website
 - In Settings: File Explorer Menu (registering with the system will require your consent — coming soon), Security, and Advanced
-- Languages: only English and Korean are available. ohmyZip follows the Windows display language; you can choose a language in Settings… > Language (takes effect the next time you start ohmyZip).
+- Languages: only English and Korean are available. ohmyZip follows the Windows display language; you can choose a language in Settings… > Language. When you change the language and click OK, ohmyZip asks whether to restart now (if you choose Later, the new language appears the next time you start ohmyZip).
 - Format-specific features (create, password, split, comment, modify) are turned on only as far as the engine supports them. When a feature isn't supported, its menu item and button are turned off and the reason appears in the tooltip.

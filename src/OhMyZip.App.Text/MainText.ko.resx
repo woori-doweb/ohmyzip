@@ -593,4 +593,11 @@ ohmyZip 을 관리자 권한으로 실행해 다시 업데이트하거나, 쓰�
   <data name="Token_InvalidHex" xml:space="preserve">
     <value>#RRGGBB 형식이 아님: {0}</value>
   </data>
+  <data name="LanguageRestartFailed_Title" xml:space="preserve">
+    <value>ohmyZip 을 다시 시작하지 못했습니다</value>
+  </data>
+  <data name="LanguageRestartFailed_Body" xml:space="preserve">
+    <value>설정은 저장했습니다. ohmyZip 을 닫은 뒤 다시 실행하면 바꾼 언어가 적용됩니다.
+{0}</value>
+  </data>
 </root>

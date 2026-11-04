@@ -60,6 +60,10 @@ public partial class PreferencesWindow : Window
 
     private readonly Action<AppSettings> _apply;
     private readonly AppSettings _working;
+    /// <summary>창을 열 때의 언어 설정(이 창에서 언어를 바꿨는지 판단).</summary>
+    private readonly AppLanguage _openedLanguage;
+    /// <summary>언어를 바꾼 뒤 지금 다시 시작하기로 했는지.</summary>
+    private bool _restart;
     private readonly Dictionary<string, CheckBox> _columnBoxes = new(StringComparer.Ordinal);
 
     private PreferencesWindow(Action<AppSettings> apply)
@@ -67,6 +71,7 @@ public partial class PreferencesWindow : Window
         InitializeComponent();
         _apply = apply;
         _working = AppSettings.Current.Clone();
+        _openedLanguage = _working.Language;
         CategoryList.ItemsSource = Categories;
         ThemeBox.ItemsSource = Themes.Select(t => t.Label).ToList();
         LanguageBox.ItemsSource = Languages.Select(l => l.Label).ToList();
@@ -142,6 +147,7 @@ public partial class PreferencesWindow : Window
         var error = AppSettings.Save(_working);
         _apply(_working);
         if (error is not null) MessageDialog.Error(this, DialogText.Pref_SaveFailed_Title, error);
+        else _restart = AskRestart(_working.Language);
         DialogResult = true;
     }
 
@@ -155,7 +161,21 @@ public partial class PreferencesWindow : Window
         var error = AppSettings.Save(defaults);
         _apply(defaults);
         if (error is not null) MessageDialog.Error(this, DialogText.Pref_ResetSaveFailed_Title, error);
+        else _restart = AskRestart(defaults.Language);
         DialogResult = true;
+    }
+
+    /// <summary>
+    /// 이 창에서 언어를 바꿔 화면 언어가 달라지면 지금 다시 시작할지 묻는다(설정은 이미 저장됨).
+    /// 저장에 실패했으면 묻지 않는다(다시 시작해도 옛 언어로 뜬다).
+    /// </summary>
+    private bool AskRestart(AppLanguage saved)
+    {
+        if (saved == _openedLanguage || !UiLanguage.NeedsRestart(saved)) return false;
+        int answer = MessageDialog.Show(this, DialogKind.Question, DialogText.Pref_RestartConfirm_Title,
+            DialogText.Pref_RestartConfirmBody, null,
+            [DialogText.Pref_Restart_Button, DialogText.Pref_RestartLater_Button], defaultIndex: 0, cancelIndex: 1);
+        return answer == 0;
     }
 
     // ───────────────────────── 파일 연결(즉시 적용) ─────────────────────────
@@ -271,6 +291,10 @@ public partial class PreferencesWindow : Window
     }
 
     /// <summary>apply 는 확인·초기화 때만 불린다(취소하면 아무것도 바꾸지 않음).</summary>
-    public static bool Show(Window owner, Action<AppSettings> apply) =>
-        new PreferencesWindow(apply) { Owner = owner }.ShowDialog() == true;
+    /// <returns>언어를 바꾸고 지금 다시 시작하기로 했으면 true(다시 시작은 호출한 창이 한다).</returns>
+    public static bool Show(Window owner, Action<AppSettings> apply)
+    {
+        var window = new PreferencesWindow(apply) { Owner = owner };
+        return window.ShowDialog() == true && window._restart;
+    }
 }

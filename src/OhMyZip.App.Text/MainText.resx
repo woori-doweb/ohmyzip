@@ -593,4 +593,11 @@ Run ohmyZip as administrator and update again, or move ohmyZip to a folder you c
   <data name="Token_InvalidHex" xml:space="preserve">
     <value>Not a #RRGGBB color: {0}</value>
   </data>
+  <data name="LanguageRestartFailed_Title" xml:space="preserve">
+    <value>Couldn't Restart ohmyZip</value>
+  </data>
+  <data name="LanguageRestartFailed_Body" xml:space="preserve">
+    <value>Your settings are saved. Close ohmyZip and start it again to use the new language.
+{0}</value>
+  </data>
 </root>

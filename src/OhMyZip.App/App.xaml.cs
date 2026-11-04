@@ -83,7 +83,7 @@ public partial class App : Application
     /// 받아 둔 업데이트를 설치한다. 실패해도 종료는 막지 않는다(설치 폴더는 Apply 가 되돌리고, 다음 실행에서 다시 받는다).
     /// 다른 창(다른 프로세스)이 먼저 같은 버전 이상을 설치했으면 건너뛴다.
     /// </summary>
-    private static void InstallPendingUpdate()
+    internal static void InstallPendingUpdate()
     {
         if (PendingUpdate is not { } pending || !AppSettings.Current.AutoUpdate) return;
         PendingUpdate = null;

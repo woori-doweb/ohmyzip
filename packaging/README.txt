@@ -18,7 +18,7 @@ Run ohmyZip.exe in the extracted folder. Pass an archive path as an argument to 
 There is no installer or code signature yet. To make ohmyZip the default app for
 archives, use Settings > File Associations in ohmyZip.
 The display language follows Windows (Korean or English). To change it, use
-Settings > Language and restart ohmyZip.
+Settings > Language; ohmyZip offers to restart when you click OK.
 ohmyZip checks GitHub for a new version once a day and installs it when you close it.
 You can turn this off in Settings > General.
 
@@ -57,7 +57,7 @@ Windows 용 압축 관리자입니다. 압축 파일을 열어 내용을 보고,
 설치 프로그램과 코드 서명은 아직 없습니다. 압축 파일의 기본 프로그램으로 쓰려면
 ohmyZip 의 환경 설정 > 파일 연결에서 등록합니다.
 화면 언어는 Windows 표시 언어를 따릅니다(한국어 또는 영어). 바꾸려면 환경 설정 > 언어 설정에서
-고른 뒤 ohmyZip 을 다시 시작합니다.
+고르고 확인을 누르면 다시 시작할지 묻습니다.
 하루에 한 번 GitHub 에서 새 버전을 확인하고, 프로그램을 닫을 때 설치합니다.
 환경 설정 > 일반 설정에서 끌 수 있습니다.
 

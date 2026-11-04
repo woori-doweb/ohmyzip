@@ -304,7 +304,9 @@ public partial class MainWindow : Window
             case "archive.comment": return EditCommentAsync();
             case "app.new-window": StartNewWindow(); break;
             case "app.exit": Close(); break;
-            case "app.preferences": PreferencesWindow.Show(this, ApplySettings); break;
+            case "app.preferences":
+                if (PreferencesWindow.Show(this, ApplySettings)) RestartForLanguage();
+                break;
             case "entry.rename": return RenameAsync();
             case "entry.add": return AddAsync();
             case "entry.delete": return DeleteAsync();

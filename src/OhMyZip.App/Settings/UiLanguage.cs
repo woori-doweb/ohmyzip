@@ -28,6 +28,12 @@ public static class UiLanguage
         _ => osUiCulture.TwoLetterISOLanguageName == "ko" ? Korean : English,
     };
 
+    /// <summary>고른 언어가 이번 실행의 화면 언어와 다르면(다시 시작해야 보이면) true.</summary>
+    public static bool NeedsRestart(AppLanguage chosen) => NeedsRestart(chosen, OsUiCulture, Current);
+
+    public static bool NeedsRestart(AppLanguage chosen, CultureInfo osUiCulture, CultureInfo current) =>
+        Resolve(chosen, osUiCulture).Name != current.Name;
+
     /// <summary>
     /// 모든 스레드의 UI 문화권과 WPF 요소의 xml:lang(글꼴 대체·입력기)을 정한다.
     /// 숫자·날짜 형식(CurrentCulture)은 Windows 지역 설정을 그대로 둔다.

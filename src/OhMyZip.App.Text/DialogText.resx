@@ -680,4 +680,16 @@ Some entries may have been written. Use Unregister to remove them.</value>
   <data name="Create_GzNote" xml:space="preserve">
     <value>A GZ archive can hold only one file.</value>
   </data>
+  <data name="Pref_RestartConfirm_Title" xml:space="preserve">
+    <value>Restart ohmyZip Now?</value>
+  </data>
+  <data name="Pref_RestartConfirmBody" xml:space="preserve">
+    <value>The new language appears after ohmyZip restarts. Your settings are already saved. If an archive is open, it opens again after the restart.</value>
+  </data>
+  <data name="Pref_Restart_Button" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="Pref_RestartLater_Button" xml:space="preserve">
+    <value>Later</value>
+  </data>
 </root>

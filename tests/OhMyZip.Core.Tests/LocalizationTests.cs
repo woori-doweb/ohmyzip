@@ -166,6 +166,18 @@ public sealed class LocalizationTests
     public void OZ_L06_Language_follows_Windows_unless_chosen(AppLanguage choice, string os, string expected) =>
         Assert.Equal(expected, UiLanguage.Resolve(choice, CultureInfo.GetCultureInfo(os)).Name);
 
+    /// <summary>환경 설정에서 고른 언어가 지금 화면 언어와 다를 때만 다시 시작을 묻는다.</summary>
+    [Theory]
+    [InlineData(AppLanguage.English, "ko-KR", "ko-KR", true)]
+    [InlineData(AppLanguage.Korean, "ko-KR", "ko-KR", false)]
+    [InlineData(AppLanguage.System, "ko-KR", "ko-KR", false)]
+    [InlineData(AppLanguage.System, "ko-KR", "en-US", true)]
+    [InlineData(AppLanguage.System, "ja-JP", "en-US", false)]
+    [InlineData(AppLanguage.Korean, "en-US", "en-US", true)]
+    [InlineData(AppLanguage.English, "en-GB", "en-US", false)]
+    public void OZ_L11_Restart_is_offered_only_when_the_display_language_changes(AppLanguage chosen, string os, string current, bool expected) =>
+        Assert.Equal(expected, UiLanguage.NeedsRestart(chosen, CultureInfo.GetCultureInfo(os), CultureInfo.GetCultureInfo(current)));
+
     [Fact]
     public void OZ_L07_Satellite_assemblies_resolve_Korean_and_fall_back_to_English()
     {
