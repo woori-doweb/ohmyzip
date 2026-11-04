@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace OhMyZip.App.Models;
 
-/// <summary>사이드바 트리 노드. 루트는 Path="" 이고 이름은 압축파일 이름.</summary>
+/// <summary>사이드바 트리 노드. 루트는 Path="" 이고 이름은 압축 파일 이름.</summary>
 public sealed class FolderNode : INotifyPropertyChanged
 {
     public required string Name { get; init; }

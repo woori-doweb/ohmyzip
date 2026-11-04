@@ -193,7 +193,7 @@ internal sealed class ZipWriter(ZipVolumeWriter output)
     public void Finish(byte[] comment)
     {
         if (comment.Length > 0xFFFF)
-            throw new IOException("압축파일 설명이 65535 바이트를 넘습니다");
+            throw new IOException("압축 파일 설명이 65535 바이트를 넘습니다");
         long tail = _central.Sum(c => (long)CentralHeader(c).Length) + 56 + 20 + ZipCentralDirectory.EocdLength + comment.Length;
         if (output.TryCollapseToSingle(tail))
         {

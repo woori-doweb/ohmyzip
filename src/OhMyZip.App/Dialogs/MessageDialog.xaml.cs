@@ -25,12 +25,7 @@ public partial class MessageDialog : Window
             DialogKind.Question => ("\uE9CE", "확인"),
             _ => ("\uE946", "정보"),
         };
-        IconGlyph.SetResourceReference(TextBlock.ForegroundProperty, kind switch
-        {
-            DialogKind.Error => Theme.ThemeManager.Error,
-            DialogKind.Success or DialogKind.Question => Theme.ThemeManager.Accent,
-            _ => Theme.ThemeManager.Text,
-        });
+        IconGlyph.SetResourceReference(TextBlock.ForegroundProperty, kind == DialogKind.Error ? Theme.ThemeManager.Error : Theme.ThemeManager.Text);
         HeadingText.Text = (kind is DialogKind.Error or DialogKind.Warning ? KindText.Text + ": " : "") + heading;
         BodyText.Text = body;
         BodyText.Visibility = string.IsNullOrWhiteSpace(body) ? Visibility.Collapsed : Visibility.Visible;
@@ -56,6 +51,7 @@ public partial class MessageDialog : Window
         SourceInitialized += (_, _) => NativeMethods.ApplyDarkTitleBar(this);
     }
 
+    /// <summary>defaultIndex &lt; 0 = 기본 단추 없음(Enter 로 확정하지 않음). cancelIndex &lt; 0 이면 마지막 단추가 취소.</summary>
     public static int Show(Window? owner, DialogKind kind, string heading, string body, IReadOnlyList<string>? problems,
         IReadOnlyList<string> buttons, int defaultIndex = 0, int cancelIndex = -1)
     {

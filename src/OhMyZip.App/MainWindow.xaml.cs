@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Automation;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
@@ -18,14 +19,15 @@ namespace OhMyZip.App;
 
 /// <summary>
 /// 주 창. 이 파일: 명령 표 → 메뉴·툴바·단축키, 활성 규칙(<see cref="CanRun"/> 한 곳), 화면 상태, 탐색, 작업 실행.
-/// 보기 설정은 MainWindow.View.cs, 압축파일·항목 명령은 MainWindow.Archive.cs.
+/// 보기 설정은 MainWindow.View.cs, 압축 파일·항목 명령은 MainWindow.Archive.cs.
 /// </summary>
 public partial class MainWindow : Window
 {
     private const string AppName = "ohmyZip";
 
     private readonly string? _startupPath;
-    private readonly string? _settingsError;
+    /// <summary>상태줄 알림 한 줄(정보만 주는 결과·시작 시 문제). 다음 명령을 실행하면 지운다.</summary>
+    private string? _notice;
     private readonly Dictionary<string, List<MenuItem>> _menuItems = new(StringComparer.Ordinal);
     private readonly Dictionary<string, MenuItem> _menuById = new(StringComparer.Ordinal);
     private readonly Dictionary<string, Button> _toolbarButtons = new(StringComparer.Ordinal);
@@ -50,7 +52,8 @@ public partial class MainWindow : Window
     public MainWindow(string? startupPath, string? settingsError)
     {
         _startupPath = startupPath;
-        _settingsError = settingsError;
+        // 설정을 못 읽으면 기본값(상태 표시줄 켜짐)으로 시작하므로 알림 창 대신 상태줄에 알린다.
+        _notice = settingsError is null ? null : "\u26A0 " + settingsError;
         InitializeComponent();
         BindCommands();
         BuildMenu();
@@ -69,7 +72,7 @@ public partial class MainWindow : Window
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
-        if (_settingsError is not null) MessageDialog.Show(this, DialogKind.Warning, "설정을 읽지 못했습니다", _settingsError, null, ["확인"]);
+        if (_notice is not null) AnnounceStatus();
         if (_startupPath is not null) await OpenArchiveAsync(_startupPath);
         if (_archive is null) EmptyOpenButton.Focus();
     }
@@ -111,10 +114,14 @@ public partial class MainWindow : Window
     private void AddMenuItem(MenuItem top, Dictionary<string, MenuItem> submenus, MenuSpec spec)
     {
         var parent = top;
+        bool separator = CommandCatalog.SeparatorBefore.Contains(spec.Id);
         if (spec.Submenu is not null && !submenus.TryGetValue(spec.Submenu, out parent))
         {
             parent = new MenuItem { Header = spec.Submenu };
             submenus[spec.Submenu] = parent;
+            // 하위 메뉴 첫 행의 구분선은 하위 메뉴 머리 앞(바깥 메뉴)에 둔다.
+            if (separator) top.Items.Add(new Separator());
+            separator = false;
             top.Items.Add(parent);
         }
         var item = new MenuItem { InputGestureText = spec.Shortcut ?? "", Tag = spec };
@@ -140,6 +147,7 @@ public partial class MainWindow : Window
             item.IsEnabled = false;
             item.ToolTip = "아직 구현하지 않은 기능입니다.";
         }
+        if (separator) parent.Items.Add(new Separator());
         parent.Items.Add(item);
     }
 
@@ -175,7 +183,7 @@ public partial class MainWindow : Window
     /// <summary>풀기 드롭다운(OZ-F027 ui_location): 압축 풀기… / 알아서 풀기. 두 명령 모두 파일 메뉴에도 있다(OZ-A06).</summary>
     private Button BuildExtractMoreButton()
     {
-        var button = new Button { Tag = "\uE70D", Content = "풀기 방식", MinWidth = 22, Padding = new Thickness(2, 4, 2, 4), Margin = new Thickness(0, 0, 2, 0) };
+        var button = new Button { Tag = "\uE70D", Content = "풀기 방식", MinWidth = 32, Padding = new Thickness(2, 4, 2, 4), Margin = new Thickness(0, 0, 2, 0) };
         AutomationProperties.SetName(button, "풀기 방식 선택");
         AutomationProperties.SetAutomationId(button, "archive.extract.more");
         button.ToolTip = "풀기 방식 선택: 압축 풀기… / 알아서 풀기";
@@ -185,7 +193,7 @@ public partial class MainWindow : Window
             var spec = CommandCatalog.Spec(key);
             var item = new MenuItem
             {
-                Header = key == "archive.extract" ? spec.Header + "…" : spec.Header,
+                Header = spec.Header,
                 InputGestureText = spec.Shortcut ?? "",
                 Command = CommandCatalog.Command(key),
                 CommandParameter = spec.Id,
@@ -209,6 +217,12 @@ public partial class MainWindow : Window
     {
         if (e.Command is not RoutedUICommand c) return;
         e.Handled = true;
+        // 새 명령을 시작하면 지난 알림을 지운다.
+        if (_notice is not null)
+        {
+            _notice = null;
+            UpdateStatusText();
+        }
         if (!CanRun(c.Name)) return;
         try
         {
@@ -230,7 +244,7 @@ public partial class MainWindow : Window
 
     /// <summary>
     /// 활성 규칙 한 곳(메뉴·툴바·단축키 모두 이 값을 CanExecute 로 본다).
-    /// 압축파일 없음 / 선택 없음 / 여러 개 선택 / 형식이 Modify·Comment 미지원 / 작업 중 이면 비활성.
+    /// 압축 파일 없음 / 선택 없음 / 여러 개 선택 / 형식이 Modify·Comment 미지원 / 작업 중 이면 비활성.
     /// </summary>
     private bool CanRun(string key)
     {
@@ -316,19 +330,47 @@ public partial class MainWindow : Window
 
     // ───────────────────────── 화면 상태 ─────────────────────────
 
+    /// <summary>
+    /// 알림 창 대신 상태줄에 한 줄로 알린다(사용자가 할 일이 없는 결과). 다음 명령을 실행하면 지워진다.
+    /// 상태 표시줄을 꺼 두어 보이지 않으면 알림이 사라지지 않도록 정보 알림 창으로 보여 준다.
+    /// </summary>
+    private void ShowNotice(string text)
+    {
+        if (StatusBarHost.Visibility != Visibility.Visible)
+        {
+            MessageDialog.Info(this, text);
+            return;
+        }
+        _notice = text;
+        UpdateUi();
+        AnnounceStatus();
+    }
+
+    /// <summary>화면 읽기 프로그램이 바뀐 상태줄 문장을 읽도록 알린다(StatusText 의 LiveSetting=Polite).</summary>
+    private void AnnounceStatus() =>
+        (UIElementAutomationPeer.FromElement(StatusText) ?? UIElementAutomationPeer.CreatePeerForElement(StatusText))
+            ?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+
+    /// <summary>상태줄 문장: 알림(있으면) + 압축 파일 요약.</summary>
+    private void UpdateStatusText()
+    {
+        var summary = _archive is null
+            ? "열린 압축 파일이 없습니다"
+            : $"파일: {_archive.FileCount:N0}, 폴더: {_archive.FolderCount:N0}, 압축 파일 크기: {_archive.ArchiveSize:N0}바이트";
+        StatusText.Text = _notice is null ? summary : $"{_notice}  ·  {summary}";
+    }
+
     private void UpdateUi()
     {
         Title = _archive is null ? AppName : $"{_archive.FileName} — {AppName}";
         bool start = ShowingStart;
         BrowserGrid.Visibility = start ? Visibility.Collapsed : Visibility.Visible;
         EmptyState.Visibility = start ? Visibility.Visible : Visibility.Collapsed;
-        // '시작 시 시작 화면 표시' 를 끄면 압축파일이 없을 때 안내 대신 빈 창(F6 으로 볼 수 있음).
+        // '시작 시 시작 화면 표시' 를 끄면 압축 파일이 없을 때 안내 대신 빈 창(F6 으로 볼 수 있음).
         StartContent.Visibility = _archive is not null || S.ShowStartScreen || _startForced ? Visibility.Visible : Visibility.Collapsed;
         EmptyReturnHint.Visibility = _archive is not null && _showStart ? Visibility.Visible : Visibility.Collapsed;
         SearchBox.IsEnabled = !start;
-        StatusText.Text = _archive is null
-            ? "열린 압축파일이 없습니다"
-            : $"파일: {_archive.FileCount:N0}, 폴더: {_archive.FolderCount:N0}, 압축 파일 크기: {_archive.ArchiveSize:N0}바이트";
+        UpdateStatusText();
 
         CommentPane.Visibility = S.ShowComment && _archive is not null ? Visibility.Visible : Visibility.Collapsed;
         CommentText.Text = string.IsNullOrEmpty(_archive?.Comment) ? "설명 없음" : _archive!.Comment;
@@ -368,7 +410,9 @@ public partial class MainWindow : Window
             var spec = CommandCatalog.Spec(key);
             var reason = DisabledReason(key);
             var shortcut = CommandCatalog.Gesture(key);
-            var baseText = shortcut is null ? spec.Header : $"{spec.Header} ({shortcut})";
+            // 말줄임표는 메뉴 항목의 '추가 입력 필요' 표시라 설명인 툴팁에는 넣지 않는다.
+            var name = spec.Header.TrimEnd('…');
+            var baseText = shortcut is null ? name : $"{name} ({shortcut})";
             var full = reason is null ? baseText : $"{baseText}\n{reason}";
             if (_toolbarButtons.TryGetValue(key, out var button))
             {
@@ -393,16 +437,16 @@ public partial class MainWindow : Window
         bool needsArchive = key is "archive.close" or "archive.reveal" or "archive.save-as" or "archive.delete-file" or "archive.test"
             or "archive.extract" or "archive.extract.smart" or "archive.comment" or "view.find"
             or "entry.add" or "entry.paste" or "entry.delete" or "entry.rename" or "entry.copy" or "entry.copy-path";
-        if (needsArchive && _archive is null) return "열린 압축파일이 없습니다.";
+        if (needsArchive && _archive is null) return "열린 압축 파일이 없습니다.";
         bool entryCommand = key.StartsWith("entry.", StringComparison.Ordinal);
         if (entryCommand && _showStart) return "시작 화면을 닫으면(F6) 쓸 수 있습니다.";
         if (entryCommand && Finding) return "찾기 결과에서는 쓸 수 없습니다 — Enter 로 항목 위치로 이동하세요.";
         switch (key)
         {
             case "entry.add" or "entry.paste" or "entry.delete" or "entry.rename" when caps is { Modify: false }:
-                return $"{format} 압축파일은 읽기 전용입니다 — 추가·삭제·이름 바꾸기를 아직 지원하지 않습니다.";
+                return $"{format} 압축 파일은 읽기 전용입니다 — 추가·삭제·이름 바꾸기를 아직 지원하지 않습니다.";
             case "archive.comment" when caps is { Comment: false }:
-                return $"{format} 형식은 압축파일 설명 편집을 아직 지원하지 않습니다.";
+                return $"{format} 형식은 압축 파일 설명 편집을 아직 지원하지 않습니다.";
             case "archive.test" when caps is { Test: false }:
                 return $"{format} 형식은 테스트를 아직 지원하지 않습니다.";
             case "archive.extract" or "archive.extract.smart" or "entry.copy" when caps is { Extract: false }:
@@ -422,7 +466,7 @@ public partial class MainWindow : Window
     {
         if (_archive is null)
         {
-            // 압축파일이 없을 때는 '시작 화면 표시' 를 꺼 둔 경우에만 안내를 켜고 끈다.
+            // 압축 파일이 없을 때는 '시작 화면 표시' 를 꺼 둔 경우에만 안내를 켜고 끈다.
             _showStart = false;
             if (!S.ShowStartScreen) _startForced = !_startForced;
             UpdateUi();

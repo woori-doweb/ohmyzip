@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <!-- 앱 어셈블리(net9.0-windows, WPF)의 색 토큰·명령 표를 시험하므로 같은 대상 프레임워크를 쓴다. -->
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -16,10 +18,13 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <!-- UseWPF 는 암시적 using 에서 System.IO 를 뺀다(Shapes.Path 충돌 회피). 엔진 시험은 System.IO 를 쓴다. -->
+    <Using Include="System.IO" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\OhMyZip.Core\OhMyZip.Core.csproj" />
+    <ProjectReference Include="..\..\src\OhMyZip.App\OhMyZip.App.csproj" />
   </ItemGroup>
 
 </Project>

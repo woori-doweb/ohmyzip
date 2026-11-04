@@ -266,7 +266,7 @@ internal sealed class WinZipAesReadStream : Stream
 }
 
 /// <summary>
-/// 전통 PKWARE 암호(ZipCrypto) 복호화 전용. 다른 프로그램이 만든 압축파일을 읽을 때만 쓰고, 새로 만들 때는 쓰지 않는다(약한 암호).
+/// 전통 PKWARE 암호(ZipCrypto) 복호화 전용. 다른 프로그램이 만든 압축 파일을 읽을 때만 쓰고, 새로 만들 때는 쓰지 않는다(약한 암호).
 /// 12바이트 암호 머리의 마지막 바이트로 암호를 1차 확인한다(틀리면 <see cref="ZipPasswordException"/>). 최종 확인은 CRC 다.
 /// </summary>
 internal sealed class ZipCryptoReadStream : Stream

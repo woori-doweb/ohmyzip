@@ -1,16 +1,16 @@
 namespace OhMyZip.Core;
 
-/// <summary>압축파일 형식. 엔진이 실제로 시험을 통과한 기능만 <see cref="FormatCapabilities"/> 에 true 로 둔다.</summary>
+/// <summary>압축 파일 형식. 엔진이 실제로 시험을 통과한 기능만 <see cref="FormatCapabilities"/> 에 true 로 둔다.</summary>
 public enum ArchiveFormat { Zip, SevenZip, Tar, GZip, TarGz, Rar, Unknown }
 
 /// <summary>
 /// 형식·엔진이 실제로 지원하는 작업. UI 의 명령 활성화와 새 압축 옵션은 이 값만 본다.
-/// Encrypt = 만들 때 암호화, Split = 만들 때 분할, Comment = 압축파일 설명 읽기/쓰기.
+/// Encrypt = 만들 때 암호화, Split = 만들 때 분할, Comment = 압축 파일 설명 읽기/쓰기.
 /// </summary>
 public sealed record FormatCapabilities(bool Read, bool Test, bool Extract, bool Create, bool Modify,
     bool Encrypt, bool Split, bool Comment);
 
-/// <summary>압축파일 안의 항목 하나. Path 는 항상 '/' 구분, 앞 '/' 없음, 폴더는 IsDirectory=true(끝 '/' 없음).</summary>
+/// <summary>압축 파일 안의 항목 하나. Path 는 항상 '/' 구분, 앞 '/' 없음, 폴더는 IsDirectory=true(끝 '/' 없음).</summary>
 public sealed record ArchiveEntry(
     string Path,
     bool IsDirectory,
@@ -35,7 +35,7 @@ public sealed record OperationResult(OperationStatus Status, string Message, IRe
     public bool Succeeded => Status == OperationStatus.Succeeded;
 }
 
-/// <summary>Comment 는 압축파일 설명(ZIP 주석). 없거나 형식이 지원하지 않으면 null.</summary>
+/// <summary>Comment 는 압축 파일 설명(ZIP 주석). 없거나 형식이 지원하지 않으면 null.</summary>
 public sealed record ListResult(OperationResult Result, IReadOnlyList<ArchiveEntry> Entries, string? Comment = null);
 
 /// <summary>대상 폴더에 같은 이름의 파일이 있을 때. 기본은 덮어쓰지 않는다(Skip).</summary>
@@ -87,11 +87,11 @@ public interface IArchiveEngine
     OperationResult Extract(string archivePath, string destinationDirectory, ExtractOptions options, IProgress<ProgressInfo>? progress = null, CancellationToken cancel = default);
     /// <summary>sources 는 파일 또는 폴더 경로. 폴더는 이름째(빈 폴더 포함) 들어간다. 기존 archivePath 가 있으면 실패. options=null 이면 기본값.</summary>
     OperationResult Create(string archivePath, IReadOnlyList<string> sources, CreateOptions? options = null, IProgress<ProgressInfo>? progress = null, CancellationToken cancel = default);
-    /// <summary>targetFolder 는 압축파일 안 폴더 경로("" = 루트). 실패·취소하면 원본 압축파일 바이트는 바뀌지 않는다.</summary>
+    /// <summary>targetFolder 는 압축 파일 안 폴더 경로("" = 루트). 실패·취소하면 원본 압축 파일 바이트는 바뀌지 않는다.</summary>
     OperationResult Add(string archivePath, IReadOnlyList<string> sources, string targetFolder = "", IProgress<ProgressInfo>? progress = null, CancellationToken cancel = default);
     OperationResult Delete(string archivePath, IReadOnlyList<string> entryPaths, IProgress<ProgressInfo>? progress = null, CancellationToken cancel = default);
     OperationResult Rename(string archivePath, string entryPath, string newName, IProgress<ProgressInfo>? progress = null, CancellationToken cancel = default);
-    /// <summary>압축파일 설명 쓰기. null/빈 문자열은 설명 삭제. Capabilities.Comment=false 면 NotSupported.</summary>
+    /// <summary>압축 파일 설명 쓰기. null/빈 문자열은 설명 삭제. Capabilities.Comment=false 면 NotSupported.</summary>
     OperationResult SetComment(string archivePath, string? comment, CancellationToken cancel = default);
 }
 

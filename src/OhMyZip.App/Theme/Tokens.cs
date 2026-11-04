@@ -8,6 +8,7 @@ public sealed record Palette(
     string Background,     // 파일 목록·대화상자 본문(불투명)
     string Text,           // 본문 글자
     string SecondaryText,  // 보조 글자(12px)
+    string DisabledText,   // 비활성 메뉴·버튼 글자. 비활성 UI 구성요소는 WCAG 1.4.3 대비 요구 예외라 ContrastPairs 에 넣지 않는다
     string Chrome,         // 툴바·메뉴·상태줄 표면(단색)
     string Sidebar,        // 사이드바 표면(단색, 약간 색조)
     string Border,         // 구분선(장식용, 글자 아님)
@@ -26,6 +27,7 @@ public static class Tokens
         Background: "#FFFFFF",
         Text: "#1B1B1F",
         SecondaryText: "#5E5E66",
+        DisabledText: "#9A9AA2",
         Chrome: "#F3F4F6",
         Sidebar: "#EEF0F3",
         Border: "#D4D6DB",
@@ -42,6 +44,7 @@ public static class Tokens
         Background: "#1C1C1E",
         Text: "#F2F2F5",
         SecondaryText: "#A9A9B2",
+        DisabledText: "#6E6E76",
         Chrome: "#2A2A2D",
         Sidebar: "#252528",
         Border: "#3E3E43",
@@ -53,11 +56,14 @@ public static class Tokens
         Hover: "#36363A",
         Error: "#FF9C94");
 
-    /// <summary>글자로 쓰이는 (전경, 배경) 조합. 각각 4.5:1 이상이어야 한다.</summary>
+    /// <summary>
+    /// 화면에서 글자·글리프로 쓰이는 (전경, 배경) 조합. 각각 4.5:1 이상이어야 한다.
+    /// DisabledText 는 비활성 구성요소라 WCAG 대비 요구 예외이므로 넣지 않는다.
+    /// </summary>
     public static IEnumerable<(string Label, string Foreground, string Background)> ContrastPairs(Palette p)
     {
         yield return ("Text/Background", p.Text, p.Background);
-        yield return ("SecondaryText/Background", p.SecondaryText, p.Background);
+        yield return ("SecondaryText/Background", p.SecondaryText, p.Background); // 열 머리글, 검색 안내 문구(입력란 배경)
         yield return ("Text/Chrome", p.Text, p.Chrome);
         yield return ("SecondaryText/Chrome", p.SecondaryText, p.Chrome);
         yield return ("Text/Sidebar", p.Text, p.Sidebar);
@@ -68,6 +74,7 @@ public static class Tokens
         yield return ("OnAccent/AccentHover", p.OnAccent, p.AccentHover);
         yield return ("OnSelection/Selection", p.OnSelection, p.Selection);
         yield return ("Error/Background", p.Error, p.Background);
+        yield return ("Accent/Background", p.Accent, p.Background); // 키보드 포커스 테두리·진행 막대
         yield return ("Accent/Chrome", p.Accent, p.Chrome);
     }
 

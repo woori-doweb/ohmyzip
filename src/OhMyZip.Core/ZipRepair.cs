@@ -120,7 +120,7 @@ public static class ZipRepair
         out ByHandleFileInformation lpFileInformation);
 
     /// <summary>
-    /// 손상된 ZIP을 복구해 <paramref name="outputZip"/>에 새 압축파일로 저장한다.
+    /// 손상된 ZIP을 복구해 <paramref name="outputZip"/>에 새 압축 파일로 저장한다.
     /// 기존 출력 파일은 절대 덮어쓰지 않으며, 복구할 수 있는 항목이 하나도 없으면
     /// 임시 출력도 남기지 않는다.
     /// </summary>
@@ -340,7 +340,7 @@ public static class ZipRepair
         if (length <= 0)
             throw new RepairFormatException("ZIP 파일이 비어 있습니다");
         if (length > MaxArchiveBytes || length > int.MaxValue)
-            throw new RepairFormatException("압축파일이 복구 입력 한도를 초과했습니다");
+            throw new RepairFormatException("압축 파일이 복구 입력 한도를 초과했습니다");
 
         byte[] bytes = GC.AllocateUninitializedArray<byte>((int)length);
         stream.Position = 0;

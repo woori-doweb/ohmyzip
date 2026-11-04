@@ -5,13 +5,13 @@ namespace OhMyZip.Core;
 
 /// <summary>분할 ZIP 의 조각 파일이 없다. 메시지에 없는 파일 이름이 들어간다.</summary>
 internal sealed class ZipVolumeMissingException(string fileName)
-    : IOException($"분할 압축파일의 조각이 없습니다: {Path.GetFileName(fileName)}")
+    : IOException($"분할 압축 파일의 조각이 없습니다: {Path.GetFileName(fileName)}")
 {
     public string FileName { get; } = fileName;
 }
 
 /// <summary>
-/// ZIP 압축파일을 이루는 파일들. 보통은 한 파일, 분할 ZIP(APPNOTE 8.5)은 name.z01, name.z02, …, name.zip(마지막).
+/// ZIP 압축 파일을 이루는 파일들. 보통은 한 파일, 분할 ZIP(APPNOTE 8.5)은 name.z01, name.z02, …, name.zip(마지막).
 /// 중앙 디렉터리의 (디스크 번호, 디스크 안 위치)를 조각을 이어 붙인 전체 위치로 바꿔 준다.
 /// </summary>
 internal sealed partial class ZipVolumeSet
@@ -49,7 +49,7 @@ internal sealed partial class ZipVolumeSet
                 throw new ZipVolumeMissingException(last);
         }
         if (!File.Exists(last))
-            throw new FileNotFoundException("압축파일이 없습니다", last);
+            throw new FileNotFoundException("압축 파일이 없습니다", last);
         int disk;
         using (var fs = new FileStream(last, FileMode.Open, FileAccess.Read, FileShare.Read))
             disk = LastDiskNumber(fs);
@@ -303,7 +303,7 @@ internal sealed class ZipVolumeWriter : Stream
     public (int Disk, long Offset) EnsureRoom(long length)
     {
         if (length > _volumeSize)
-            throw new IOException("분할 크기가 압축파일 끝 기록보다 작습니다");
+            throw new IOException("분할 크기가 압축 파일 끝 기록보다 작습니다");
         if (_volumeSize - _current.Position < length)
             OpenVolume();
         return (Disk, DiskOffset);

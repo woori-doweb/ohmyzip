@@ -177,11 +177,11 @@ public partial class CreateArchiveDialog : Window
 
     private void OnPasswordChanged(object sender, RoutedEventArgs e) => UpdatePasswordError();
 
-    /// <summary>색만이 아니라 아이콘 + 문장으로 불일치를 알린다(D12).</summary>
+    /// <summary>색만이 아니라 아이콘 + 문장으로 불일치를 알린다.</summary>
     private void UpdatePasswordError()
     {
         bool mismatch = Confirm.Length > 0 && Password != Confirm;
-        PasswordError.Text = mismatch ? "\u26A0 암호와 암호 확인이 서로 다릅니다." : "";
+        PasswordError.Text = mismatch ? "\u26A0 암호와 암호 확인이 다릅니다. 두 칸에 같은 암호를 입력하세요." : "";
         PasswordError.Visibility = mismatch ? Visibility.Visible : Visibility.Collapsed;
     }
 
@@ -255,7 +255,7 @@ public partial class CreateArchiveDialog : Window
     {
         ErrorText.Visibility = Visibility.Collapsed;
         var caps = Archives.CapabilitiesOf(_format);
-        if (!caps.Create) { ShowError("이 형식으로는 아직 만들 수 없습니다."); return; }
+        if (!caps.Create) { ShowError("이 형식으로는 아직 만들 수 없습니다. 형식에서 다른 항목을 고르세요."); return; }
         if (_sources.Count == 0) { ShowError("압축할 파일이나 폴더를 추가하세요."); return; }
 
         var ext = Archives.DefaultExtension(_format);
@@ -278,10 +278,10 @@ public partial class CreateArchiveDialog : Window
         if (Directory.Exists(target)) { ShowError("같은 이름의 폴더가 있습니다.", TargetBox); return; }
         foreach (var s in _sources)
         {
-            if (string.Equals(s, target, StringComparison.OrdinalIgnoreCase)) { ShowError("압축할 파일과 같은 경로에 저장할 수 없습니다.", TargetBox); return; }
+            if (string.Equals(s, target, StringComparison.OrdinalIgnoreCase)) { ShowError("압축할 파일과 같은 경로에는 저장할 수 없습니다. 다른 이름이나 폴더를 고르세요.", TargetBox); return; }
             if (Directory.Exists(s) && target.StartsWith(s.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
             {
-                ShowError("압축할 폴더 안에는 압축 파일을 저장할 수 없습니다.", TargetBox);
+                ShowError("압축할 폴더 안에는 압축 파일을 저장할 수 없습니다. 그 폴더 밖의 위치를 고르세요.", TargetBox);
                 return;
             }
         }
@@ -289,7 +289,7 @@ public partial class CreateArchiveDialog : Window
         string? password = null;
         if (EncryptGroup.IsEnabled && Password.Length > 0)
         {
-            if (Password != Confirm) { UpdatePasswordError(); ShowError("암호와 암호 확인이 서로 다릅니다."); return; }
+            if (Password != Confirm) { UpdatePasswordError(); ShowError("암호와 암호 확인이 다릅니다. 두 칸에 같은 암호를 입력하세요."); return; }
             password = Password;
         }
         else if (EncryptGroup.IsEnabled && Confirm.Length > 0)
@@ -316,9 +316,9 @@ public partial class CreateArchiveDialog : Window
         bool replace = File.Exists(target);
         if (replace)
         {
-            int answer = MessageDialog.Show(this, DialogKind.Question, "같은 이름의 압축 파일이 이미 있습니다",
+            int answer = MessageDialog.Show(this, DialogKind.Warning, "같은 이름의 압축 파일이 이미 있습니다",
                 $"{target}\n새 압축이 성공하면 기존 파일을 바꿉니다. 실패하거나 취소하면 기존 파일은 그대로입니다.", null,
-                ["바꾸기", "취소"], defaultIndex: 1, cancelIndex: 1);
+                ["바꾸기", "취소"], defaultIndex: -1, cancelIndex: 1);
             if (answer != 0) return;
         }
 

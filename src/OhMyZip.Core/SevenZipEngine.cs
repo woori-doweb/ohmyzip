@@ -148,7 +148,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
     private static DateTime? ModifiedUtc(IEntry e) => Modified(e)?.UtcDateTime;
 
     /// <summary>
-    /// 압축 방식 이름. 빈 파일은 폴더(코더)가 없고, 일부 암호화 압축파일은 코더 구성을 SharpCompress 가 방식으로 옮기지 못해
+    /// 압축 방식 이름. 빈 파일은 폴더(코더)가 없고, 일부 암호화 압축 파일은 코더 구성을 SharpCompress 가 방식으로 옮기지 못해
     /// CompressionType 이 예외를 던진다(실측: 다른 도구로 만든 AES 7Z 에서 InvalidFormatException) → 그때는 방식 없음(null).
     /// </summary>
     private static string? Method(SevenZipArchiveEntry e)
@@ -192,7 +192,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
 
     // ---------- 열기 ----------
 
-    /// <summary>열린 압축파일. 분할이면 Stream 은 조각을 이은 <see cref="VolumeReadStream"/>.</summary>
+    /// <summary>열린 압축 파일. 분할이면 Stream 은 조각을 이은 <see cref="VolumeReadStream"/>.</summary>
     private sealed class Opened(Stream stream, SevenZipArchive archive, List<SevenZipArchiveEntry> entries, bool headerEncrypted) : IDisposable
     {
         public SevenZipArchive Archive { get; } = archive;
@@ -248,7 +248,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
             {
                 parts = Volumes.ConsecutiveParts(Path.GetFullPath(archivePath));
                 if (parts.Count == 0)
-                    return OperationResult.Fail("7Z 압축파일을 열 수 없습니다", "첫 조각이 없습니다");
+                    return OperationResult.Fail("7Z 압축 파일을 열 수 없습니다", "첫 조각이 없습니다");
                 stream = new VolumeReadStream(parts);
             }
             else
@@ -258,7 +258,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("7Z 압축파일을 열 수 없습니다", ex.Message);
+            return OperationResult.Fail("7Z 압축 파일을 열 수 없습니다", ex.Message);
         }
 
         try
@@ -294,13 +294,13 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
                 stream.Dispose();
                 return headerEncrypted
                     ? OperationResult.NeedPassword(PasswordWrong)
-                    : OperationResult.Fail("7Z 압축파일을 열 수 없습니다", ex.Message);
+                    : OperationResult.Fail("7Z 압축 파일을 열 수 없습니다", ex.Message);
             }
         }
         catch (Exception ex)
         {
             stream.Dispose();
-            return OperationResult.Fail("7Z 압축파일을 열 수 없습니다", ex.Message);
+            return OperationResult.Fail("7Z 압축 파일을 열 수 없습니다", ex.Message);
         }
     }
 
@@ -328,7 +328,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
                             Modified(e), ExpectedCrc(e), Method(e), IsEncrypted(e) || (opened.HeaderEncrypted && !e.IsDirectory)));
                     }
                 }
-                // DEF-02: 목록은 압축파일에 기록된 항목만 돌려준다(경로로만 생기는 폴더는 앱이 트리에서 만든다).
+                // DEF-02: 목록은 압축 파일에 기록된 항목만 돌려준다(경로로만 생기는 폴더는 앱이 트리에서 만든다).
                 return new ListResult(OperationResult.Ok($"항목 {entries.Count}개"), entries);
             }
         }
@@ -338,7 +338,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return new ListResult(OperationResult.Fail("7Z 압축파일을 읽을 수 없습니다", ex.Message), []);
+            return new ListResult(OperationResult.Fail("7Z 압축 파일을 읽을 수 없습니다", ex.Message), []);
         }
     }
 
@@ -391,7 +391,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (WrongPasswordException)
         {
-            return OperationResult.NeedPassword($"{PasswordWrong} (또는 압축파일 손상)");
+            return OperationResult.NeedPassword($"{PasswordWrong} (또는 압축 파일 손상)");
         }
         catch (OperationCanceledException)
         {
@@ -399,7 +399,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("7Z 압축파일을 검사할 수 없습니다", ex.Message);
+            return OperationResult.Fail("7Z 압축 파일을 검사할 수 없습니다", ex.Message);
         }
     }
 
@@ -439,7 +439,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
             }
             catch (WrongPasswordException)
             {
-                return session.Rollback(OperationResult.NeedPassword($"{PasswordWrong} (또는 압축파일 손상). 이번에 만든 파일을 지웠습니다"));
+                return session.Rollback(OperationResult.NeedPassword($"{PasswordWrong} (또는 압축 파일 손상). 이번에 만든 파일을 지웠습니다"));
             }
             catch (OperationCanceledException)
             {
@@ -487,7 +487,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("압축파일 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail("압축 파일 경로가 올바르지 않습니다", ex.Message);
         }
         bool split = options.VolumeSize is not null;
         string firstOutput = split ? Volumes.PartPath(full, 1) : full;
@@ -496,7 +496,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         if (sources.Count == 0)
             return OperationResult.Fail("압축할 파일이 없습니다");
         if (!Directory.Exists(Path.GetDirectoryName(full)))
-            return OperationResult.Fail("압축파일을 둘 폴더가 없습니다", Path.GetDirectoryName(full) ?? full);
+            return OperationResult.Fail("압축 파일을 둘 폴더가 없습니다", Path.GetDirectoryName(full) ?? full);
 
         string temp = AtomicFile.TempSibling(full);
         var problems = new List<string>();
@@ -524,13 +524,13 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
                     AtomicFile.Commit(volumes.Parts[i], target, overwrite: false);
                     committed.Add(target);
                 }
-                return OperationResult.Ok($"항목 {sourceItems.Count}개로 분할 압축파일 {volumes.Parts.Count}조각을 만들었습니다");
+                return OperationResult.Ok($"항목 {sourceItems.Count}개로 분할 압축 파일 {volumes.Parts.Count}조각을 만들었습니다");
             }
             using (var fs = new FileStream(temp, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
                 SevenZipWriter.Write(fs, items, writeOptions, total, progress, cancel);
             cancel.ThrowIfCancellationRequested();
             AtomicFile.Commit(temp, full, overwrite: false);
-            return OperationResult.Ok($"항목 {sourceItems.Count}개로 압축파일을 만들었습니다");
+            return OperationResult.Ok($"항목 {sourceItems.Count}개로 압축 파일을 만들었습니다");
         }
         catch (OperationCanceledException)
         {
@@ -540,7 +540,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         catch (Exception ex)
         {
             RemoveAll(committed);
-            return OperationResult.Fail("압축파일을 만들지 못했습니다", ex.Message);
+            return OperationResult.Fail("압축 파일을 만들지 못했습니다", ex.Message);
         }
         finally
         {
@@ -587,7 +587,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
 
     /// <summary>
     /// 기존 항목을 풀면서(map 이 null 을 돌려주면 버림, 아니면 그 이름으로) 새 7Z 를 같은 폴더 임시 파일에 쓰고, 성공했을 때만 원본과 바꾼다.
-    /// 암호화된 압축파일은 같은 암호로 다시 암호화하고(헤더 암호화도 유지), 압축 수준은 <see cref="ModifyLevel"/>.
+    /// 암호화된 압축 파일은 같은 암호로 다시 암호화하고(헤더 암호화도 유지), 압축 수준은 <see cref="ModifyLevel"/>.
     /// </summary>
     private OperationResult Rewrite(string archivePath, Func<ArchiveIndex, OperationResult?> validate, Func<string, string?> map,
         Func<ArchiveIndex, IEnumerable<SourceEntry>> extra, string successMessage, IProgress<ProgressInfo>? progress, CancellationToken cancel)
@@ -599,12 +599,12 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("압축파일 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail("압축 파일 경로가 올바르지 않습니다", ex.Message);
         }
         if (Volumes.IsFirstPart(full))
             return OperationResult.Unsupported("분할된 7Z 는 고칠 수 없습니다. 풀어서 다시 만드세요");
         if (!File.Exists(full))
-            return OperationResult.Fail("압축파일이 없습니다", archivePath);
+            return OperationResult.Fail("압축 파일이 없습니다", archivePath);
         if (TryOpen(full, out var opened) is { } error)
             return error;
 
@@ -629,15 +629,15 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (WrongPasswordException)
         {
-            return OperationResult.NeedPassword($"{PasswordWrong}. 압축파일은 바뀌지 않았습니다");
+            return OperationResult.NeedPassword($"{PasswordWrong}. 압축 파일은 바뀌지 않았습니다");
         }
         catch (OperationCanceledException)
         {
-            return OperationResult.Cancelled("취소했습니다. 압축파일은 바뀌지 않았습니다");
+            return OperationResult.Cancelled("취소했습니다. 압축 파일은 바뀌지 않았습니다");
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("압축파일을 고치지 못했습니다. 원본은 바뀌지 않았습니다", ex.Message);
+            return OperationResult.Fail("압축 파일을 고치지 못했습니다. 원본은 바뀌지 않았습니다", ex.Message);
         }
         finally
         {
@@ -686,11 +686,11 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
-            return OperationResult.Fail("압축파일 경로가 올바르지 않습니다", ex.Message);
+            return OperationResult.Fail("압축 파일 경로가 올바르지 않습니다", ex.Message);
         }
         var items = SourceTree.Expand(sources, prefix, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { fullArchive }, problems);
         if (problems.Count > 0)
-            return new OperationResult(OperationStatus.Failed, "추가할 원본을 찾을 수 없습니다. 압축파일은 바뀌지 않았습니다", problems);
+            return new OperationResult(OperationStatus.Failed, "추가할 원본을 찾을 수 없습니다. 압축 파일은 바뀌지 않았습니다", problems);
         if (SourceTree.DuplicateName(items) is { } dup)
             return OperationResult.Fail("추가할 원본 이름이 겹칩니다", dup);
         int fileCount = items.Count(i => !i.IsDirectory);
@@ -702,7 +702,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
                     return OperationResult.Fail("대상 경로가 폴더가 아니라 파일입니다", folder);
                 var existing = new HashSet<string>(index.All, StringComparer.OrdinalIgnoreCase);
                 var clash = items.Where(i => existing.Contains(i.EntryName)).Select(i => $"이미 있음: {i.EntryName}").ToArray();
-                return clash.Length > 0 ? OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축파일은 바뀌지 않았습니다", clash) : null;
+                return clash.Length > 0 ? OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다", clash) : null;
             },
             map: path => path,
             extra: index => folder.Length > 0 && !index.Folders.Contains(folder)
@@ -722,7 +722,7 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
             validate: index =>
             {
                 var missing = targets.Where(t => !index.All.Contains(t)).Select(t => $"없는 항목: {t}").ToArray();
-                return missing.Length > 0 ? OperationResult.Fail("압축파일에 없는 항목입니다", missing) : null;
+                return missing.Length > 0 ? OperationResult.Fail("압축 파일에 없는 항목입니다", missing) : null;
             },
             map: path => targets.Any(t => SafePaths.IsSelfOrDescendant(path, t)) ? null : path,
             extra: _ => [],
@@ -747,10 +747,10 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
             validate: index =>
             {
                 if (!index.All.Contains(old))
-                    return OperationResult.Fail("압축파일에 없는 항목입니다", old);
+                    return OperationResult.Fail("압축 파일에 없는 항목입니다", old);
                 bool caseOnly = string.Equals(renamed, old, StringComparison.OrdinalIgnoreCase);
                 if (!caseOnly && new HashSet<string>(index.All, StringComparer.OrdinalIgnoreCase).Contains(renamed))
-                    return OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축파일은 바뀌지 않았습니다", renamed);
+                    return OperationResult.Fail("같은 이름의 항목이 이미 있습니다. 압축 파일은 바뀌지 않았습니다", renamed);
                 return null;
             },
             map: path => SafePaths.IsSelfOrDescendant(path, old) ? renamed + path[old.Length..] : path,
@@ -761,5 +761,5 @@ public sealed class SevenZipEngine(ReadOptions? read = null) : IArchiveEngine
     }
 
     public OperationResult SetComment(string archivePath, string? comment, CancellationToken cancel = default)
-        => OperationResult.Unsupported("이 형식은 압축파일 설명을 지원하지 않습니다");
+        => OperationResult.Unsupported("이 형식은 압축 파일 설명을 지원하지 않습니다");
 }

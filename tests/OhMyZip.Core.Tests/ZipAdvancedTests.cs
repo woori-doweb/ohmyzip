@@ -3,7 +3,7 @@ using System.Text;
 
 namespace OhMyZip.Core.Tests;
 
-/// <summary>ZIP 고급 기능: 압축 수준, AES-256, ZipCrypto 읽기, 암호 압축파일 수정, 분할, 코드페이지, 설명, 취소, 변조 검출.</summary>
+/// <summary>ZIP 고급 기능: 압축 수준, AES-256, ZipCrypto 읽기, 암호 압축 파일 수정, 분할, 코드페이지, 설명, 취소, 변조 검출.</summary>
 public class ZipAdvancedTests
 {
     // 시험 전용 합성 암호. 실제 암호가 아니다.
@@ -11,7 +11,7 @@ public class ZipAdvancedTests
     private const string OtherPassword = "oz-Synth-9902";
 
     /// <summary>
-    /// 외부 압축 프로그램의 CLI 로 만든 ZipCrypto 압축파일(input 의 readme.txt·한글이름.txt·nested·empty, 암호 = Password, 2026-10-27).
+    /// 외부 압축 프로그램의 CLI 로 만든 ZipCrypto 압축 파일(input 의 readme.txt·한글이름.txt·nested·empty, 암호 = Password, 2026-10-27).
     /// 한글 이름은 UTF-8 플래그 없이 CP949 바이트 + Info-ZIP 유니코드 경로(0x7075)로 들어 있다.
     /// </summary>
     private const string ExternalZipCryptoBase64 =
@@ -401,7 +401,7 @@ public class ZipAdvancedTests
                 Assert.Equal(hash, Util.Sha256(Path.Combine(output, path)));
         }
 
-        // 분할 압축파일 고치기는 NotSupported, 바이트는 그대로.
+        // 분할 압축 파일 고치기는 NotSupported, 바이트는 그대로.
         var before = parts.Select(p => Util.Sha256(Path.Combine(outDir, p))).ToList();
         Assert.Equal(OperationStatus.NotSupported, engine.Delete(zip, ["src/b.bin"]).Status);
         Assert.Equal(OperationStatus.NotSupported, engine.Rename(zip, "src/b.bin", "c.bin").Status);

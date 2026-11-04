@@ -7,11 +7,11 @@ using OhMyZip.App.Theme;
 namespace OhMyZip.App.Dialogs;
 
 /// <summary>
-/// 항목 몇 개짜리 작은 대화상자(툴바 버튼 설정·색상 설정·압축파일 설명 편집). 같은 틀: 제목 + 본문 + 확인/취소.
+/// 항목 몇 개짜리 작은 대화상자(툴바 버튼 설정·색상 설정·압축 파일 설명 편집). 같은 틀: 제목 + 본문 + 확정(동사)/취소.
 /// </summary>
 public static class SimpleDialogs
 {
-    private static (Window Window, StackPanel Body) Frame(Window owner, string title, string automationId, double width)
+    private static (Window Window, StackPanel Body) Frame(Window owner, string title, string automationId, double width, string okLabel)
     {
         var window = new Window
         {
@@ -31,7 +31,7 @@ public static class SimpleDialogs
         root.Children.Add(new TextBlock { Text = title, FontSize = 15, FontWeight = FontWeights.SemiBold, Margin = new Thickness(0, 0, 0, 10) });
         root.Children.Add(body);
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 18, 0, 0) };
-        var ok = new Button { Content = "확인", IsDefault = true, Style = (Style)owner.FindResource("Oz.Button") };
+        var ok = new Button { Content = okLabel, IsDefault = true, Style = (Style)owner.FindResource("Oz.Button") };
         var cancel = new Button { Content = "취소", IsCancel = true, Style = (Style)owner.FindResource("Oz.Button") };
         AutomationProperties.SetAutomationId(ok, automationId + "-Ok");
         AutomationProperties.SetAutomationId(cancel, automationId + "-Cancel");
@@ -54,7 +54,7 @@ public static class SimpleDialogs
     /// <summary>툴바 버튼 설정: 버튼마다 표시/숨김. 반환값은 숨길 명령 키 목록(취소면 null).</summary>
     public static List<string>? ToolbarButtons(Window owner, IReadOnlyList<(string Key, string Label)> buttons, IReadOnlyCollection<string> hidden)
     {
-        var (window, body) = Frame(owner, "툴바 버튼 설정", "OZ-ToolbarButtonsDialog", 360);
+        var (window, body) = Frame(owner, "툴바 버튼 설정", "OZ-ToolbarButtonsDialog", 360, "적용");
         body.Children.Add(new TextBlock { Text = "툴바에 보일 버튼을 고르세요. 숨긴 명령도 메뉴와 단축키로 쓸 수 있습니다.", TextWrapping = TextWrapping.Wrap });
         var boxes = new List<(string Key, CheckBox Box)>();
         foreach (var (key, label) in buttons)
@@ -69,7 +69,7 @@ public static class SimpleDialogs
     /// <summary>색상 설정: 앱 내부 테마 재정의(환경 설정 일반과 같은 값). 취소면 null.</summary>
     public static AppTheme? ColorTheme(Window owner, AppTheme current)
     {
-        var (window, body) = Frame(owner, "색상 설정", "OZ-ThemeDialog", 360);
+        var (window, body) = Frame(owner, "색상 설정", "OZ-ThemeDialog", 360, "적용");
         body.Children.Add(new TextBlock
         {
             Text = "ohmyZip 창의 색만 바꿉니다(앱 내부 설정). 고대비 테마가 켜져 있으면 항상 시스템 색을 씁니다.",
@@ -89,10 +89,10 @@ public static class SimpleDialogs
         return radios.First(r => r.Radio.IsChecked == true).Value;
     }
 
-    /// <summary>압축파일 설명 편집(여러 줄). 취소면 null, 빈 문자열은 설명 삭제.</summary>
+    /// <summary>압축 파일 설명 편집(여러 줄). 취소면 null, 빈 문자열은 설명 삭제.</summary>
     public static string? Comment(Window owner, string archiveName, string? current)
     {
-        var (window, body) = Frame(owner, "압축 파일 설명 편집", "OZ-CommentDialog", 520);
+        var (window, body) = Frame(owner, "압축 파일 설명 편집", "OZ-CommentDialog", 520, "저장");
         body.Children.Add(new TextBlock { Text = $"{archiveName} 의 설명(비우면 설명을 지웁니다):", TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 0, 6) });
         var box = new TextBox
         {

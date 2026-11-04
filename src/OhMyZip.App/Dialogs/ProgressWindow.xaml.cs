@@ -88,7 +88,7 @@ public partial class ProgressWindow : Window
         AmountText.Text = text;
     }
 
-    /// <summary>전체 크기를 모를 때만 진행률 없는 막대. 애니메이션 끔(D16·동작 줄이기)이면 움직이지 않는 빈 막대.</summary>
+    /// <summary>전체 크기를 모를 때만 진행률 없는 막대. 애니메이션 끔(Windows 애니메이션 효과 끔·동작 줄이기)이면 움직이지 않는 빈 막대.</summary>
     private void ShowUnknown(long processed)
     {
         Bar.IsIndeterminate = Theme.ThemeManager.AnimationsEnabled;

@@ -15,7 +15,7 @@ public enum FileAssociationStatus
 }
 
 /// <summary>
-/// Windows '기본 앱' 에서 ohmyZip 을 압축파일 기본 프로그램으로 고를 수 있게 하는 사용자 범위 등록.
+/// Windows '기본 앱' 에서 ohmyZip 을 압축 파일 기본 프로그램으로 고를 수 있게 하는 사용자 범위 등록.
 /// Windows 10/11 은 프로그램이 UserChoice 를 직접 바꾸지 못하게 하므로, 여기서는 후보로 등록만 하고
 /// 실제 선택은 사용자가 설정 화면(<see cref="SettingsUri"/>)에서 한다. 확장자 키의 기본값은 건드리지 않는다.
 /// 모든 경로는 root 기준 상대 경로다(보통 HKCU, 시험에서는 임시 하위 키).
@@ -26,8 +26,8 @@ public static class FileAssociations
     public const string AppName = "ohmyZip";
     public const string ProgId = "ohmyZip.Archive";
     public const string ExeName = "ohmyZip.exe";
-    public const string TypeName = "ohmyZip 압축파일";
-    public const string AppDescription = "ohmyZip 압축파일 관리자";
+    public const string TypeName = "ohmyZip 압축 파일";
+    public const string AppDescription = "ohmyZip 압축 파일 관리자";
     public const string SettingsUri = "ms-settings:defaultapps?registeredAppUser=ohmyZip";
 
     public const string ClassesPath = @"Software\Classes";

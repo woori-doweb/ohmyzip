@@ -60,7 +60,7 @@ internal sealed record ZipRecord
     }
 }
 
-/// <summary>중앙 디렉터리 전체와 압축파일 설명.</summary>
+/// <summary>중앙 디렉터리 전체와 압축 파일 설명.</summary>
 internal sealed record ZipDirectory(IReadOnlyList<ZipRecord> Entries, byte[] CommentBytes, string? Comment);
 
 /// <summary>
@@ -251,7 +251,7 @@ internal static class ZipCentralDirectory
         return Encoding.UTF8;
     }
 
-    /// <summary>압축파일 설명: 올바른 UTF-8 이면 UTF-8, 아니면 지정 코드페이지(없으면 CP949). 비어 있으면 null.</summary>
+    /// <summary>압축 파일 설명: 올바른 UTF-8 이면 UTF-8, 아니면 지정 코드페이지(없으면 CP949). 비어 있으면 null.</summary>
     private static string? DecodeComment(byte[] comment, int? codePage)
     {
         if (comment.Length == 0)
@@ -323,7 +323,7 @@ internal static class ZipCentralDirectory
     };
 }
 
-/// <summary>열린 ZIP 압축파일(한 파일 또는 분할 조각 묶음). 항목 데이터를 압축 해제·복호화해 연다. 한 번에 한 항목 스트림만 쓴다.</summary>
+/// <summary>열린 ZIP 압축 파일(한 파일 또는 분할 조각 묶음). 항목 데이터를 압축 해제·복호화해 연다. 한 번에 한 항목 스트림만 쓴다.</summary>
 internal sealed class ZipArchiveReader : IDisposable
 {
     private ZipArchiveReader(ZipVolumeSet volumes, Stream stream, ZipDirectory directory)
@@ -370,7 +370,7 @@ internal sealed class ZipArchiveReader : IDisposable
         Stream.ReadExactly(header.AsSpan(30));
         dataStart = local + header.Length;
         if (dataStart + r.CompressedSize > Stream.Length)
-            throw new InvalidDataException($"{r.Name}: 데이터가 압축파일 밖으로 나갑니다");
+            throw new InvalidDataException($"{r.Name}: 데이터가 압축 파일 밖으로 나갑니다");
         return header;
     }
 

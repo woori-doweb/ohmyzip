@@ -113,7 +113,7 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("RAR 압축파일을 열 수 없습니다", ex.Message);
+            return OperationResult.Fail("RAR 압축 파일을 열 수 없습니다", ex.Message);
         }
         RarArchive? archive = null;
         bool headerEncrypted = false;
@@ -138,7 +138,7 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
             stream.Dispose();
             if (headerEncrypted || ex is CryptographicException)
                 return OperationResult.NeedPassword(Password is null ? PasswordMissing : PasswordWrong);
-            return OperationResult.Fail("RAR 압축파일을 열 수 없습니다", ex.Message);
+            return OperationResult.Fail("RAR 압축 파일을 열 수 없습니다", ex.Message);
         }
     }
 
@@ -181,7 +181,7 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
                             Modified(e), ExpectedCrc(e, opened.Rar5), e.IsDirectory ? null : e.CompressionType.ToString(), IsEncrypted(e)));
                     }
                 }
-                // DEF-02: 목록은 압축파일에 기록된 항목만 돌려준다(경로로만 생기는 폴더는 앱이 트리에서 만든다).
+                // DEF-02: 목록은 압축 파일에 기록된 항목만 돌려준다(경로로만 생기는 폴더는 앱이 트리에서 만든다).
                 return new ListResult(OperationResult.Ok($"항목 {entries.Count}개"), entries);
             }
         }
@@ -191,7 +191,7 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return new ListResult(OperationResult.Fail("RAR 압축파일을 읽을 수 없습니다", ex.Message), []);
+            return new ListResult(OperationResult.Fail("RAR 압축 파일을 읽을 수 없습니다", ex.Message), []);
         }
     }
 
@@ -240,7 +240,7 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (WrongPasswordException)
         {
-            return OperationResult.NeedPassword($"{PasswordWrong} (또는 압축파일 손상)");
+            return OperationResult.NeedPassword($"{PasswordWrong} (또는 압축 파일 손상)");
         }
         catch (OperationCanceledException)
         {
@@ -248,7 +248,7 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
         }
         catch (Exception ex)
         {
-            return OperationResult.Fail("RAR 압축파일을 검사할 수 없습니다", ex.Message);
+            return OperationResult.Fail("RAR 압축 파일을 검사할 수 없습니다", ex.Message);
         }
     }
 
@@ -284,7 +284,7 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
             }
             catch (WrongPasswordException)
             {
-                return session.Rollback(OperationResult.NeedPassword($"{PasswordWrong} (또는 압축파일 손상). 이번에 만든 파일을 지웠습니다"));
+                return session.Rollback(OperationResult.NeedPassword($"{PasswordWrong} (또는 압축 파일 손상). 이번에 만든 파일을 지웠습니다"));
             }
             catch (OperationCanceledException)
             {
@@ -314,5 +314,5 @@ public sealed class RarReadEngine(ReadOptions? read = null) : IArchiveEngine
         => OperationResult.Unsupported(WriteUnsupported);
 
     public OperationResult SetComment(string archivePath, string? comment, CancellationToken cancel = default)
-        => OperationResult.Unsupported("RAR 압축파일 설명은 지원하지 않습니다");
+        => OperationResult.Unsupported("RAR 압축 파일 설명은 지원하지 않습니다");
 }

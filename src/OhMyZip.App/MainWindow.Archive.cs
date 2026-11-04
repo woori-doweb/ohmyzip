@@ -12,7 +12,7 @@ using OhMyZip.Core;
 
 namespace OhMyZip.App;
 
-/// <summary>압축파일·항목 명령: 열기(암호)·테스트·풀기·알아서 풀기·새 압축·수정·설명·클립보드·파일 작업·도움말.</summary>
+/// <summary>압축 파일·항목 명령: 열기(암호)·테스트·풀기·알아서 풀기·새 압축·수정·설명·클립보드·파일 작업·도움말.</summary>
 public partial class MainWindow
 {
     private string? _clipboardTemp;
@@ -35,7 +35,7 @@ public partial class MainWindow
     private static bool IsWrongPassword(OperationResult result) => result.Message.Contains("올바르지 않", StringComparison.Ordinal);
 
     /// <summary>
-    /// 압축파일을 열어 목록을 보여 준다. 엔진이 PasswordRequired 를 돌려주면 암호를 물어 같은 형식 엔진으로 다시 연다.
+    /// 압축 파일을 열어 목록을 보여 준다. 엔진이 PasswordRequired 를 돌려주면 암호를 물어 같은 형식 엔진으로 다시 연다.
     /// 암호는 ReadOptions 로 엔진·ArchiveModel 에만 두고(메모리), 닫으면 버린다.
     /// </summary>
     private async Task OpenArchiveAsync(string path, string? folder = null, string? selectName = null, ReadOptions? read = null)
@@ -53,7 +53,9 @@ public partial class MainWindow
         var name = Path.GetFileName(full);
         if (!File.Exists(full))
         {
-            MessageDialog.Error(this, $"{name}을(를) 열 수 없습니다", Directory.Exists(full) ? "폴더는 압축 파일로 열 수 없습니다." : $"파일이 없습니다: {full}");
+            MessageDialog.Error(this, $"{name}을(를) 열 수 없습니다", Directory.Exists(full)
+                ? "폴더는 열 수 없습니다. 폴더 안의 압축 파일을 고르세요."
+                : $"파일을 찾을 수 없습니다: {full}\n경로를 확인하거나 열기(Ctrl+O)로 다시 고르세요.");
             return;
         }
 
@@ -71,7 +73,7 @@ public partial class MainWindow
                 {
                     format = Archives.Detect(full);
                     if (format == ArchiveFormat.Unknown)
-                        return new ListResult(OperationResult.Fail("지원하지 않거나 알 수 없는 압축파일 형식입니다."), []);
+                        return new ListResult(OperationResult.Fail("지원하지 않거나 알 수 없는 압축 파일 형식입니다. ZIP·7Z·RAR·TAR·GZ·TGZ 파일을 여세요."), []);
                     engine = Archives.For(format, current);
                     return engine.List(full, cancel);
                 }
@@ -144,8 +146,8 @@ public partial class MainWindow
     }
 
     /// <summary>
-    /// 열린 압축파일에 대한 엔진 작업. PasswordRequired 면 암호를 물어 그 암호로 묶인 엔진으로 다시 시도하고,
-    /// 통과한 엔진은 열린 압축파일에 남긴다(같은 세션에서 다시 묻지 않음). 암호 입력을 취소하면 Cancelled.
+    /// 열린 압축 파일에 대한 엔진 작업. PasswordRequired 면 암호를 물어 그 암호로 묶인 엔진으로 다시 시도하고,
+    /// 통과한 엔진은 열린 압축 파일에 남긴다(같은 세션에서 다시 묻지 않음). 암호 입력을 취소하면 Cancelled.
     /// </summary>
     private async Task<OperationResult> RunArchiveOperationAsync(ArchiveModel a, string heading, string idleText,
         Func<IArchiveEngine, IProgress<ProgressInfo>, CancellationToken, OperationResult> work)
@@ -216,7 +218,7 @@ public partial class MainWindow
                 MessageDialog.Result(this, "테스트를 마쳤지만 확인할 점이 있습니다", result);
                 break;
             case OperationStatus.Cancelled:
-                MessageDialog.Info(this, "테스트를 취소했습니다", $"{result.Message}\n테스트는 파일을 만들거나 바꾸지 않습니다.");
+                ShowNotice("테스트를 취소했습니다. 파일은 바뀌지 않았습니다.");
                 break;
             default:
                 MessageDialog.Result(this, "압축 파일에 오류가 있습니다", result);
@@ -237,7 +239,7 @@ public partial class MainWindow
     }
 
     /// <summary>
-    /// 알아서 풀기(OZ-F027): 최상위 항목이 하나면 압축파일 폴더에 바로, 아니면 압축파일 이름 폴더(있으면 "이름 (2)")에 푼다.
+    /// 알아서 풀기(OZ-F027): 최상위 항목이 하나면 압축 파일 폴더에 바로, 아니면 압축 파일 이름 폴더(있으면 "이름 (2)")에 푼다.
     /// 충돌 정책·풀고 나서 폴더 열기는 환경 설정 기본값.
     /// </summary>
     private async Task SmartExtractAsync()
@@ -326,8 +328,7 @@ public partial class MainWindow
                 if (open == 0 || openAfter) OpenFolderInExplorer(destination);
                 break;
             case OperationStatus.Cancelled:
-                MessageDialog.Info(this, "압축 풀기를 취소했습니다",
-                    $"{result.Message}\n이번 작업에서 만든 파일·폴더는 지우고, 덮어쓰던 파일은 원래 내용으로 되돌렸습니다.\n대상 폴더: {destination}");
+                ShowNotice($"압축 풀기를 취소했습니다. 만든 파일은 지우고 덮어쓰던 파일은 되돌렸습니다: {destination}");
                 break;
             default:
                 MessageDialog.Result(this, "압축을 풀지 못했습니다", result);
@@ -394,10 +395,11 @@ public partial class MainWindow
             case OperationStatus.Cancelled:
             {
                 var leftovers = new[] { work, target }.Distinct().Where(p => replace ? p == work && File.Exists(p) : File.Exists(p)).ToList();
-                MessageDialog.Info(this, "압축을 취소했습니다",
-                    leftovers.Count == 0
-                        ? $"{result.Message}\n만들던 압축 파일을 남기지 않았습니다(확인함).{(replace ? " 기존 파일은 그대로입니다." : "")}"
-                        : $"{result.Message}\n확인 필요: 다음 파일이 남아 있습니다.", leftovers);
+                if (leftovers.Count == 0)
+                    ShowNotice("압축을 취소했습니다. 만들던 압축 파일을 남기지 않았습니다." + (replace ? " 기존 파일은 그대로입니다." : ""));
+                else
+                    MessageDialog.Show(this, DialogKind.Warning, "압축을 취소했지만 남은 파일이 있습니다",
+                        "다음 파일을 직접 지우세요.", leftovers, ["확인"]);
                 break;
             }
             case OperationStatus.NotSupported:
@@ -444,7 +446,7 @@ public partial class MainWindow
         {
             var names = rows.Take(50).Select(r => r.IsDirectory ? r.Name + "/" : r.Name).ToList();
             if (rows.Count > names.Count) names.Add($"… 외 {rows.Count - names.Count:N0}개");
-            int answer = MessageDialog.Show(this, DialogKind.Warning, "선택한 항목을 압축 파일에서 삭제할까요?",
+            int answer = MessageDialog.Show(this, DialogKind.Question, "선택한 항목을 압축 파일에서 삭제할까요?",
                 $"{rows.Count:N0}개 항목을 {a.FileName}에서 삭제합니다. 폴더는 안의 항목도 함께 삭제됩니다.", names,
                 ["삭제", "취소"], defaultIndex: 0, cancelIndex: 1);
             if (answer != 0) return;
@@ -466,18 +468,18 @@ public partial class MainWindow
         var newName = InputDialog.Ask(this, "이름 바꾸기", $"'{row.Name}'의 새 이름:", row.Name, value =>
         {
             if (value.Length == 0) return "이름을 입력하세요.";
-            if (value is "." or "..") return "이 이름은 쓸 수 없습니다.";
-            if (value.IndexOfAny(invalid) >= 0 || value.Contains('/')) return "이름에 \\ / : * ? \" < > | 를 쓸 수 없습니다.";
-            if (value != row.Name && siblings.Contains(value)) return "같은 폴더에 같은 이름의 항목이 이미 있습니다.";
+            if (value is "." or "..") return "'.' 과 '..' 은 이름으로 쓸 수 없습니다. 다른 이름을 입력하세요.";
+            if (value.IndexOfAny(invalid) >= 0 || value.Contains('/')) return "이름에서 \\ / : * ? \" < > | 를 빼세요.";
+            if (value != row.Name && siblings.Contains(value)) return "같은 폴더에 같은 이름의 항목이 있습니다. 다른 이름을 입력하세요.";
             return null;
-        });
+        }, okLabel: "이름 바꾸기");
         if (newName is null || newName == row.Name) return;
         var before = Snapshot(a.FilePath);
         var result = await RunArchiveOperationAsync(a, "이름 바꾸는 중", $"{row.Name} → {newName}", (e, p, c) => e.Rename(a.FilePath, row.Path, newName, p, c));
         await ReportModifyAsync(a, before, result, "이름을 바꾸지 못했습니다", "이름 바꾸기를 취소했습니다", newName);
     }
 
-    /// <summary>압축파일 설명 편집(Ctrl+Shift+M) → engine.SetComment.</summary>
+    /// <summary>압축 파일 설명 편집(Ctrl+Shift+M) → engine.SetComment.</summary>
     private async Task EditCommentAsync()
     {
         if (_archive is not { Engine.Capabilities.Comment: true } a) return;
@@ -514,12 +516,13 @@ public partial class MainWindow
                 break;
             case OperationStatus.Cancelled:
             {
-                // 취소 뒤 실제로 압축파일이 그대로인지 크기·수정 시각으로 확인해 알려 준다.
+                // 취소 뒤 실제로 압축 파일이 그대로인지 크기·수정 시각으로 확인해 알려 준다.
                 var after = Snapshot(a.FilePath);
-                var note = before is not null && after == before
-                    ? "압축 파일은 바뀌지 않았습니다(크기·수정 시각 확인). 임시 파일은 엔진이 지웠습니다."
-                    : "확인 필요: 압축 파일의 크기나 수정 시각이 작업 전과 다릅니다.";
-                MessageDialog.Info(this, cancelHeading, $"{result.Message}\n{note}");
+                if (before is not null && after == before)
+                    ShowNotice($"{cancelHeading}. 압축 파일은 바뀌지 않았습니다.");
+                else
+                    MessageDialog.Show(this, DialogKind.Warning, cancelHeading,
+                        $"{result.Message}\n확인 필요: 압축 파일의 크기나 수정 시각이 작업 전과 다릅니다.", null, ["확인"]);
                 break;
             }
             default:
@@ -554,7 +557,7 @@ public partial class MainWindow
         if (!result.Succeeded)
         {
             TryDeleteDirectory(destination);
-            if (result.Status == OperationStatus.Cancelled) MessageDialog.Info(this, "클립보드 복사를 취소했습니다", "임시로 풀던 파일을 지웠습니다.");
+            if (result.Status == OperationStatus.Cancelled) ShowNotice("클립보드 복사를 취소했습니다. 임시로 풀던 파일을 지웠습니다.");
             else MessageDialog.Result(this, "클립보드로 복사하지 못했습니다", result);
             return;
         }
@@ -597,13 +600,13 @@ public partial class MainWindow
         }
         if (files.Length == 0)
         {
-            MessageDialog.Info(this, "클립보드에 붙여 넣을 파일이 없습니다");
+            ShowNotice("클립보드에 붙여 넣을 파일이 없습니다.");
             return;
         }
         await AddSourcesAsync(files);
     }
 
-    /// <summary>파일의 경로명을 클립보드로: '압축파일 경로\항목 경로' 한 줄씩.</summary>
+    /// <summary>파일의 경로명을 클립보드로: '압축 파일 경로\항목 경로' 한 줄씩.</summary>
     private void CopyEntryPaths()
     {
         if (_archive is null) return;
@@ -634,9 +637,9 @@ public partial class MainWindow
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { }
     }
 
-    // ───────────────────────── 압축파일 파일 작업 ─────────────────────────
+    // ───────────────────────── 압축 파일 파일 작업 ─────────────────────────
 
-    /// <summary>다른 이름으로 저장: 압축파일 바이트를 그대로 복사(임시 파일 → 이동). 같은 경로는 거부.</summary>
+    /// <summary>다른 이름으로 저장: 압축 파일 바이트를 그대로 복사(임시 파일 → 이동). 같은 경로는 거부.</summary>
     private async Task SaveAsAsync()
     {
         if (_archive is null) return;
@@ -677,10 +680,10 @@ public partial class MainWindow
         switch (result.Status)
         {
             case OperationStatus.Succeeded:
-                MessageDialog.Show(this, DialogKind.Success, "다른 이름으로 저장했습니다", target, null, ["확인"]);
+                ShowNotice($"다른 이름으로 저장했습니다: {target}");
                 break;
             case OperationStatus.Cancelled:
-                MessageDialog.Info(this, "저장을 취소했습니다", "복사하던 임시 파일을 지웠습니다. 대상 파일은 바뀌지 않았습니다.");
+                ShowNotice("저장을 취소했습니다. 대상 파일은 바뀌지 않았습니다.");
                 break;
             default:
                 MessageDialog.Result(this, "다른 이름으로 저장하지 못했습니다", result);
@@ -709,12 +712,12 @@ public partial class MainWindow
     {
         if (_archive is null) return;
         var path = _archive.FilePath;
-        int answer = MessageDialog.Show(this, DialogKind.Warning, "압축 파일을 휴지통으로 보낼까요?",
-            $"{path}\n압축 파일을 닫고 휴지통으로 보냅니다. 휴지통에서 되살릴 수 있습니다.", null, ["휴지통으로 보내기", "취소"], defaultIndex: 1, cancelIndex: 1);
+        int answer = MessageDialog.Show(this, DialogKind.Question, "압축 파일을 휴지통으로 보낼까요?",
+            $"{path}\n압축 파일을 닫고 휴지통으로 보냅니다. 휴지통에서 되살릴 수 있습니다.", null, ["휴지통으로 보내기", "취소"], defaultIndex: 0, cancelIndex: 1);
         if (answer != 0) return;
         CloseArchive();
         var error = NativeMethods.MoveToRecycleBin(this, path);
-        if (error is null) MessageDialog.Show(this, DialogKind.Success, "휴지통으로 보냈습니다", path, null, ["확인"]);
+        if (error is null) ShowNotice($"휴지통으로 보냈습니다: {path}");
         else MessageDialog.Error(this, "압축 파일을 삭제하지 못했습니다", $"{error}\n{path}");
     }
 

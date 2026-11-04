@@ -59,7 +59,7 @@
                 <StackPanel>
                     <TextBlock Style="{StaticResource Pref.Heading}" Text="일반 설정" />
                     <CheckBox x:Name="ShowStartScreenBox" Content="시작 시 시작 화면 표시" AutomationProperties.AutomationId="OZ-Pref-ShowStartScreen" />
-                    <TextBlock Style="{StaticResource Pref.Note}" Text="끄면 압축파일 없이 시작할 때 안내 화면 대신 빈 창이 열립니다(F6 으로 언제든 볼 수 있음)." />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="끄면 압축 파일 없이 시작할 때 안내 화면 대신 빈 창이 열립니다(F6 으로 언제든 볼 수 있음)." />
                     <TextBlock x:Name="ThemeLabel" Style="{StaticResource Pref.Label}" Text="테마 (앱 내부 설정):" />
                     <ComboBox x:Name="ThemeBox" AutomationProperties.LabeledBy="{Binding ElementName=ThemeLabel}" AutomationProperties.AutomationId="OZ-Pref-Theme" />
                     <TextBlock Style="{StaticResource Pref.Note}" Text="Windows 설정은 바꾸지 않습니다. 고대비 테마가 켜져 있으면 항상 시스템 색을 씁니다." />
@@ -70,7 +70,8 @@
                 <!-- 1 파일 연결 -->
                 <StackPanel Visibility="Collapsed">
                     <TextBlock Style="{StaticResource Pref.Heading}" Text="파일 연결" />
-                    <TextBlock x:Name="FileAssocStatusText" TextWrapping="Wrap" AutomationProperties.AutomationId="OZ-Pref-Status-FileAssoc" />
+                    <TextBlock x:Name="FileAssocStatusText" TextWrapping="Wrap" AutomationProperties.AutomationId="OZ-Pref-Status-FileAssoc"
+                               AutomationProperties.LiveSetting="Polite" />
                     <TextBlock x:Name="FileAssocExtensionsText" Style="{StaticResource Pref.Note}" Margin="0,10,0,0" AutomationProperties.AutomationId="OZ-Pref-FileAssoc-Extensions" />
                     <TextBlock Style="{StaticResource Pref.Note}"
                                Text="Windows 는 프로그램이 기본 프로그램을 직접 바꾸지 못하게 합니다. 등록하면 ohmyZip 이 Windows 기본 앱 목록에 나타나고, 열린 설정에서 ohmyZip 을 고르면 기본 프로그램이 됩니다. 현재 사용자 범위에만 기록하며 관리자 권한이 필요하지 않습니다." />
@@ -127,7 +128,7 @@
                 <StackPanel Visibility="Collapsed">
                     <TextBlock Style="{StaticResource Pref.Heading}" Text="보안 설정" />
                     <TextBlock TextWrapping="Wrap" AutomationProperties.AutomationId="OZ-Pref-Status-Security"
-                               Text="&#x24D8; 암호 관리자·악성코드 검사 설정은 준비 중입니다. 입력한 암호는 열린 압축파일에 대해서만 메모리에 두고, 설정 파일이나 기록에 저장하지 않습니다." />
+                               Text="&#x24D8; 암호 관리자·악성코드 검사 설정은 준비 중입니다. 입력한 암호는 열린 압축 파일에 대해서만 메모리에 두고, 설정 파일이나 기록에 저장하지 않습니다." />
                 </StackPanel>
 
                 <!-- 7 고급 설정 -->

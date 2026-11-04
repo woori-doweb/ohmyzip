@@ -193,7 +193,7 @@ public class FormatTests
         var list = Archives.For(archive).List(archive);
         Assert.True(list.Result.Succeeded, list.Result.Message);
         var entry = Assert.Single(list.Entries);
-        Assert.Equal(Fixtures.KoreanName, entry.Path); // ASCII 가 아닌 이름은 FNAME 없이 압축파일 이름에서
+        Assert.Equal(Fixtures.KoreanName, entry.Path); // ASCII 가 아닌 이름은 FNAME 없이 압축 파일 이름에서
         Assert.Equal(new FileInfo(korean).Length, entry.Size);
         Assert.NotNull(entry.Crc32);
         Assert.True(engine.Test(archive).Succeeded);
@@ -209,7 +209,7 @@ public class FormatTests
         Assert.True(engine.Extract(ascii, asciiOut, new ExtractOptions()).Succeeded);
         Assert.Equal(Fixtures.ReadmeHash, Util.Sha256(Path.Combine(asciiOut, "readme.txt")));
 
-        // FNAME 이 없으면 압축파일 이름에서 .gz 를 뺍 이름
+        // FNAME 이 없으면 압축 파일 이름에서 .gz 를 뺍 이름
         string plain = temp.Combine("data.bin.gz");
         using (var fs = File.Create(plain))
         using (var gz = new GZipStream(fs, CompressionLevel.Optimal))

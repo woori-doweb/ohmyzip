@@ -7,7 +7,7 @@ namespace OhMyZip.App.Theme;
 
 /// <summary>
 /// 시작 시 Windows 앱 테마(라이트/다크)·고대비를 읽어 브러시 자원을 채운다.
-/// 모든 화면은 DynamicResource 로 이 키들을 참조하므로 설정이 바뀌면 다시 Apply 하면 된다.
+/// 모든 화면은 DynamicResource 로 이 키들을 참조하므로 설정이 바뀌면 Reapply 로 브러시와 제목 표시줄을 다시 맞춘다.
 /// </summary>
 public static class ThemeManager
 {
@@ -35,7 +35,7 @@ public static class ThemeManager
     /// <summary>앱 내부 테마 재정의(환경 설정·색상 설정). 고대비가 켜져 있으면 항상 시스템 색이 이긴다.</summary>
     public static AppTheme Override { get; set; } = AppTheme.System;
 
-    /// <summary>앱 내부 '동작 줄이기'. Windows 애니메이션 끔과 함께 움직이는 표시를 쓰지 않는다(D16).</summary>
+    /// <summary>앱 내부 '동작 줄이기'. Windows 애니메이션 끔과 함께 움직이는 표시를 쓰지 않는다.</summary>
     public static bool ReduceMotion { get; set; }
 
     public static bool AnimationsEnabled => SystemParameters.ClientAreaAnimation && !ReduceMotion;
@@ -53,12 +53,12 @@ public static class ThemeManager
         SystemParameters.StaticPropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(SystemParameters.HighContrast))
-                app.Dispatcher.BeginInvoke(() => Apply(app));
+                app.Dispatcher.BeginInvoke(() => Reapply(app));
         };
         SystemEvents.UserPreferenceChanged += (_, e) =>
         {
             if (e.Category is UserPreferenceCategory.General or UserPreferenceCategory.Color or UserPreferenceCategory.VisualStyle)
-                app.Dispatcher.BeginInvoke(() => Apply(app));
+                app.Dispatcher.BeginInvoke(() => Reapply(app));
         };
     }
 
@@ -68,7 +68,8 @@ public static class ThemeManager
         IsHighContrast = SystemParameters.HighContrast;
         if (IsHighContrast)
         {
-            // 고대비: 시스템 색만, 반투명 없음.
+            // 고대비: 시스템 색만, 반투명 없음. 앱 다크 제목 표시줄도 강제하지 않는다.
+            IsDark = false;
             r[Background] = SystemColors.WindowBrush;
             r[Text] = SystemColors.WindowTextBrush;
             r[SecondaryText] = SystemColors.WindowTextBrush;
@@ -104,7 +105,7 @@ public static class ThemeManager
         r[Background] = Brush(p.Background);
         r[Text] = Brush(p.Text);
         r[SecondaryText] = Brush(p.SecondaryText);
-        r[DisabledText] = Brush(IsDark ? "#6E6E76" : "#9A9AA2"); // 비활성 글자(대비 요구 예외)
+        r[DisabledText] = Brush(p.DisabledText); // 비활성 글자(대비 요구 예외)
         r[Chrome] = Brush(p.Chrome);
         r[ChromeText] = Brush(p.Text);
         r[Sidebar] = Brush(p.Sidebar);

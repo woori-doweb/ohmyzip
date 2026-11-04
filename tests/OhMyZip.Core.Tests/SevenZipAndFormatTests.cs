@@ -113,7 +113,7 @@ public class SevenZipAndFormatTests
 
         var list = engine.List(invalid);
         Assert.Equal(OperationStatus.Failed, list.Result.Status);
-        Assert.Equal("지원하지 않거나 알 수 없는 압축파일 형식", list.Result.Message);
+        Assert.Equal("지원하지 않거나 알 수 없는 압축 파일 형식", list.Result.Message);
         Assert.Empty(list.Entries);
         Assert.Equal(OperationStatus.Failed, engine.Test(invalid).Status);
         Assert.Equal(OperationStatus.Failed, engine.Extract(invalid, temp.Combine("out"), new ExtractOptions()).Status);

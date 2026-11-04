@@ -100,7 +100,7 @@ public partial class MainWindow
         {
             _extractMoreButton.Style = (Style)FindResource(S.ToolbarMode == ToolbarMode.Classic ? "Oz.ToolbarClassicButton" : "Oz.ToolbarSmallButton");
             _extractMoreButton.Content = S.ToolbarMode == ToolbarMode.Classic ? "▾" : "풀기 방식";
-            _extractMoreButton.MinWidth = 22;
+            _extractMoreButton.MinWidth = 32;
             _extractMoreButton.Padding = new Thickness(2, 4, 2, 4);
             _extractMoreButton.Visibility = _toolbarButtons["archive.extract"].Visibility;
         }
@@ -217,7 +217,7 @@ public partial class MainWindow
         UpdateFind();
     }
 
-    /// <summary>압축파일 전체(모든 폴더)에서 이름을 찾는다. 결과는 전체 경로 목록.</summary>
+    /// <summary>압축 파일 전체(모든 폴더)에서 이름을 찾는다. 결과는 전체 경로 목록.</summary>
     private void UpdateFind()
     {
         if (_archive is null || _search.Length == 0)
@@ -238,10 +238,10 @@ public partial class MainWindow
         if (more) hits.RemoveAt(hits.Count - 1);
         FindResults.ItemsSource = hits;
         FindSummary.Text = hits.Count == 0
-            ? $"'{_search}' 와(과) 맞는 항목이 없습니다 (압축파일 전체에서 찾음)."
+            ? $"'{_search}' 와(과) 맞는 항목이 없습니다 (압축 파일 전체에서 찾음)."
             : more
                 ? $"'{_search}' 찾기 결과: 처음 {MaxFindResults:N0}개만 표시 — 조건을 좁히세요. Enter = 위치로 이동, Esc = 지우기"
-                : $"'{_search}' 찾기 결과: {hits.Count:N0}개 (압축파일 전체). Enter = 위치로 이동, Esc = 지우기";
+                : $"'{_search}' 찾기 결과: {hits.Count:N0}개 (압축 파일 전체). Enter = 위치로 이동, Esc = 지우기";
         FindPanel.Visibility = Visibility.Visible;
         UpdateUi();
     }

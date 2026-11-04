@@ -5,7 +5,7 @@ using System.Windows.Controls;
 namespace OhMyZip.App.Dialogs;
 
 /// <summary>
-/// 압축파일 암호 입력. 암호는 반환값으로만 넘기고 어디에도 기록하지 않는다.
+/// 압축 파일 암호 입력. 암호는 반환값으로만 넘기고 어디에도 기록하지 않는다.
 /// wrong=true 면 '암호가 올바르지 않습니다' 를 경고 아이콘과 함께 보여 준다.
 /// </summary>
 public partial class PasswordDialog : Window

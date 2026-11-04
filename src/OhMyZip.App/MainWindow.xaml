@@ -49,7 +49,7 @@
                 <Grid Grid.Column="1" Width="260" Margin="12,0,4,0" VerticalAlignment="Center">
                     <TextBox x:Name="SearchBox" Style="{StaticResource Oz.TextBox}" Padding="28,0,6,0"
                              AutomationProperties.Name="파일 찾기" AutomationProperties.AutomationId="OZ-FindBox"
-                             ToolTip="압축파일 전체에서 이름으로 찾기 (Ctrl+F) — * ? 와일드카드, Esc 지우기, Enter 로 결과로 이동"
+                             ToolTip="압축 파일 전체에서 이름으로 찾기 (Ctrl+F) — * ? 와일드카드, Esc 지우기, Enter 로 결과로 이동"
                              TextChanged="OnSearchChanged" PreviewKeyDown="OnSearchKeyDown" />
                     <TextBlock Text="&#xE721;" FontFamily="{StaticResource Oz.IconFont}" FontSize="13" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Foreground="{DynamicResource Oz.SecondaryText}" IsHitTestVisible="False" />
@@ -59,12 +59,13 @@
             </Grid>
         </Border>
 
-        <!-- 4. 상태줄: 정보만, 조작 버튼 없음(D09). -->
+        <!-- 4. 상태줄: 정보만, 조작 버튼 없음. 알림 문장이 바뀌면 화면 읽기 프로그램이 읽는다(LiveSetting). -->
         <StatusBar x:Name="StatusBarHost" DockPanel.Dock="Bottom" Style="{StaticResource Oz.StatusBar}" AutomationProperties.Name="상태 표시줄">
             <StatusBarItem>
                 <TextBlock x:Name="StatusText" Foreground="{DynamicResource Oz.ChromeText}" AutomationProperties.AutomationId="OZ-StatusText"
-                           ToolTip="폴더: 압축파일에 기록된 폴더 항목 수(경로로만 생기는 폴더는 트리에 보이지만 세지 않음)"
-                           AutomationProperties.HelpText="폴더: 압축파일에 기록된 폴더 항목 수(경로로만 생기는 폴더는 트리에 보이지만 세지 않음)" />
+                           AutomationProperties.LiveSetting="Polite"
+                           ToolTip="폴더: 압축 파일에 기록된 폴더 항목 수(경로로만 생기는 폴더는 트리에 보이지만 세지 않음)"
+                           AutomationProperties.HelpText="폴더: 압축 파일에 기록된 폴더 항목 수(경로로만 생기는 폴더는 트리에 보이지만 세지 않음)" />
             </StatusBarItem>
         </StatusBar>
 
@@ -104,7 +105,7 @@
                 <GridSplitter x:Name="SidebarSplitter" Grid.Column="1" Style="{StaticResource Oz.GridSplitter}" ResizeBehavior="PreviousAndNext" />
 
                 <DockPanel Grid.Column="2">
-                    <!-- 경로 표시줄: 깊은 경로 보완(D06). -->
+                    <!-- 경로 표시줄: 깊은 경로 보완. -->
                     <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Oz.Border}" BorderThickness="0,0,0,1" Padding="6,4">
                         <DockPanel>
                             <Button x:Name="UpButton" DockPanel.Dock="Left" Style="{StaticResource Oz.IconButton}" Content="&#xE74A;" IsTabStop="False"
@@ -114,7 +115,7 @@
                         </DockPanel>
                     </Border>
 
-                    <!-- 압축파일 설명 창(F8). -->
+                    <!-- 압축 파일 설명 창(F8). -->
                     <Border x:Name="CommentPane" DockPanel.Dock="Bottom" Visibility="Collapsed" MaxHeight="160"
                             Background="{DynamicResource Oz.Chrome}" BorderBrush="{DynamicResource Oz.Border}" BorderThickness="0,1,0,0" Padding="8,6">
                         <DockPanel>
@@ -161,7 +162,7 @@
                                  AutomationProperties.Name="파일 목록" AutomationProperties.AutomationId="OZ-EntryList"
                                  MouseDoubleClick="OnGridDoubleClick" PreviewKeyDown="OnBrowseKeyDown" SelectionChanged="OnGridSelectionChanged" />
 
-                        <!-- 찾기 결과(Ctrl+F): 압축파일 전체에서 이름이 맞는 항목의 전체 경로. -->
+                        <!-- 찾기 결과(Ctrl+F): 압축 파일 전체에서 이름이 맞는 항목의 전체 경로. -->
                         <DockPanel x:Name="FindPanel" Visibility="Collapsed" Background="{DynamicResource Oz.Background}">
                             <TextBlock x:Name="FindSummary" DockPanel.Dock="Top" Margin="8,6" Foreground="{DynamicResource Oz.SecondaryText}"
                                        AutomationProperties.AutomationId="OZ-FindSummary" />
@@ -189,14 +190,14 @@
                 <StackPanel x:Name="StartContent" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="460">
                     <controls:AppLogo HorizontalAlignment="Center" />
                     <TextBlock Margin="0,18,0,0" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" FontSize="15"
-                               Text="압축파일을 끌어 놓거나 열기(Ctrl+O)를 누르세요" />
+                               Text="압축 파일을 끌어 놓거나 열기(Ctrl+O)를 누르세요" />
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
                         <Button x:Name="EmptyOpenButton" Content="열기" Style="{StaticResource Oz.Button}" AutomationProperties.Name="열기" />
                         <Button x:Name="EmptyCreateButton" Content="새 압축" Style="{StaticResource Oz.Button}" AutomationProperties.Name="새 압축" />
                     </StackPanel>
                     <TextBlock x:Name="EmptyReturnHint" Margin="0,14,0,0" HorizontalAlignment="Center" Visibility="Collapsed"
                                Foreground="{DynamicResource Oz.SecondaryText}" FontSize="{StaticResource Oz.SecondarySize}"
-                               Text="열린 압축파일로 돌아가려면 F6 을 누르세요" />
+                               Text="열린 압축 파일로 돌아가려면 F6 을 누르세요" />
                 </StackPanel>
             </Grid>
         </Grid>

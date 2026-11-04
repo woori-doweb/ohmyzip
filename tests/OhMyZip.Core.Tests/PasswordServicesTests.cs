@@ -147,7 +147,7 @@ public sealed class PasswordServicesTests
             plain,
             new PasswordRecoveryOptions("0123456789", 1, 3, 100, TimeSpan.FromSeconds(2)));
         Assert.Equal(OperationStatus.Failed, notEncrypted.Result.Status);
-        Assert.Contains("암호가 걸린 압축파일이 아닙니다", notEncrypted.Result.Message);
+        Assert.Contains("암호가 걸린 압축 파일이 아닙니다", notEncrypted.Result.Message);
         Assert.Null(notEncrypted.Password);
         Assert.Equal(0, notEncrypted.Attempts);
 
@@ -157,7 +157,7 @@ public sealed class PasswordServicesTests
             corrupt,
             new PasswordRecoveryOptions("0123456789", 1, 3, 100, TimeSpan.FromSeconds(2)));
         Assert.Equal(OperationStatus.Failed, probeFailure.Result.Status);
-        Assert.DoesNotContain("암호가 걸린 압축파일이 아닙니다", probeFailure.Result.Message);
+        Assert.DoesNotContain("암호가 걸린 압축 파일이 아닙니다", probeFailure.Result.Message);
 
         string probeFolder = temp.Combine("probe-folder");
         Directory.CreateDirectory(probeFolder);

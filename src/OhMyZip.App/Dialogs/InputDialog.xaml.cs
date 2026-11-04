@@ -8,12 +8,13 @@ public partial class InputDialog : Window
 {
     private readonly Func<string, string?> _validate;
 
-    private InputDialog(string title, string prompt, string initial, Func<string, string?> validate)
+    private InputDialog(string title, string prompt, string initial, Func<string, string?> validate, string okLabel)
     {
         InitializeComponent();
         Title = title;
         PromptText.Text = prompt;
         ValueBox.Text = initial;
+        OkButton.Content = okLabel;
         _validate = validate;
         Loaded += (_, _) =>
         {
@@ -40,9 +41,10 @@ public partial class InputDialog : Window
         DialogResult = true;
     }
 
-    public static string? Ask(Window owner, string title, string prompt, string initial, Func<string, string?> validate)
+    /// <summary>okLabel 은 확정 단추 문구(동사, 예: "이름 바꾸기").</summary>
+    public static string? Ask(Window owner, string title, string prompt, string initial, Func<string, string?> validate, string okLabel = "확인")
     {
-        var dlg = new InputDialog(title, prompt, initial, validate) { Owner = owner };
+        var dlg = new InputDialog(title, prompt, initial, validate, okLabel) { Owner = owner };
         return dlg.ShowDialog() == true ? dlg.Value : null;
     }
 }

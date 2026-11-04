@@ -25,7 +25,7 @@ public partial class App : Application
         ThemeManager.Override = AppSettings.Current.Theme;
         ThemeManager.ReduceMotion = AppSettings.Current.ReduceMotion;
         ThemeManager.Initialize(this);
-        // 첫 번째 명령줄 인자 = 열 압축파일.
+        // 첫 번째 명령줄 인자 = 열 압축 파일.
         var window = new MainWindow(e.Args.Length > 0 ? e.Args[0] : null, settingsError);
         MainWindow = window;
         window.Show();

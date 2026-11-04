@@ -18,7 +18,7 @@ public sealed record PasswordRecoveryResult(
     long Attempts,
     TimeSpan Elapsed);
 
-/// <summary>암호화된 압축파일의 제한된 사전·전수 검색.</summary>
+/// <summary>암호화된 압축 파일의 제한된 사전·전수 검색.</summary>
 public static class PasswordRecovery
 {
     private const int MaxPasswordLength = 8;
@@ -26,7 +26,7 @@ public static class PasswordRecovery
     private static readonly TimeSpan MaxDurationLimit = TimeSpan.FromHours(1);
 
     /// <summary>
-    /// 압축파일이 실제로 암호화되어 있는지 먼저 확인한 뒤 후보를 검사한다.
+    /// 압축 파일이 실제로 암호화되어 있는지 먼저 확인한 뒤 후보를 검사한다.
     /// 후보 문자열은 결과·진행 정보·예외에 넣지 않는다.
     /// </summary>
     public static PasswordRecoveryResult Recover(
@@ -44,7 +44,7 @@ public static class PasswordRecovery
             return Complete(validation, null, 0, stopwatch);
 
         if (string.IsNullOrWhiteSpace(archivePath))
-            return Complete(OperationResult.Fail("압축파일 경로가 올바르지 않습니다"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail("압축 파일 경로가 올바르지 않습니다"), null, 0, stopwatch);
 
         TimeSpan remaining = options.MaxDuration - stopwatch.Elapsed;
         if (remaining <= TimeSpan.Zero)
@@ -64,7 +64,7 @@ public static class PasswordRecovery
         }
         catch
         {
-            probe = OperationResult.Fail("압축파일을 검사할 수 없습니다");
+            probe = OperationResult.Fail("압축 파일을 검사할 수 없습니다");
         }
 
         if (cancel.IsCancellationRequested)
@@ -77,7 +77,7 @@ public static class PasswordRecovery
             return Complete(probe, null, 0, stopwatch);
         }
         if (probe.Status == OperationStatus.Succeeded)
-            return Complete(OperationResult.Fail("암호가 걸린 압축파일이 아닙니다"), null, 0, stopwatch);
+            return Complete(OperationResult.Fail("암호가 걸린 압축 파일이 아닙니다"), null, 0, stopwatch);
         if (probe.Status != OperationStatus.PasswordRequired)
             return Complete(probe, null, 0, stopwatch);
 

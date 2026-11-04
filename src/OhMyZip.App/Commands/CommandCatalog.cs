@@ -31,31 +31,31 @@ public static class CommandCatalog
     /// <summary>메뉴 명령 58개(OZ-C001~C058), 표시 순서.</summary>
     public static readonly IReadOnlyList<MenuSpec> Items =
     [
-        new("OZ-C001", "파일", null, "압축 파일 열기", "Ctrl+O", "archive.open"),
-        new("OZ-C002", "파일", null, "새로 압축", "Ctrl+N", "archive.create"),
+        new("OZ-C001", "파일", null, "압축 파일 열기…", "Ctrl+O", "archive.open"),
+        new("OZ-C002", "파일", null, "새로 압축…", "Ctrl+N", "archive.create"),
         new("OZ-C003", "파일", null, "압축 파일 닫기", "F4", "archive.close"),
-        new("OZ-C004", "파일", null, "다른 이름으로 저장", null, "archive.save-as"),
+        new("OZ-C004", "파일", null, "다른 이름으로 저장…", null, "archive.save-as"),
         new("OZ-C005", "파일", null, "압축 파일 삭제", "Ctrl+Del", "archive.delete-file"),
         new("OZ-C006", "파일", null, "압축 파일 완전 삭제", "Shift+Ctrl+Del", "archive.shred"),
         new("OZ-C007", "파일", null, "압축 파일이 있는 폴더 열기", null, "archive.reveal"),
         new("OZ-C008", "파일", null, "압축 파일 테스트", "Ctrl+T", "archive.test"),
         new("OZ-C009", "파일", null, "압축 파일 악성코드 검사", "Ctrl+I", "archive.scan"),
-        new("OZ-C010", "파일", null, "압축 풀기", "Ctrl+E", "archive.extract"),
-        new("OZ-C011", "파일", null, "새창 띄우기", "Ctrl+Shift+N", "app.new-window"),
-        new("OZ-C012", "파일", null, "새창 띄우기(관리자 권한)", "Ctrl+Alt+N", "app.new-window-admin"),
+        new("OZ-C010", "파일", null, "압축 풀기…", "Ctrl+E", "archive.extract"),
+        new("OZ-C011", "파일", null, "새 창 띄우기", "Ctrl+Shift+N", "app.new-window"),
+        new("OZ-C012", "파일", null, "새 창 띄우기(관리자 권한)", "Ctrl+Alt+N", "app.new-window-admin"),
         new("OZ-C013", "파일", null, "종료", "Ctrl+W", "app.exit"),
-        new("OZ-C014", "편집", null, "이름 바꾸기", "F2", "entry.rename"),
-        new("OZ-C015", "편집", null, "파일 추가", "Ins", "entry.add"),
+        new("OZ-C014", "편집", null, "이름 바꾸기…", "F2", "entry.rename"),
+        new("OZ-C015", "편집", null, "파일 추가…", "Ins", "entry.add"),
         new("OZ-C016", "편집", null, "파일 삭제", "Del", "entry.delete"),
-        new("OZ-C017", "편집", null, "압축 파일 설명 편집", "Ctrl+Shift+M", "archive.comment"),
+        new("OZ-C017", "편집", null, "압축 파일 설명 편집…", "Ctrl+Shift+M", "archive.comment"),
         new("OZ-C018", "편집", null, "클립보드로 파일 복사하기", "Ctrl+C", "entry.copy"),
         new("OZ-C019", "편집", null, "클립보드에서 파일 붙여 넣기", "Ctrl+V", "entry.paste"),
         new("OZ-C020", "편집", null, "파일의 경로명을 클립보드로 복사", null, "entry.copy-path"),
         new("OZ-C021", "찾기", null, "파일 찾기", "Ctrl+F", "view.find"),
-        new("OZ-C022", "설정", null, "환경 설정(F5)", null, "app.preferences"),
-        new("OZ-C023", "설정", null, "제품 등록...", null, "app.register"),
-        new("OZ-C024", "설정", null, "제품 등록 삭제...", null, "app.unregister"),
-        new("OZ-C025", "설정", null, "암호 관리자...", null, "app.passwords"),
+        new("OZ-C022", "설정", null, "환경 설정…", "F5", "app.preferences"),
+        new("OZ-C023", "설정", null, "제품 등록…", null, "app.register"),
+        new("OZ-C024", "설정", null, "제품 등록 삭제…", null, "app.unregister"),
+        new("OZ-C025", "설정", null, "암호 관리자…", null, "app.passwords"),
         new("OZ-C026", "보기", null, "시작 화면", "F6", "view.start"),
         new("OZ-C027", "보기", null, "트리 컨트롤", "F7", "view.sidebar"),
         new("OZ-C028", "보기", null, "압축 파일 설명", "F8", "view.comment"),
@@ -65,7 +65,7 @@ public static class CommandCatalog
         new("OZ-C032", "보기", "툴바", "작게", null, "view.toolbar"),
         new("OZ-C033", "보기", "툴바", "구식", null, "view.toolbar"),
         new("OZ-C034", "보기", "툴바", "숨기기", null, "view.toolbar"),
-        new("OZ-C035", "보기", "툴바", "툴바 버튼 설정", null, "view.toolbar"),
+        new("OZ-C035", "보기", "툴바", "툴바 버튼 설정…", null, "view.toolbar"),
         new("OZ-C036", "보기", "파일 목록", "자세히", null, "view.listmode"),
         new("OZ-C037", "보기", "파일 목록", "간단히", null, "view.listmode"),
         new("OZ-C038", "보기", "파일 목록", "아이콘", null, "view.listmode"),
@@ -81,9 +81,9 @@ public static class CommandCatalog
         new("OZ-C048", "보기", "칼럼 설정", "파일 설명", null, "view.columns"),
         new("OZ-C049", "보기", "칼럼 설정", "부가 정보", null, "view.columns"),
         new("OZ-C050", "보기", null, "항상 위에 표시", null, "view.topmost"),
-        new("OZ-C051", "보기", null, "색상 설정...", null, "view.theme"),
-        new("OZ-C052", "도구", null, "손상된 압축 파일 복구...", null, "tools.repair"),
-        new("OZ-C053", "도구", null, "압축 파일 암호 복구...", null, "tools.recover-password"),
+        new("OZ-C051", "보기", null, "색상 설정…", null, "view.theme"),
+        new("OZ-C052", "도구", null, "손상된 압축 파일 복구…", null, "tools.repair"),
+        new("OZ-C053", "도구", null, "압축 파일 암호 복구…", null, "tools.recover-password"),
         new("OZ-C054", "도움말", null, "정보", "F1", "help.about"),
         new("OZ-C055", "도움말", null, "프로그램 설치 폴더 열기", null, "help.install-folder"),
         new("OZ-C056", "도움말", null, "도움말 페이지 열기", null, "help.docs"),
@@ -100,10 +100,16 @@ public static class CommandCatalog
         ("archive.extract", new("OZ-F027", "파일", null, "알아서 풀기", null, "archive.extract.smart")),
     ];
 
-    /// <summary>메뉴 문구에 이미 들어 있어 Shortcut 칸을 비워 둔 단축키("환경 설정(F5)").</summary>
-    public static readonly IReadOnlyDictionary<string, string> ExtraGestures = new Dictionary<string, string>(StringComparer.Ordinal)
+    /// <summary>
+    /// 이 행 앞에 메뉴 구분선(같은 메뉴·하위 메뉴 안의 묶음 경계). 하위 메뉴 첫 행이면 그 하위 메뉴 머리 앞에 둔다.
+    /// </summary>
+    public static readonly IReadOnlySet<string> SeparatorBefore = new HashSet<string>(StringComparer.Ordinal)
     {
-        ["app.preferences"] = "F5",
+        "OZ-C003", "OZ-C008", "OZ-C010", "OZ-C011", "OZ-C013",
+        "OZ-C017", "OZ-C018",
+        "OZ-C023", "OZ-C025",
+        "OZ-C031", "OZ-C035", "OZ-C050",
+        "OZ-C055", "OZ-C057",
     };
 
     /// <summary>실제로 동작하는 명령(ohmyzip_command 키). 이 집합 밖은 메뉴에서 비활성. 활성 조건은 MainWindow.CanRun 한 곳.</summary>
@@ -118,7 +124,7 @@ public static class CommandCatalog
         "help.about", "help.install-folder", "help.docs",
     };
 
-    /// <summary>툴바 3묶음(D02). 모든 키는 <see cref="Items"/> 에 있어야 한다(D01, OZ-A06).</summary>
+    /// <summary>툴바 3묶음. 모든 키는 <see cref="Items"/> 에 있어야 한다(OZ-A06).</summary>
     public static readonly IReadOnlyList<IReadOnlyList<ToolbarSpec>> ToolbarGroups =
     [
         [new("archive.open", "열기", "\uE8E5"), new("archive.create", "새 압축", "\uE7B8")],
@@ -148,8 +154,8 @@ public static class CommandCatalog
     /// <summary>키의 첫 메뉴 항목(헤더·단축키).</summary>
     public static MenuSpec Spec(string key) => Items.Concat(FeatureItems.Select(f => f.Spec)).First(i => i.Key == key);
 
-    /// <summary>명령의 단축키(Shortcut 또는 <see cref="ExtraGestures"/>).</summary>
-    public static string? Gesture(string key) => Spec(key).Shortcut ?? ExtraGestures.GetValueOrDefault(key);
+    /// <summary>명령의 단축키.</summary>
+    public static string? Gesture(string key) => Spec(key).Shortcut;
 
     /// <summary>"Ctrl+Shift+N", "Ins", "Del", "F2" 같은 단축키 표기를 KeyGesture 로.</summary>
     public static KeyGesture ParseGesture(string text)

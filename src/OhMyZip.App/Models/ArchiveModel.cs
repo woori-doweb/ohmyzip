@@ -4,7 +4,7 @@ using OhMyZip.Core;
 
 namespace OhMyZip.App.Models;
 
-/// <summary>열린 압축파일 하나: 엔진 목록 결과를 폴더 구조로 색인한다. 명시 폴더 항목이 없는 경로도 폴더로 만든다.</summary>
+/// <summary>열린 압축 파일 하나: 엔진 목록 결과를 폴더 구조로 색인한다. 명시 폴더 항목이 없는 경로도 폴더로 만든다.</summary>
 public sealed class ArchiveModel
 {
     public string FilePath { get; }
@@ -15,11 +15,11 @@ public sealed class ArchiveModel
     /// <summary>엔진에 묶인 열기 옵션(암호 포함). 메모리에만 두고 닫으면 버린다.</summary>
     public ReadOptions? Read { get; private set; }
     public IReadOnlyList<ArchiveEntry> Entries { get; }
-    /// <summary>압축파일 설명(ListResult.Comment). 없으면 null.</summary>
+    /// <summary>압축 파일 설명(ListResult.Comment). 없으면 null.</summary>
     public string? Comment { get; }
     public long ArchiveSize { get; }
     public int FileCount { get; }
-    /// <summary>압축파일에 기록된 폴더 항목 수. 경로에서만 생기는 상위 폴더는 트리에는 보이지만 세지 않는다(DEF-02).</summary>
+    /// <summary>압축 파일에 기록된 폴더 항목 수. 경로에서만 생기는 상위 폴더는 트리에는 보이지만 세지 않는다(DEF-02).</summary>
     public int FolderCount => Entries.Count(e => e.IsDirectory && e.Path.Trim('/').Length > 0);
 
     private readonly Dictionary<string, Folder> _folders = new(StringComparer.Ordinal);

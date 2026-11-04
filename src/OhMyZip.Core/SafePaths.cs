@@ -1,6 +1,6 @@
 namespace OhMyZip.Core;
 
-/// <summary>압축파일 항목 이름을 다루는 공용 규칙. 해제 경로 검증(Zip Slip·절대경로·장치 이름)은 모두 여기서 한다.</summary>
+/// <summary>압축 파일 항목 이름을 다루는 공용 규칙. 해제 경로 검증(Zip Slip·절대경로·장치 이름)은 모두 여기서 한다.</summary>
 internal static class SafePaths
 {
     private static readonly char[] InvalidNameChars = Path.GetInvalidFileNameChars();
@@ -107,7 +107,7 @@ internal static class SafePaths
             && (full[r.Length] == Path.DirectorySeparatorChar || full[r.Length] == Path.AltDirectorySeparatorChar);
     }
 
-    /// <summary>압축파일 안 새 이름(한 단계 이름) 검증. 오류 문구 또는 null.</summary>
+    /// <summary>압축 파일 안 새 이름(한 단계 이름) 검증. 오류 문구 또는 null.</summary>
     public static string? ValidateLeafName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

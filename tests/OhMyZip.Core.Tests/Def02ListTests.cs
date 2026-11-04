@@ -3,7 +3,7 @@ using System.IO.Compression;
 
 namespace OhMyZip.Core.Tests;
 
-/// <summary>DEF-02(2026-10-27): 목록은 압축파일에 기록된 항목만 돌려준다. 경로로만 생기는 상위 폴더를 항목으로 합성하지 않는다.</summary>
+/// <summary>DEF-02(2026-10-27): 목록은 압축 파일에 기록된 항목만 돌려준다. 경로로만 생기는 상위 폴더를 항목으로 합성하지 않는다.</summary>
 public class Def02ListTests
 {
     [Fact]

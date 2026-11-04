@@ -306,6 +306,19 @@
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
     </Style>
 
+    <!-- 메뉴 구분선: 묶음 경계. 고대비에서는 Oz.Border = 시스템 글자색. -->
+    <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator">
+        <Setter Property="Margin" Value="28,4,8,4" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Separator">
+                    <Border Height="1" Background="{DynamicResource Oz.Border}" SnapsToDevicePixels="True" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="MenuItem">
         <Setter Property="Foreground" Value="{DynamicResource Oz.ChromeText}" />
         <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />

@@ -292,7 +292,7 @@ internal static class SevenZipWriter
 
     /// <summary>
     /// items 를 차례로 읽어 7Z 하나를 output 에 쓴다(output 은 탐색 가능해야 함: 끝에서 시작 헤더를 고쳐 쓴다).
-    /// items 는 지연 열거여도 된다(고치기 때 기존 압축파일을 풀면서 바로 다시 압축). totalBytes 는 진행률·사전 크기용 추정치.
+    /// items 는 지연 열거여도 된다(고치기 때 기존 압축 파일을 풀면서 바로 다시 압축). totalBytes 는 진행률·사전 크기용 추정치.
     /// </summary>
     public static void Write(Stream output, IEnumerable<SevenZipItem> items, SevenZipWriteOptions options, long totalBytes,
         IProgress<ProgressInfo>? progress, CancellationToken cancel)

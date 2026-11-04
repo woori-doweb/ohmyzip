@@ -4,6 +4,7 @@ using System.IO;
 using System.Security;
 using System.Windows;
 using System.Windows.Automation;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using Microsoft.Win32;
 using OhMyZip.App.Settings;
@@ -30,8 +31,8 @@ public partial class PreferencesWindow : Window
 
     private static readonly (ExtractDestination Value, string Label)[] Destinations =
     [
-        (ExtractDestination.ArchiveFolder, "압축파일이 있는 폴더"),
-        (ExtractDestination.ArchiveNameFolder, "압축파일 이름으로 된 폴더"),
+        (ExtractDestination.ArchiveFolder, "압축 파일이 있는 폴더"),
+        (ExtractDestination.ArchiveNameFolder, "압축 파일 이름으로 된 폴더"),
         (ExtractDestination.LastUsed, "마지막으로 푼 위치"),
     ];
 
@@ -129,9 +130,9 @@ public partial class PreferencesWindow : Window
 
     private void OnReset(object sender, RoutedEventArgs e)
     {
-        int answer = MessageDialog.Show(this, DialogKind.Warning, "모든 ohmyZip 설정을 기본값으로 되돌릴까요?",
+        int answer = MessageDialog.Show(this, DialogKind.Question, "모든 ohmyZip 설정을 기본값으로 되돌릴까요?",
             $"범위: 모든 ohmyZip 설정을 기본값으로(일반·압축 풀기·압축하기·보기/편집, 보기 메뉴의 툴바·칼럼·목록 방식·항상 위 포함). 바로 저장되며 되돌릴 수 없습니다.\n설정 파일: {AppSettings.FilePath}",
-            null, ["초기화", "취소"], defaultIndex: 1, cancelIndex: 1);
+            null, ["초기화", "취소"], defaultIndex: 0, cancelIndex: 1);
         if (answer != 0) return;
         var defaults = new AppSettings();
         var error = AppSettings.Save(defaults);
@@ -174,7 +175,7 @@ public partial class PreferencesWindow : Window
                 "ⓘ 등록됨 — Windows 기본 앱에서 ohmyZip 을 고를 수 있습니다. 지금 기본 프로그램인지는 Windows 기본 앱 설정에서 확인하세요.",
             FileAssociationStatus.RegisteredElsewhere =>
                 "ⓘ 다른 위치의 ohmyZip 이 등록돼 있음 — 다시 등록하면 이 위치로 바뀝니다.",
-            _ => "ⓘ 등록되지 않음 — Windows 기본 앱 목록에 ohmyZip 이 없습니다. 압축파일은 ohmyZip 창으로 끌어 놓거나 열기(Ctrl+O)로 여세요.",
+            _ => "ⓘ 등록되지 않음 — Windows 기본 앱 목록에 ohmyZip 이 없습니다. 압축 파일은 ohmyZip 창으로 끌어 놓거나 열기(Ctrl+O)로 여세요.",
         };
         FileAssocUnregisterButton.IsEnabled = status != FileAssociationStatus.NotRegistered;
     }
@@ -187,7 +188,7 @@ public partial class PreferencesWindow : Window
             MessageDialog.Error(this, "파일 연결을 등록하지 못했습니다", "실행 파일 경로를 알 수 없습니다.");
             return;
         }
-        int answer = MessageDialog.Show(this, DialogKind.Question, "ohmyZip 을 압축파일 기본 프로그램 후보로 등록할까요?",
+        int answer = MessageDialog.Show(this, DialogKind.Question, "ohmyZip 을 압축 파일 기본 프로그램 후보로 등록할까요?",
             "현재 사용자(HKCU) 범위에만 기록하며 관리자 권한이 필요하지 않습니다. 확장자의 지금 기본 프로그램 설정은 바꾸지 않습니다.\n"
             + "등록한 뒤 열리는 Windows 기본 앱 설정에서 ohmyZip 을 골라야 기본 프로그램이 됩니다.\n"
             + "되돌리기: 이 페이지의 '등록 해제' (또는 ohmyZip.exe --unregister-file-types).\n\n"
@@ -216,7 +217,8 @@ public partial class PreferencesWindow : Window
         }
         RefreshFileAssocStatus();
         if (OpenDefaultAppsSettings())
-            MessageDialog.Info(this, "ohmyZip 을 등록했습니다", "열린 설정에서 ohmyZip 을 고르면 기본 프로그램이 됩니다.");
+            FileAssocStatusText.Text += " 열린 Windows 기본 앱 설정에서 ohmyZip 을 고르면 기본 프로그램이 됩니다.";
+        AnnounceFileAssocStatus();
     }
 
     private void OnFileAssocUnregister(object sender, RoutedEventArgs e)
@@ -233,9 +235,15 @@ public partial class PreferencesWindow : Window
             return;
         }
         RefreshFileAssocStatus();
-        MessageDialog.Info(this, "ohmyZip 파일 연결 등록을 해제했습니다",
-            "Windows 기본 앱 목록에서 ohmyZip 이 빠집니다. 압축파일을 열 프로그램은 Windows 기본 앱 설정에서 다시 고르세요.");
+        // 상태 문장이 해제 전과 같을 수 있으므로(실행 파일 경로를 모를 때 등) 결과를 덧붙인다.
+        FileAssocStatusText.Text += " 등록을 해제했습니다. 압축 파일을 열 프로그램은 Windows 기본 앱 설정에서 다시 고르세요.";
+        AnnounceFileAssocStatus();
     }
+
+    /// <summary>알림 창 대신 상태 문장으로 알린 결과를 화면 읽기 프로그램이 읽도록 알린다(LiveSetting=Polite).</summary>
+    private void AnnounceFileAssocStatus() =>
+        (UIElementAutomationPeer.FromElement(FileAssocStatusText) ?? UIElementAutomationPeer.CreatePeerForElement(FileAssocStatusText))
+            ?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
 
     private void OnFileAssocOpenSettings(object sender, RoutedEventArgs e) => OpenDefaultAppsSettings();
 

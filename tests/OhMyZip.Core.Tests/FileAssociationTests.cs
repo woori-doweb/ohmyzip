@@ -44,8 +44,8 @@ public sealed class FileAssociationTests : IDisposable
         using (var progId = _root.OpenSubKey(@"Software\Classes\ohmyZip.Archive"))
         {
             Assert.NotNull(progId);
-            Assert.Equal("ohmyZip 압축파일", progId.GetValue(""));
-            Assert.Equal("ohmyZip 압축파일", progId.GetValue("FriendlyTypeName"));
+            Assert.Equal("ohmyZip 압축 파일", progId.GetValue(""));
+            Assert.Equal("ohmyZip 압축 파일", progId.GetValue("FriendlyTypeName"));
         }
         Assert.Equal(icon, ReadDefault(@"Software\Classes\ohmyZip.Archive\DefaultIcon"));
         Assert.Equal(command, ReadDefault(@"Software\Classes\ohmyZip.Archive\shell\open\command"));

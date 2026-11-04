@@ -38,7 +38,7 @@ public partial class ExtractDialog : Window
     public ConflictChoice Conflict => Conflicts[Math.Max(0, ConflictBox.SelectedIndex)].Value;
     public bool OpenAfter => OpenAfterBox.IsChecked == true;
 
-    /// <summary>설정의 기본 해제 위치: 압축파일 폴더 / 압축파일 이름 폴더 / 마지막 위치(없으면 압축파일 폴더).</summary>
+    /// <summary>설정의 기본 해제 위치: 압축 파일 폴더 / 압축 파일 이름 폴더 / 마지막 위치(없으면 압축 파일 폴더).</summary>
     public static string DefaultDestination(string archivePath, AppSettings settings)
     {
         var dir = Path.GetDirectoryName(archivePath) ?? "";
@@ -91,8 +91,8 @@ public partial class ExtractDialog : Window
         var name = InputDialog.Ask(this, "새 폴더 만들기", "풀 위치 안에 만들 새 폴더 이름:", "새 폴더", value =>
         {
             if (value.Length == 0) return "이름을 입력하세요.";
-            if (value is "." or "..") return "이 이름은 쓸 수 없습니다.";
-            if (value.IndexOfAny(invalid) >= 0) return "이름에 \\ / : * ? \" < > | 를 쓸 수 없습니다.";
+            if (value is "." or "..") return "'.' 과 '..' 은 이름으로 쓸 수 없습니다. 다른 이름을 입력하세요.";
+            if (value.IndexOfAny(invalid) >= 0) return "이름에서 \\ / : * ? \" < > | 를 빼세요.";
             return null;
         });
         if (name is null) return;

@@ -1,4 +1,4 @@
-﻿# ohmyZip.ico 생성: src/OhMyZip.App/Theme/AppIcon.xaml 의 DrawingImage(Oz.AppIcon)를 크기별 PNG 로 그려 ICO 하나에 담는다.
+﻿# ohmyZip.ico 생성: src/OhMyZip.App/Theme/AppIcon.xaml 의 DrawingImage 를 크기별 PNG 로 그려 ICO 하나에 담는다(32px 이하는 Oz.AppIconSmall, 그보다 크면 Oz.AppIcon).
 # 사용: powershell -NoProfile -ExecutionPolicy Bypass -File ohmyzip/packaging/make_icon.ps1 [-Preview <png>]
 # 아이콘 그림을 고치면 이 스크립트를 다시 돌리고 바뀐 ohmyZip.ico 를 함께 커밋한다.
 param([string]$Preview = "")
@@ -13,12 +13,15 @@ $sizes = 16, 20, 24, 32, 40, 48, 64, 128, 256
 $stream = [System.IO.File]::OpenRead($xamlPath)
 try { $dict = [System.Windows.Markup.XamlReader]::Load($stream) } finally { $stream.Dispose() }
 $image = $dict['Oz.AppIcon']
-if ($null -eq $image) { throw "Oz.AppIcon not found in $xamlPath" }
+$small = $dict['Oz.AppIconSmall']
+if ($null -eq $image -or $null -eq $small) { throw "Oz.AppIcon/Oz.AppIconSmall not found in $xamlPath" }
 
 function Render([int]$size) {
+    # 작은 크기에서는 세부가 1px 미만으로 뭉개지므로 단순판을 그린다.
+    $source = if ($size -le 32) { $small } else { $image }
     $visual = New-Object System.Windows.Media.DrawingVisual
     $dc = $visual.RenderOpen()
-    $dc.DrawImage($image, (New-Object System.Windows.Rect 0, 0, $size, $size))
+    $dc.DrawImage($source, (New-Object System.Windows.Rect 0, 0, $size, $size))
     $dc.Close()
     $bmp = New-Object System.Windows.Media.Imaging.RenderTargetBitmap $size, $size, 96, 96, ([System.Windows.Media.PixelFormats]::Pbgra32)
     $bmp.Render($visual)

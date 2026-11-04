@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- 아이콘 + 문장: 색만으로 의미를 전하지 않는다(D12). -->
+        <!-- 아이콘 + 문장: 색만으로 의미를 전하지 않는다. -->
         <TextBlock x:Name="IconGlyph" Grid.RowSpan="2" FontFamily="{StaticResource Oz.IconFont}" FontSize="28" Margin="0,0,16,0" VerticalAlignment="Top" AutomationProperties.Name="{Binding Text, ElementName=KindText}" AutomationProperties.AutomationId="OZ-Message-Icon" />
         <TextBlock x:Name="KindText" Visibility="Collapsed" />
         <StackPanel Grid.Column="1">
