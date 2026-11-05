@@ -1,16 +1,20 @@
-# main 에 커밋이 올라오면 빌드·시험 → packaging/package.py 로 배포 zip·sha256 생성 → 직전 v* 태그 이후 커밋 이력을 노트로 GitHub Release v<버전> 을 만든다(앱의 자동 업데이트가 이 최신 릴리스를 읽는다).
-name: release
+# ohmyzip/ 를 바꾼 커밋이 main 에 올라오면 빌드·시험 → ohmyzip/packaging/package.py 로 배포 zip·sha256 생성 → 직전 v* 태그 이후 ohmyzip/ 커밋 이력을 노트로 GitHub Release v<버전> 을 만들고 latest 로 표시한다(ohmyZip 자동 업데이트가 releases/latest 를 읽는다).
+# 파일 이름 release.yml 은 바꾸지 않는다: run_number 가 버전 patch 이고, 이름을 바꾸면 1 부터 다시 센다.
+name: ohmyzip release
 
 on:
   push:
     branches: [main]
+    paths:
+      - "ohmyzip/**"
+      - ".github/workflows/release.yml"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: release
+  group: release-ohmyzip
   cancel-in-progress: false
 
 jobs:
@@ -19,6 +23,7 @@ jobs:
     defaults:
       run:
         shell: pwsh
+        working-directory: ohmyzip
     env:
       PYTHONIOENCODING: utf-8
       DOTNET_NOLOGO: "1"
@@ -77,10 +82,10 @@ jobs:
           $prev = git tag --list "v*" --merged HEAD --sort=-v:refname | Select-Object -First 1
           if ($prev) {
             Write-Host "직전 태그: $prev"
-            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md "$prev..HEAD"
+            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md "$prev..HEAD" -- .
           } else {
             Write-Host "직전 태그 없음: 전체 이력"
-            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md HEAD
+            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md HEAD -- .
           }
           if ($LASTEXITCODE -ne 0) { throw "git log 실패 (rc=$LASTEXITCODE)" }
           if ((Get-Item notes.md).Length -eq 0) {
@@ -103,5 +108,5 @@ jobs:
           }
           $global:LASTEXITCODE = 0
           $zip = "releases/ohmyZip-$env:VER-win-x64.zip"
-          gh release create $env:TAG $zip "$zip.sha256" --title "ohmyZip $env:VER" --notes-file notes.md --target $env:GITHUB_SHA
+          gh release create $env:TAG $zip "$zip.sha256" --title "ohmyZip $env:VER" --notes-file notes.md --target $env:GITHUB_SHA --latest
           if ($LASTEXITCODE -ne 0) { throw "gh release create 실패 (rc=$LASTEXITCODE)" }

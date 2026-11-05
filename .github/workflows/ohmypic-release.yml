@@ -1,0 +1,114 @@
+# When a commit that changes ohmypic/ reaches main: build, run the self-contained tests, package with
+# ohmypic/packaging/package.py, and publish GitHub Release ohmypic-v<version> as a prerelease that is never
+# marked latest (ohmyZip's updater reads releases/latest; ohMypic's updater filters ohmypic-v* tags).
+# Keep this file name: run_number is the patch version and restarts at 1 when the file is renamed.
+name: ohmypic release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ohmypic/**"
+      - ".github/workflows/ohmypic-release.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-ohmypic
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: ohmypic
+    env:
+      PYTHONIOENCODING: utf-8
+      DOTNET_NOLOGO: "1"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Compute version
+        id: version
+        run: |
+          $m = Select-String -Path src/OhMyPic.App/OhMyPic.App.csproj -Pattern '<Version>(\d+)\.(\d+)\.\d+</Version>' | Select-Object -First 1
+          if (-not $m) { throw "no <Version>major.minor.patch</Version> in src/OhMyPic.App/OhMyPic.App.csproj" }
+          $ver = "$($m.Matches[0].Groups[1].Value).$($m.Matches[0].Groups[2].Value).${{ github.run_number }}"
+          $tag = "ohmypic-v$ver"
+          git rev-parse -q --verify "refs/tags/$tag" | Out-Null
+          $exists = $LASTEXITCODE -eq 0
+          $global:LASTEXITCODE = 0
+          if ($exists) { Write-Host "Tag $tag already exists; skipping the release." }
+          "version=$ver" >> $env:GITHUB_OUTPUT
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+          "skip=$($exists.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          Write-Host "version=$ver tag=$tag skip=$exists"
+
+      - name: Setup .NET
+        if: steps.version.outputs.skip != 'true'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Setup Python
+        if: steps.version.outputs.skip != 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Build
+        if: steps.version.outputs.skip != 'true'
+        run: dotnet build OhMyPic.sln -c Release
+
+      - name: Test
+        if: steps.version.outputs.skip != 'true'
+        # These classes need image fixtures kept outside the repository, so they run only locally.
+        run: dotnet test tests/OhMyPic.Core.Tests -c Release --no-build --filter "FullyQualifiedName!~BatchTests&FullyQualifiedName!~CancellationTests&FullyQualifiedName!~FileOpsTests&FullyQualifiedName!~FormatTests&FullyQualifiedName!~LoaderTests&FullyQualifiedName!~ResizeTests"
+
+      - name: Package
+        if: steps.version.outputs.skip != 'true'
+        run: python -X utf8 packaging/package.py "${{ steps.version.outputs.version }}"
+
+      - name: Release notes
+        if: steps.version.outputs.skip != 'true'
+        run: |
+          $prev = git tag --list "ohmypic-v*" --merged HEAD --sort=-v:refname | Select-Object -First 1
+          if ($prev) {
+            Write-Host "Previous tag: $prev"
+            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md "$prev..HEAD" -- .
+          } else {
+            Write-Host "No previous tag: full history"
+            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md HEAD -- .
+          }
+          if ($LASTEXITCODE -ne 0) { throw "git log failed (rc=$LASTEXITCODE)" }
+          if ((Get-Item notes.md).Length -eq 0) {
+            Set-Content -Path notes.md -Value "- No new commits since the previous release." -Encoding utf8NoBOM
+          }
+          Get-Content notes.md -Encoding utf8
+
+      - name: Create release
+        if: steps.version.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VER: ${{ steps.version.outputs.version }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release view $env:TAG | Out-Null
+          if ($LASTEXITCODE -eq 0) {
+            $global:LASTEXITCODE = 0
+            Write-Host "Release $env:TAG already exists; skipping."
+            exit 0
+          }
+          $global:LASTEXITCODE = 0
+          $zip = "releases/ohMypic-$env:VER-win-x64.zip"
+          gh release create $env:TAG $zip "$zip.sha256" --title "ohMypic $env:VER" --notes-file notes.md --target $env:GITHUB_SHA --prerelease --latest=false
+          if ($LASTEXITCODE -ne 0) { throw "gh release create failed (rc=$LASTEXITCODE)" }
