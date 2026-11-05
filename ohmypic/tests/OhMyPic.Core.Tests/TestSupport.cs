@@ -44,8 +44,12 @@ internal static class Fixtures
         return target;
     }
 
+    /// <summary>Only tests that located the fixtures can have touched them, so the check runs only after that
+    /// (classes that synthesise their images then also run where the fixtures are absent, such as CI).</summary>
     public static void AssertOriginalsUnchanged()
     {
+        if (!Dir.IsValueCreated)
+            return;
         foreach (var (name, hash) in ExpectedHashes)
             Assert.Equal(hash, Util.Sha256(Path.Combine(Directory, name)));
     }
