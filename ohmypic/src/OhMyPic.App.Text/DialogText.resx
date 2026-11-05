@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About_Description" xml:space="preserve">
+    <value>Browse, view and edit images on Windows: thumbnails, full-screen viewing, slideshows, rotate, resize, format conversion and batch editing.</value>
+  </data>
+  <data name="About_Formats" xml:space="preserve">
+    <value>Opens BMP, GIF, JPEG, PNG, TIFF, ICO, JPEG XR and DDS, plus any format with an installed Windows imaging decoder. Saves BMP, GIF, JPEG, PNG and TIFF.</value>
+  </data>
+  <data name="About_LogoName" xml:space="preserve">
+    <value>ohMypic logo</value>
+  </data>
+  <data name="About_Notices" xml:space="preserve">
+    <value>Uses the fonts and icons that come with Windows (Segoe UI, Segoe Fluent Icons). No third-party code or artwork is bundled.</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>About ohMypic</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="App_Name" xml:space="preserve">
+    <value>ohMypic</value>
+  </data>
+  <data name="Cancel_Button" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Message_KindError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Message_KindInfo" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Message_KindQuestion" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Message_KindSuccess" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Message_KindWarning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Message_ProblemsName" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Ok_Button" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Pref_AlwaysOnTop" xml:space="preserve">
+    <value>Keep the window on top</value>
+  </data>
+  <data name="Pref_ApplyLastSaveQuality" xml:space="preserve">
+    <value>Remember the last quality used in the edit dialogs</value>
+  </data>
+  <data name="Pref_Assoc_ExtensionsLabel" xml:space="preserve">
+    <value>Image types</value>
+  </data>
+  <data name="Pref_Assoc_Intro" xml:space="preserve">
+    <value>Registers ohMypic as a program that can open the checked image types. Windows does not let a program make itself the default app: after registering, choose ohMypic yourself in Windows Settings &gt; Apps &gt; Default apps.</value>
+  </data>
+  <data name="Pref_Assoc_OpenSettings_Button" xml:space="preserve">
+    <value>Open Windows Default apps</value>
+  </data>
+  <data name="Pref_Assoc_RegisterDone" xml:space="preserve">
+    <value>Registered. Choose ohMypic in Windows Default apps to make it the default.</value>
+  </data>
+  <data name="Pref_Assoc_RegisterFailed_Title" xml:space="preserve">
+    <value>Could not register the file associations</value>
+  </data>
+  <data name="Pref_Assoc_Register_Button" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Pref_Assoc_StatusElsewhere" xml:space="preserve">
+    <value>Registered to ohMypic in another folder</value>
+  </data>
+  <data name="Pref_Assoc_StatusNotRegistered" xml:space="preserve">
+    <value>Not registered</value>
+  </data>
+  <data name="Pref_Assoc_StatusRegistered" xml:space="preserve">
+    <value>Registered</value>
+  </data>
+  <data name="Pref_Assoc_Summary" xml:space="preserve">
+    <value>{0} of {1} image types are registered for this copy of ohMypic.</value>
+  </data>
+  <data name="Pref_Assoc_UnregisterDone" xml:space="preserve">
+    <value>Unregistered.</value>
+  </data>
+  <data name="Pref_Assoc_UnregisterFailed_Title" xml:space="preserve">
+    <value>Could not unregister the file associations</value>
+  </data>
+  <data name="Pref_Assoc_Unregister_Button" xml:space="preserve">
+    <value>Unregister</value>
+  </data>
+  <data name="Pref_AutoRotateByExif" xml:space="preserve">
+    <value>Rotate photos by their camera orientation</value>
+  </data>
+  <data name="Pref_BackgroundBlack" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="Pref_BackgroundCustom" xml:space="preserve">
+    <value>Custom ({0})</value>
+  </data>
+  <data name="Pref_BackgroundDarkGray" xml:space="preserve">
+    <value>Dark gray</value>
+  </data>
+  <data name="Pref_BackgroundGray" xml:space="preserve">
+    <value>Gray</value>
+  </data>
+  <data name="Pref_BackgroundLabel" xml:space="preserve">
+    <value>Viewer background</value>
+  </data>
+  <data name="Pref_BackgroundSystem" xml:space="preserve">
+    <value>Follow the theme</value>
+  </data>
+  <data name="Pref_BackgroundWhite" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="Pref_CategoriesName" xml:space="preserve">
+    <value>Settings categories</value>
+  </data>
+  <data name="Pref_DeleteWithoutAsking" xml:space="preserve">
+    <value>Delete files without asking</value>
+  </data>
+  <data name="Pref_FitActualSize" xml:space="preserve">
+    <value>Actual size</value>
+  </data>
+  <data name="Pref_FitHeight" xml:space="preserve">
+    <value>Fit to height</value>
+  </data>
+  <data name="Pref_FitKeepZoom" xml:space="preserve">
+    <value>Keep the current zoom</value>
+  </data>
+  <data name="Pref_FitModeLabel" xml:space="preserve">
+    <value>When an image opens</value>
+  </data>
+  <data name="Pref_FitShrinkLargeOnly" xml:space="preserve">
+    <value>Shrink large images to the window</value>
+  </data>
+  <data name="Pref_FitWidth" xml:space="preserve">
+    <value>Fit to width</value>
+  </data>
+  <data name="Pref_FitWindow" xml:space="preserve">
+    <value>Fit to window</value>
+  </data>
+  <data name="Pref_ImmediateNote" xml:space="preserve">
+    <value>Changes on this page take effect immediately. OK and Cancel do not undo them.</value>
+  </data>
+  <data name="Pref_IntervalLabel" xml:space="preserve">
+    <value>Time per image</value>
+  </data>
+  <data name="Pref_IntervalValue" xml:space="preserve">
+    <value>{0} s</value>
+  </data>
+  <data name="Pref_JpegQualityLabel" xml:space="preserve">
+    <value>JPEG save quality</value>
+  </data>
+  <data name="Pref_LanguageEnglish" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Pref_LanguageKorean" xml:space="preserve">
+    <value>Korean</value>
+  </data>
+  <data name="Pref_LanguageLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Pref_LanguageNote" xml:space="preserve">
+    <value>A new language applies the next time ohMypic starts.</value>
+  </data>
+  <data name="Pref_LanguageSystem" xml:space="preserve">
+    <value>Same as Windows</value>
+  </data>
+  <data name="Pref_LoopAtEnds" xml:space="preserve">
+    <value>Go around at the first and last image</value>
+  </data>
+  <data name="Pref_OpenSettingsFailed_Title" xml:space="preserve">
+    <value>Could not open Windows Settings</value>
+  </data>
+  <data name="Pref_Page_Associations" xml:space="preserve">
+    <value>File Associations</value>
+  </data>
+  <data name="Pref_Page_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Pref_Page_ShellMenu" xml:space="preserve">
+    <value>File Explorer Menu</value>
+  </data>
+  <data name="Pref_Page_Slideshow" xml:space="preserve">
+    <value>Slideshow</value>
+  </data>
+  <data name="Pref_Page_Thumbnails" xml:space="preserve">
+    <value>Thumbnails</value>
+  </data>
+  <data name="Pref_Page_View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Pref_PixelsValue" xml:space="preserve">
+    <value>{0} px</value>
+  </data>
+  <data name="Pref_RegisterPartialBody" xml:space="preserve">
+    <value>Some entries may already have been written; Unregister removes them.
+
+Details: {0}</value>
+  </data>
+  <data name="Pref_ResetAllTip" xml:space="preserve">
+    <value>Restore the defaults on every page.</value>
+  </data>
+  <data name="Pref_ResetAll_Button" xml:space="preserve">
+    <value>Reset All</value>
+  </data>
+  <data name="Pref_ResetPageTip" xml:space="preserve">
+    <value>Restore the defaults on this page.</value>
+  </data>
+  <data name="Pref_ResetPage_Button" xml:space="preserve">
+    <value>Reset Page</value>
+  </data>
+  <data name="Pref_RotateAsk" xml:space="preserve">
+    <value>Ask before saving</value>
+  </data>
+  <data name="Pref_RotateAutoSaveLabel" xml:space="preserve">
+    <value>After rotating an image</value>
+  </data>
+  <data name="Pref_RotateAutoSaveNote" xml:space="preserve">
+    <value>Applies when you move to another image or close the viewer.</value>
+  </data>
+  <data name="Pref_RotateOverwrite" xml:space="preserve">
+    <value>Save automatically (overwrite)</value>
+  </data>
+  <data name="Pref_Shell_Consent_Body" xml:space="preserve">
+    <value>ohMypic will write the following registry keys for the current user only (no administrator rights):
+{0}
+
+Program: {1}
+Items: {2}
+
+Unregister removes them again.</value>
+  </data>
+  <data name="Pref_Shell_Consent_Button" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Pref_Shell_Consent_Title" xml:space="preserve">
+    <value>Register the File Explorer menu?</value>
+  </data>
+  <data name="Pref_Shell_Extensions" xml:space="preserve">
+    <value>Image types: {0}</value>
+  </data>
+  <data name="Pref_Shell_Intro" xml:space="preserve">
+    <value>Adds an ohMypic submenu to the right-click menu of image files in File Explorer. Only the current user is affected; no administrator rights are needed.</value>
+  </data>
+  <data name="Pref_Shell_Items" xml:space="preserve">
+    <value>Items: {0}</value>
+  </data>
+  <data name="Pref_Shell_LanguageNote" xml:space="preserve">
+    <value>The menu text is written in the current display language. Register again after changing the language.</value>
+  </data>
+  <data name="Pref_Shell_RegisterDone" xml:space="preserve">
+    <value>Registered.</value>
+  </data>
+  <data name="Pref_Shell_RegisterFailed_Title" xml:space="preserve">
+    <value>Could not register the File Explorer menu</value>
+  </data>
+  <data name="Pref_Shell_Register_Button" xml:space="preserve">
+    <value>Register…</value>
+  </data>
+  <data name="Pref_Shell_StatusElsewhere" xml:space="preserve">
+    <value>The File Explorer menu points to ohMypic in another folder or is incomplete. Register again to repair it.</value>
+  </data>
+  <data name="Pref_Shell_StatusNotRegistered" xml:space="preserve">
+    <value>The File Explorer menu is not registered.</value>
+  </data>
+  <data name="Pref_Shell_StatusRegistered" xml:space="preserve">
+    <value>The File Explorer menu is registered.</value>
+  </data>
+  <data name="Pref_Shell_UnregisterDone" xml:space="preserve">
+    <value>Unregistered.</value>
+  </data>
+  <data name="Pref_Shell_UnregisterFailed_Title" xml:space="preserve">
+    <value>Could not unregister the File Explorer menu</value>
+  </data>
+  <data name="Pref_Shell_Unregister_Button" xml:space="preserve">
+    <value>Unregister</value>
+  </data>
+  <data name="Pref_Shell_Windows11Note" xml:space="preserve">
+    <value>On Windows 11 the menu is under "Show more options" (Shift+F10).</value>
+  </data>
+  <data name="Pref_ShowFileNameInFullScreen" xml:space="preserve">
+    <value>Show the file name in full screen and slideshows</value>
+  </data>
+  <data name="Pref_ShowHiddenFiles" xml:space="preserve">
+    <value>Show hidden files and folders</value>
+  </data>
+  <data name="Pref_ShowNavigator" xml:space="preserve">
+    <value>Show the navigator when the image is larger than the window</value>
+  </data>
+  <data name="Pref_ShowResolution" xml:space="preserve">
+    <value>Show the resolution under thumbnails</value>
+  </data>
+  <data name="Pref_SlideFade" xml:space="preserve">
+    <value>Fade between images</value>
+  </data>
+  <data name="Pref_SlideshowNote" xml:space="preserve">
+    <value>During a slideshow: Left and Right step, Space pauses, Esc ends it.</value>
+  </data>
+  <data name="Pref_SmoothScaling" xml:space="preserve">
+    <value>Smooth zoomed images</value>
+  </data>
+  <data name="Pref_StatusReadFailed" xml:space="preserve">
+    <value>Could not read the registration state: {0}</value>
+  </data>
+  <data name="Pref_ThumbnailSizeLabel" xml:space="preserve">
+    <value>Thumbnail size</value>
+  </data>
+  <data name="Pref_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Pref_UseRecycleBin" xml:space="preserve">
+    <value>Move deleted files to the Recycle Bin</value>
+  </data>
+  <data name="Pref_WheelActionLabel" xml:space="preserve">
+    <value>Mouse wheel</value>
+  </data>
+  <data name="Pref_WheelNextPrevious" xml:space="preserve">
+    <value>Next / previous image</value>
+  </data>
+  <data name="Pref_WheelZoom" xml:space="preserve">
+    <value>Zoom in / out</value>
+  </data>
+  <data name="Sys_AppDescription" xml:space="preserve">
+    <value>Browse, view and edit images.</value>
+  </data>
+  <data name="Sys_CommandLine_Title" xml:space="preserve">
+    <value>ohMypic cannot run this command</value>
+  </data>
+  <data name="Sys_ExePathUnknown" xml:space="preserve">
+    <value>The location of the ohMypic program file could not be determined.</value>
+  </data>
+  <data name="Sys_RegisterAssocFailed" xml:space="preserve">
+    <value>Could not register the file associations: {0}</value>
+  </data>
+  <data name="Sys_RegisterShellFailed" xml:space="preserve">
+    <value>Could not register the File Explorer menu: {0}</value>
+  </data>
+  <data name="Sys_ShellMenu_Batch" xml:space="preserve">
+    <value>Batch Edit…</value>
+  </data>
+  <data name="Sys_ShellMenu_Convert" xml:space="preserve">
+    <value>Convert Format…</value>
+  </data>
+  <data name="Sys_ShellMenu_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Sys_ShellMenu_Resize" xml:space="preserve">
+    <value>Resize…</value>
+  </data>
+  <data name="Sys_ShellMenu_Rotate" xml:space="preserve">
+    <value>Rotate…</value>
+  </data>
+  <data name="Sys_ShellMenu_Slideshow" xml:space="preserve">
+    <value>Slideshow</value>
+  </data>
+  <data name="Sys_SwitchNeedsFile" xml:space="preserve">
+    <value>The option {0} needs the path of an existing image file.</value>
+  </data>
+  <data name="Sys_TypeName" xml:space="preserve">
+    <value>ohMypic image</value>
+  </data>
+  <data name="Sys_UnknownSwitch" xml:space="preserve">
+    <value>Unknown command-line option: {0}</value>
+  </data>
+  <data name="Sys_UnregisterAssocFailed" xml:space="preserve">
+    <value>Could not unregister the file associations: {0}</value>
+  </data>
+  <data name="Sys_UnregisterShellFailed" xml:space="preserve">
+    <value>Could not unregister the File Explorer menu: {0}</value>
+  </data>
+  <data name="Sys_Usage" xml:space="preserve">
+    <value>Options:
+  --register-associations | --unregister-associations
+  --register-shell-menu | --unregister-shell-menu
+  --slideshow | --rotate | --resize | --convert | --batch &lt;file&gt;</value>
+  </data>
+</root>

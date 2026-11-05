@@ -1,0 +1,41 @@
+<Window x:Class="OhMyPic.App.Dialogs.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+        Style="{StaticResource Op.WindowStyle}"
+        Title="{x:Static res:UpdateText.Window_Title}" Width="520" SizeToContent="Height"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        AutomationProperties.AutomationId="OP-UpdateWindow">
+    <StackPanel Margin="20,18,20,16">
+        <TextBlock x:Name="HeadingText" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"
+                   AutomationProperties.LiveSetting="Polite" AutomationProperties.AutomationId="OP-Update-Heading" />
+        <TextBlock x:Name="CurrentVersionText" Margin="0,10,0,0" AutomationProperties.AutomationId="OP-Update-CurrentVersion" />
+        <TextBlock x:Name="NewVersionText" Margin="0,2,0,0" Visibility="Collapsed" AutomationProperties.AutomationId="OP-Update-NewVersion" />
+        <TextBlock x:Name="BodyText" Margin="0,10,0,0" TextWrapping="Wrap" Visibility="Collapsed" AutomationProperties.AutomationId="OP-Update-Body" />
+
+        <StackPanel x:Name="NotesPanel" Margin="0,14,0,0" Visibility="Collapsed">
+            <TextBlock Text="{x:Static res:UpdateText.NotesLabel}" FontWeight="SemiBold" />
+            <Border Margin="0,4,0,0" BorderBrush="{DynamicResource Op.Border}" BorderThickness="1" CornerRadius="4">
+                <ScrollViewer MaxHeight="220" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="8,6">
+                    <TextBlock x:Name="NotesText" TextWrapping="Wrap" AutomationProperties.Name="{x:Static res:UpdateText.NotesName}"
+                               AutomationProperties.AutomationId="OP-Update-Notes" />
+                </ScrollViewer>
+            </Border>
+        </StackPanel>
+
+        <StackPanel x:Name="ProgressPanel" Margin="0,14,0,0" Visibility="Collapsed">
+            <ProgressBar x:Name="Bar" Height="6" Minimum="0" Maximum="1"
+                         Foreground="{DynamicResource Op.Accent}" Background="{DynamicResource Op.Hover}" BorderThickness="0"
+                         AutomationProperties.Name="{x:Static res:UpdateText.ProgressName}" AutomationProperties.AutomationId="OP-Update-Progress" />
+            <TextBlock x:Name="ProgressText" Margin="0,6,0,0" Foreground="{DynamicResource Op.SecondaryText}" FontSize="{StaticResource Op.SecondarySize}"
+                       AutomationProperties.LiveSetting="Polite" AutomationProperties.AutomationId="OP-Update-ProgressText" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+            <Button x:Name="InstallButton" Content="{x:Static res:UpdateText.Install_Button}" Style="{StaticResource Op.Button}" Visibility="Collapsed"
+                    Click="OnInstall" AutomationProperties.AutomationId="OP-Update-Install" />
+            <Button x:Name="CloseButton" Content="{x:Static res:UpdateText.Close_Button}" IsCancel="True" Style="{StaticResource Op.Button}"
+                    AutomationProperties.AutomationId="OP-Update-Close" />
+        </StackPanel>
+    </StackPanel>
+</Window>

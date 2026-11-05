@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WIC (System.Windows.Media.Imaging) ships with the WPF framework reference. -->
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- UseWPF removes System.IO from the implicit usings (System.Windows.Shapes.Path clash); the engine needs it. -->
+    <Using Include="System.IO" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="OhMyPic.Core.Tests" />
+  </ItemGroup>
+
+</Project>

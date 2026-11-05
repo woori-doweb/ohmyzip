@@ -1,0 +1,75 @@
+<UserControl x:Class="OhMyPic.App.Dialogs.Edit.OutputOptionsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+             AutomationProperties.Name="{x:Static res:EditText.Output_GroupName}"
+             AutomationProperties.AutomationId="OP-Edit-Output">
+    <StackPanel>
+        <!-- Save location -->
+        <TextBlock x:Name="LocationLabel" Text="{x:Static res:EditText.Output_LocationLabel}" FontWeight="SemiBold" Margin="0,0,0,6" />
+        <RadioButton x:Name="SameFolderRadio" GroupName="OpEditOutputLocation" Content="{x:Static res:EditText.Output_SameFolder}"
+                     Foreground="{DynamicResource Op.Text}" MinHeight="24" VerticalContentAlignment="Center" Checked="OnInputChanged"
+                     AutomationProperties.Name="{x:Static res:EditText.Output_SameFolder}" AutomationProperties.AutomationId="OP-Edit-Output-SameFolder" />
+        <DockPanel Margin="0,4,0,0">
+            <RadioButton x:Name="SubFolderRadio" GroupName="OpEditOutputLocation" Content="{x:Static res:EditText.Output_SubFolder}"
+                         Foreground="{DynamicResource Op.Text}" MinHeight="24" VerticalContentAlignment="Center" VerticalAlignment="Center" Checked="OnInputChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Output_SubFolder}" AutomationProperties.AutomationId="OP-Edit-Output-SubFolder" />
+            <TextBox x:Name="SubFolderBox" Style="{StaticResource Op.TextBox}" Margin="10,0,0,0" TextChanged="OnInputChanged"
+                     AutomationProperties.Name="{x:Static res:EditText.Output_SubFolderName}" AutomationProperties.AutomationId="OP-Edit-Output-SubFolderName" />
+        </DockPanel>
+        <TextBlock x:Name="SubFolderError" Margin="24,4,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Op.Error}" Visibility="Collapsed"
+                   AutomationProperties.LiveSetting="Assertive" AutomationProperties.AutomationId="OP-Edit-Output-SubFolderError" />
+        <RadioButton x:Name="SpecifiedRadio" GroupName="OpEditOutputLocation" Content="{x:Static res:EditText.Output_Specified}" Margin="0,6,0,0"
+                     Foreground="{DynamicResource Op.Text}" MinHeight="24" VerticalContentAlignment="Center" Checked="OnInputChanged"
+                     AutomationProperties.Name="{x:Static res:EditText.Output_Specified}" AutomationProperties.AutomationId="OP-Edit-Output-Specified" />
+        <DockPanel Margin="24,4,0,0">
+            <Button x:Name="BrowseButton" DockPanel.Dock="Right" Content="{x:Static res:EditText.Browse_Button}" Style="{StaticResource Op.Button}" Margin="6,0,0,0" Click="OnBrowse"
+                    AutomationProperties.Name="{x:Static res:EditText.Browse_Button}" AutomationProperties.AutomationId="OP-Edit-Output-Browse" />
+            <TextBox x:Name="FolderBox" Style="{StaticResource Op.TextBox}" TextChanged="OnInputChanged"
+                     AutomationProperties.Name="{x:Static res:EditText.Output_FolderPathName}" AutomationProperties.AutomationId="OP-Edit-Output-FolderPath" />
+        </DockPanel>
+        <TextBlock x:Name="FolderError" Margin="24,4,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Op.Error}" Visibility="Collapsed"
+                   AutomationProperties.LiveSetting="Assertive" AutomationProperties.AutomationId="OP-Edit-Output-FolderError" />
+
+        <!-- Text added to the file name -->
+        <CheckBox x:Name="AddTextBox" Content="{x:Static res:EditText.Output_AddText}" Margin="0,14,0,0" Foreground="{DynamicResource Op.Text}"
+                  MinHeight="24" VerticalContentAlignment="Center" Checked="OnInputChanged" Unchecked="OnInputChanged"
+                  AutomationProperties.Name="{x:Static res:EditText.Output_AddText}" AutomationProperties.AutomationId="OP-Edit-Output-AddText" />
+        <Grid Margin="24,4,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <TextBox x:Name="PrefixBox" Style="{StaticResource Op.TextBox}" TextChanged="OnInputChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Output_PrefixName}" AutomationProperties.AutomationId="OP-Edit-Output-Prefix" />
+                <TextBlock x:Name="PrefixPlaceholder" Text="{x:Static res:EditText.Output_PrefixPlaceholder}" Margin="9,0,0,0" VerticalAlignment="Center"
+                           IsHitTestVisible="False" Foreground="{DynamicResource Op.SecondaryText}" />
+            </Grid>
+            <Grid Grid.Column="2">
+                <TextBox x:Name="SuffixBox" Style="{StaticResource Op.TextBox}" TextChanged="OnInputChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Output_SuffixName}" AutomationProperties.AutomationId="OP-Edit-Output-Suffix" />
+                <TextBlock x:Name="SuffixPlaceholder" Text="{x:Static res:EditText.Output_SuffixPlaceholder}" Margin="9,0,0,0" VerticalAlignment="Center"
+                           IsHitTestVisible="False" Foreground="{DynamicResource Op.SecondaryText}" />
+            </Grid>
+        </Grid>
+        <TextBlock x:Name="AddTextError" Margin="24,4,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Op.Error}" Visibility="Collapsed"
+                   AutomationProperties.LiveSetting="Assertive" AutomationProperties.AutomationId="OP-Edit-Output-AddTextError" />
+
+        <!-- Duplicate handling -->
+        <DockPanel Margin="0,14,0,0">
+            <TextBlock x:Name="ConflictLabel" Text="{x:Static res:EditText.Output_ConflictLabel}" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <ComboBox x:Name="ConflictBox" MinHeight="32" MinWidth="160" HorizontalAlignment="Left" SelectionChanged="OnInputChanged"
+                      AutomationProperties.Name="{x:Static res:EditText.Output_ConflictLabel}" AutomationProperties.AutomationId="OP-Edit-Output-Conflict" />
+        </DockPanel>
+
+        <!-- Delete original -->
+        <CheckBox x:Name="DeleteOriginalBox" Content="{x:Static res:EditText.Output_DeleteOriginal}" Margin="0,14,0,0" Foreground="{DynamicResource Op.Text}"
+                  MinHeight="24" VerticalContentAlignment="Center" Checked="OnInputChanged" Unchecked="OnInputChanged"
+                  AutomationProperties.Name="{x:Static res:EditText.Output_DeleteOriginal}" AutomationProperties.AutomationId="OP-Edit-Output-DeleteOriginal" />
+        <TextBlock x:Name="DeleteWarning" Text="{x:Static res:EditText.Output_DeleteWarning}" Margin="24,4,0,0" TextWrapping="Wrap"
+                   Foreground="{DynamicResource Op.Error}" FontSize="{StaticResource Op.SecondarySize}" Visibility="Collapsed"
+                   AutomationProperties.LiveSetting="Polite" AutomationProperties.AutomationId="OP-Edit-Output-DeleteWarning" />
+    </StackPanel>
+</UserControl>

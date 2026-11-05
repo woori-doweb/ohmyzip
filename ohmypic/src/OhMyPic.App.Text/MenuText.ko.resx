@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ComingSoon_ToolTip" xml:space="preserve">
+    <value>이후 버전에서 제공할 기능입니다.</value>
+  </data>
+  <data name="DropDown_HelpText" xml:space="preserve">
+    <value>선택 메뉴를 엽니다.</value>
+  </data>
+  <data name="Error_BadGesture" xml:space="preserve">
+    <value>알 수 없는 단축키 "{0}"입니다.</value>
+  </data>
+  <data name="Error_UnknownCommand" xml:space="preserve">
+    <value>알 수 없는 명령 "{0}"입니다.</value>
+  </data>
+  <data name="Label_About" xml:space="preserve">
+    <value>ohMypic 정보</value>
+  </data>
+  <data name="Label_AlwaysOnTop" xml:space="preserve">
+    <value>항상 위</value>
+  </data>
+  <data name="Label_Associations" xml:space="preserve">
+    <value>파일 연결…</value>
+  </data>
+  <data name="Label_BatchDialog" xml:space="preserve">
+    <value>일괄편집…</value>
+  </data>
+  <data name="Label_Browser" xml:space="preserve">
+    <value>목록보기</value>
+  </data>
+  <data name="Label_ConvertDialog" xml:space="preserve">
+    <value>포맷변환…</value>
+  </data>
+  <data name="Label_Copy" xml:space="preserve">
+    <value>복사</value>
+  </data>
+  <data name="Label_CopyImage" xml:space="preserve">
+    <value>이미지 복사</value>
+  </data>
+  <data name="Label_Cut" xml:space="preserve">
+    <value>잘라내기</value>
+  </data>
+  <data name="Label_Delete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="Label_Exit" xml:space="preserve">
+    <value>끝내기</value>
+  </data>
+  <data name="Label_First" xml:space="preserve">
+    <value>처음 이미지</value>
+  </data>
+  <data name="Label_FitModeSettings" xml:space="preserve">
+    <value>보기 설정…</value>
+  </data>
+  <data name="Label_FolderTree" xml:space="preserve">
+    <value>폴더 트리</value>
+  </data>
+  <data name="Label_FormatDetails" xml:space="preserve">
+    <value>자세히</value>
+  </data>
+  <data name="Label_FormatFilmstrip" xml:space="preserve">
+    <value>필름스트립</value>
+  </data>
+  <data name="Label_FormatIcons" xml:space="preserve">
+    <value>아이콘</value>
+  </data>
+  <data name="Label_FormatLargeIcons" xml:space="preserve">
+    <value>큰 아이콘</value>
+  </data>
+  <data name="Label_FormatList" xml:space="preserve">
+    <value>목록</value>
+  </data>
+  <data name="Label_FormatThumbnails" xml:space="preserve">
+    <value>썸네일</value>
+  </data>
+  <data name="Label_FullScreen" xml:space="preserve">
+    <value>전체 화면</value>
+  </data>
+  <data name="Label_HelpContents" xml:space="preserve">
+    <value>도움말</value>
+  </data>
+  <data name="Label_Language" xml:space="preserve">
+    <value>언어…</value>
+  </data>
+  <data name="Label_Last" xml:space="preserve">
+    <value>마지막 이미지</value>
+  </data>
+  <data name="Label_Next" xml:space="preserve">
+    <value>다음 이미지</value>
+  </data>
+  <data name="Label_OpenFile" xml:space="preserve">
+    <value>파일 열기…</value>
+  </data>
+  <data name="Label_OpenFolder" xml:space="preserve">
+    <value>폴더 열기…</value>
+  </data>
+  <data name="Label_PaneCamera" xml:space="preserve">
+    <value>카메라 정보 창</value>
+  </data>
+  <data name="Label_PanePreview" xml:space="preserve">
+    <value>미리보기 창</value>
+  </data>
+  <data name="Label_Paste" xml:space="preserve">
+    <value>붙여넣기</value>
+  </data>
+  <data name="Label_Previous" xml:space="preserve">
+    <value>이전 이미지</value>
+  </data>
+  <data name="Label_Print" xml:space="preserve">
+    <value>인쇄하기…</value>
+  </data>
+  <data name="Label_Properties" xml:space="preserve">
+    <value>파일 속성</value>
+  </data>
+  <data name="Label_Refresh" xml:space="preserve">
+    <value>새로 고침</value>
+  </data>
+  <data name="Label_Rename" xml:space="preserve">
+    <value>이름 바꾸기…</value>
+  </data>
+  <data name="Label_ResizeDialog" xml:space="preserve">
+    <value>크기변경…</value>
+  </data>
+  <data name="Label_RotateDialog" xml:space="preserve">
+    <value>회전하기…</value>
+  </data>
+  <data name="Label_RotateLeft" xml:space="preserve">
+    <value>왼쪽으로 회전</value>
+  </data>
+  <data name="Label_RotateRight" xml:space="preserve">
+    <value>오른쪽으로 회전</value>
+  </data>
+  <data name="Label_SaveAs" xml:space="preserve">
+    <value>다른 이름으로 저장…</value>
+  </data>
+  <data name="Label_SaveRotation" xml:space="preserve">
+    <value>회전 저장</value>
+  </data>
+  <data name="Label_SelectAll" xml:space="preserve">
+    <value>모두 선택</value>
+  </data>
+  <data name="Label_Settings" xml:space="preserve">
+    <value>환경설정…</value>
+  </data>
+  <data name="Label_ShellMenu" xml:space="preserve">
+    <value>탐색기 메뉴…</value>
+  </data>
+  <data name="Label_SlideshowStart" xml:space="preserve">
+    <value>연속보기 시작</value>
+  </data>
+  <data name="Label_SortAscending" xml:space="preserve">
+    <value>오름차순</value>
+  </data>
+  <data name="Label_SortDate" xml:space="preserve">
+    <value>날짜순 정렬</value>
+  </data>
+  <data name="Label_SortDescending" xml:space="preserve">
+    <value>내림차순</value>
+  </data>
+  <data name="Label_SortName" xml:space="preserve">
+    <value>이름순 정렬</value>
+  </data>
+  <data name="Label_SortSize" xml:space="preserve">
+    <value>크기순 정렬</value>
+  </data>
+  <data name="Label_SortType" xml:space="preserve">
+    <value>종류순 정렬</value>
+  </data>
+  <data name="Label_Up" xml:space="preserve">
+    <value>상위 폴더</value>
+  </data>
+  <data name="Label_Viewer" xml:space="preserve">
+    <value>크게보기</value>
+  </data>
+  <data name="Label_ZoomActual" xml:space="preserve">
+    <value>실제 크기</value>
+  </data>
+  <data name="Label_ZoomFit" xml:space="preserve">
+    <value>창에 맞추기</value>
+  </data>
+  <data name="Label_ZoomIn" xml:space="preserve">
+    <value>확대</value>
+  </data>
+  <data name="Label_ZoomOut" xml:space="preserve">
+    <value>축소</value>
+  </data>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>편집</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>파일</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>도움말</value>
+  </data>
+  <data name="Menu_Image" xml:space="preserve">
+    <value>이미지</value>
+  </data>
+  <data name="Menu_Slideshow" xml:space="preserve">
+    <value>연속보기</value>
+  </data>
+  <data name="Menu_Tools" xml:space="preserve">
+    <value>도구</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>보기</value>
+  </data>
+  <data name="PendingSuffix" xml:space="preserve">
+    <value> (준비 중)</value>
+  </data>
+  <data name="Toolbar_Browser" xml:space="preserve">
+    <value>목록보기</value>
+  </data>
+  <data name="Toolbar_Copy" xml:space="preserve">
+    <value>복사</value>
+  </data>
+  <data name="Toolbar_Cut" xml:space="preserve">
+    <value>잘라내기</value>
+  </data>
+  <data name="Toolbar_Delete" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="Toolbar_Edit" xml:space="preserve">
+    <value>편집</value>
+  </data>
+  <data name="Toolbar_FullScreen" xml:space="preserve">
+    <value>전체 화면</value>
+  </data>
+  <data name="Toolbar_Paste" xml:space="preserve">
+    <value>붙여넣기</value>
+  </data>
+  <data name="Toolbar_Rename" xml:space="preserve">
+    <value>이름 바꾸기</value>
+  </data>
+  <data name="Toolbar_RotateLeft" xml:space="preserve">
+    <value>왼쪽 회전</value>
+  </data>
+  <data name="Toolbar_RotateRight" xml:space="preserve">
+    <value>오른쪽 회전</value>
+  </data>
+  <data name="Toolbar_Slideshow" xml:space="preserve">
+    <value>연속보기</value>
+  </data>
+  <data name="Toolbar_Sort" xml:space="preserve">
+    <value>정렬</value>
+  </data>
+  <data name="Toolbar_ViewFormat" xml:space="preserve">
+    <value>보기 형식</value>
+  </data>
+  <data name="Toolbar_Viewer" xml:space="preserve">
+    <value>크게보기</value>
+  </data>
+  <data name="Toolbar_ZoomActual" xml:space="preserve">
+    <value>실제 크기</value>
+  </data>
+  <data name="Toolbar_ZoomFit" xml:space="preserve">
+    <value>맞추기</value>
+  </data>
+  <data name="Toolbar_ZoomIn" xml:space="preserve">
+    <value>확대</value>
+  </data>
+  <data name="Toolbar_ZoomOut" xml:space="preserve">
+    <value>축소</value>
+  </data>
+</root>

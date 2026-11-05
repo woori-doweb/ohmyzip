@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ComingSoon_ToolTip" xml:space="preserve">
+    <value>This feature is coming in a later version.</value>
+  </data>
+  <data name="DropDown_HelpText" xml:space="preserve">
+    <value>Opens a menu of choices.</value>
+  </data>
+  <data name="Error_BadGesture" xml:space="preserve">
+    <value>Unrecognized key gesture "{0}".</value>
+  </data>
+  <data name="Error_UnknownCommand" xml:space="preserve">
+    <value>Unknown command "{0}".</value>
+  </data>
+  <data name="Label_About" xml:space="preserve">
+    <value>About ohMypic</value>
+  </data>
+  <data name="Label_AlwaysOnTop" xml:space="preserve">
+    <value>Always on Top</value>
+  </data>
+  <data name="Label_Associations" xml:space="preserve">
+    <value>File Associations…</value>
+  </data>
+  <data name="Label_BatchDialog" xml:space="preserve">
+    <value>Batch Edit…</value>
+  </data>
+  <data name="Label_Browser" xml:space="preserve">
+    <value>Browser</value>
+  </data>
+  <data name="Label_ConvertDialog" xml:space="preserve">
+    <value>Convert Format…</value>
+  </data>
+  <data name="Label_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Label_CopyImage" xml:space="preserve">
+    <value>Copy Image</value>
+  </data>
+  <data name="Label_Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="Label_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Label_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Label_First" xml:space="preserve">
+    <value>First Image</value>
+  </data>
+  <data name="Label_FitModeSettings" xml:space="preserve">
+    <value>View Settings…</value>
+  </data>
+  <data name="Label_FolderTree" xml:space="preserve">
+    <value>Folder Tree</value>
+  </data>
+  <data name="Label_FormatDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Label_FormatFilmstrip" xml:space="preserve">
+    <value>Filmstrip</value>
+  </data>
+  <data name="Label_FormatIcons" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="Label_FormatLargeIcons" xml:space="preserve">
+    <value>Large Icons</value>
+  </data>
+  <data name="Label_FormatList" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="Label_FormatThumbnails" xml:space="preserve">
+    <value>Thumbnails</value>
+  </data>
+  <data name="Label_FullScreen" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="Label_HelpContents" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Label_Language" xml:space="preserve">
+    <value>Language…</value>
+  </data>
+  <data name="Label_Last" xml:space="preserve">
+    <value>Last Image</value>
+  </data>
+  <data name="Label_Next" xml:space="preserve">
+    <value>Next Image</value>
+  </data>
+  <data name="Label_OpenFile" xml:space="preserve">
+    <value>Open File…</value>
+  </data>
+  <data name="Label_OpenFolder" xml:space="preserve">
+    <value>Open Folder…</value>
+  </data>
+  <data name="Label_PaneCamera" xml:space="preserve">
+    <value>Camera Info Pane</value>
+  </data>
+  <data name="Label_PanePreview" xml:space="preserve">
+    <value>Preview Pane</value>
+  </data>
+  <data name="Label_Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="Label_Previous" xml:space="preserve">
+    <value>Previous Image</value>
+  </data>
+  <data name="Label_Print" xml:space="preserve">
+    <value>Print…</value>
+  </data>
+  <data name="Label_Properties" xml:space="preserve">
+    <value>File Properties</value>
+  </data>
+  <data name="Label_Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Label_Rename" xml:space="preserve">
+    <value>Rename…</value>
+  </data>
+  <data name="Label_ResizeDialog" xml:space="preserve">
+    <value>Resize…</value>
+  </data>
+  <data name="Label_RotateDialog" xml:space="preserve">
+    <value>Rotate…</value>
+  </data>
+  <data name="Label_RotateLeft" xml:space="preserve">
+    <value>Rotate Left</value>
+  </data>
+  <data name="Label_RotateRight" xml:space="preserve">
+    <value>Rotate Right</value>
+  </data>
+  <data name="Label_SaveAs" xml:space="preserve">
+    <value>Save As…</value>
+  </data>
+  <data name="Label_SaveRotation" xml:space="preserve">
+    <value>Save Rotation</value>
+  </data>
+  <data name="Label_SelectAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="Label_Settings" xml:space="preserve">
+    <value>Settings…</value>
+  </data>
+  <data name="Label_ShellMenu" xml:space="preserve">
+    <value>File Explorer Menu…</value>
+  </data>
+  <data name="Label_SlideshowStart" xml:space="preserve">
+    <value>Start Slideshow</value>
+  </data>
+  <data name="Label_SortAscending" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="Label_SortDate" xml:space="preserve">
+    <value>Sort by Date</value>
+  </data>
+  <data name="Label_SortDescending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="Label_SortName" xml:space="preserve">
+    <value>Sort by Name</value>
+  </data>
+  <data name="Label_SortSize" xml:space="preserve">
+    <value>Sort by Size</value>
+  </data>
+  <data name="Label_SortType" xml:space="preserve">
+    <value>Sort by Type</value>
+  </data>
+  <data name="Label_Up" xml:space="preserve">
+    <value>Up One Folder</value>
+  </data>
+  <data name="Label_Viewer" xml:space="preserve">
+    <value>View Image</value>
+  </data>
+  <data name="Label_ZoomActual" xml:space="preserve">
+    <value>Actual Size</value>
+  </data>
+  <data name="Label_ZoomFit" xml:space="preserve">
+    <value>Fit to Window</value>
+  </data>
+  <data name="Label_ZoomIn" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="Label_ZoomOut" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Menu_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="Menu_Slideshow" xml:space="preserve">
+    <value>Slideshow</value>
+  </data>
+  <data name="Menu_Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="PendingSuffix" xml:space="preserve">
+    <value> (Coming soon)</value>
+  </data>
+  <data name="Toolbar_Browser" xml:space="preserve">
+    <value>Browser</value>
+  </data>
+  <data name="Toolbar_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Toolbar_Cut" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="Toolbar_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Toolbar_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Toolbar_FullScreen" xml:space="preserve">
+    <value>Full Screen</value>
+  </data>
+  <data name="Toolbar_Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="Toolbar_Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Toolbar_RotateLeft" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="Toolbar_RotateRight" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="Toolbar_Slideshow" xml:space="preserve">
+    <value>Slideshow</value>
+  </data>
+  <data name="Toolbar_Sort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="Toolbar_ViewFormat" xml:space="preserve">
+    <value>View Format</value>
+  </data>
+  <data name="Toolbar_Viewer" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Toolbar_ZoomActual" xml:space="preserve">
+    <value>Actual</value>
+  </data>
+  <data name="Toolbar_ZoomFit" xml:space="preserve">
+    <value>Fit</value>
+  </data>
+  <data name="Toolbar_ZoomIn" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="Toolbar_ZoomOut" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+</root>

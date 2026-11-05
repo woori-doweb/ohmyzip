@@ -1,0 +1,176 @@
+<Window x:Class="OhMyPic.App.Dialogs.PreferencesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+        Style="{StaticResource Op.WindowStyle}"
+        Title="{x:Static res:DialogText.Pref_Title}" Width="720" Height="540" MinWidth="600" MinHeight="440"
+        ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        AutomationProperties.AutomationId="OP-PreferencesWindow">
+    <Window.Resources>
+        <Style x:Key="Pref.Heading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,12" />
+        </Style>
+        <Style x:Key="Pref.Label" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,12,0,4" />
+        </Style>
+        <Style x:Key="Pref.Note" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource Op.SecondaryText}" />
+            <Setter Property="FontSize" Value="{StaticResource Op.SecondarySize}" />
+            <Setter Property="Margin" Value="0,4,0,0" />
+        </Style>
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="MinHeight" Value="24" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="MinWidth" Value="260" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="Width" Value="260" />
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="IsSnapToTickEnabled" Value="True" />
+            <Setter Property="TickFrequency" Value="1" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="Pref.Value" TargetType="TextBlock">
+            <Setter Property="Margin" Value="12,0,0,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="60" />
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom" Margin="16,10,16,14" LastChildFill="False">
+            <Button x:Name="ResetPageButton" DockPanel.Dock="Left" Content="{x:Static res:DialogText.Pref_ResetPage_Button}" Style="{StaticResource Op.Button}" Margin="0,0,4,0" Click="OnResetPage"
+                    AutomationProperties.AutomationId="OP-Pref-ResetPage" ToolTip="{x:Static res:DialogText.Pref_ResetPageTip}" />
+            <Button DockPanel.Dock="Left" Content="{x:Static res:DialogText.Pref_ResetAll_Button}" Style="{StaticResource Op.Button}" Click="OnResetAll"
+                    AutomationProperties.AutomationId="OP-Pref-ResetAll" ToolTip="{x:Static res:DialogText.Pref_ResetAllTip}" />
+            <Button DockPanel.Dock="Right" Content="{x:Static res:DialogText.Cancel_Button}" IsCancel="True" Style="{StaticResource Op.Button}" AutomationProperties.AutomationId="OP-Pref-Cancel" />
+            <Button DockPanel.Dock="Right" Content="{x:Static res:DialogText.Ok_Button}" IsDefault="True" Style="{StaticResource Op.Button}" Click="OnOk" AutomationProperties.AutomationId="OP-Pref-Ok" />
+        </DockPanel>
+        <Border DockPanel.Dock="Bottom" Height="1" Background="{DynamicResource Op.Border}" />
+
+        <!-- Pages in fixed order: General, View, Slideshow, Thumbnails, File Associations, File Explorer Menu. -->
+        <Border DockPanel.Dock="Left" Width="170" Background="{DynamicResource Op.Sidebar}" BorderBrush="{DynamicResource Op.Border}" BorderThickness="0,0,1,0">
+            <ListBox x:Name="CategoryList" Background="Transparent" BorderThickness="0" Padding="4,8" Foreground="{DynamicResource Op.Text}"
+                     SelectionChanged="OnCategoryChanged" AutomationProperties.Name="{x:Static res:DialogText.Pref_CategoriesName}" AutomationProperties.AutomationId="OP-Pref-Categories">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource Op.EntryListItem}">
+                        <Setter Property="Padding" Value="10,6" />
+                        <Setter Property="MinHeight" Value="32" />
+                        <Setter Property="AutomationProperties.Name" Value="{Binding}" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Border>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20,16" Focusable="False">
+            <Grid x:Name="Pages">
+                <!-- 0 General -->
+                <StackPanel>
+                    <TextBlock Style="{StaticResource Pref.Heading}" Text="{x:Static res:DialogText.Pref_Page_General}" />
+                    <CheckBox x:Name="DeleteWithoutAskingBox" Content="{x:Static res:DialogText.Pref_DeleteWithoutAsking}" Margin="0" AutomationProperties.AutomationId="OP-Pref-DeleteWithoutAsking" />
+                    <CheckBox x:Name="UseRecycleBinBox" Content="{x:Static res:DialogText.Pref_UseRecycleBin}" AutomationProperties.AutomationId="OP-Pref-UseRecycleBin" />
+                    <CheckBox x:Name="ShowHiddenFilesBox" Content="{x:Static res:DialogText.Pref_ShowHiddenFiles}" AutomationProperties.AutomationId="OP-Pref-ShowHiddenFiles" />
+                    <TextBlock x:Name="RotateSaveLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_RotateAutoSaveLabel}" />
+                    <ComboBox x:Name="RotateSaveBox" AutomationProperties.LabeledBy="{Binding ElementName=RotateSaveLabel}" AutomationProperties.AutomationId="OP-Pref-RotateAutoSave" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_RotateAutoSaveNote}" />
+                    <TextBlock x:Name="QualityLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_JpegQualityLabel}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Slider x:Name="QualitySlider" Minimum="1" Maximum="100" AutomationProperties.LabeledBy="{Binding ElementName=QualityLabel}" AutomationProperties.AutomationId="OP-Pref-JpegQuality" />
+                        <TextBlock Style="{StaticResource Pref.Value}" Text="{Binding Value, ElementName=QualitySlider, StringFormat={}{0:0}}" />
+                    </StackPanel>
+                    <CheckBox x:Name="ApplyLastQualityBox" Content="{x:Static res:DialogText.Pref_ApplyLastSaveQuality}" AutomationProperties.AutomationId="OP-Pref-ApplyLastSaveQuality" />
+                    <TextBlock x:Name="LanguageLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_LanguageLabel}" Margin="0,16,0,4" />
+                    <ComboBox x:Name="LanguageBox" AutomationProperties.LabeledBy="{Binding ElementName=LanguageLabel}" AutomationProperties.AutomationId="OP-Pref-Language" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_LanguageNote}" />
+                    <CheckBox x:Name="CheckUpdatesBox" Content="{x:Static res:UpdateText.Pref_CheckForUpdates}" Margin="0,16,0,0" AutomationProperties.AutomationId="OP-Pref-CheckUpdates" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:UpdateText.Pref_CheckForUpdatesNote}" />
+                </StackPanel>
+
+                <!-- 1 View -->
+                <StackPanel Visibility="Collapsed">
+                    <TextBlock Style="{StaticResource Pref.Heading}" Text="{x:Static res:DialogText.Pref_Page_View}" />
+                    <TextBlock x:Name="FitModeLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_FitModeLabel}" Margin="0,0,0,4" />
+                    <ComboBox x:Name="FitModeBox" AutomationProperties.LabeledBy="{Binding ElementName=FitModeLabel}" AutomationProperties.AutomationId="OP-Pref-FitMode" />
+                    <TextBlock x:Name="WheelLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_WheelActionLabel}" />
+                    <ComboBox x:Name="WheelBox" AutomationProperties.LabeledBy="{Binding ElementName=WheelLabel}" AutomationProperties.AutomationId="OP-Pref-WheelAction" />
+                    <TextBlock x:Name="BackgroundLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_BackgroundLabel}" />
+                    <ComboBox x:Name="BackgroundBox" AutomationProperties.LabeledBy="{Binding ElementName=BackgroundLabel}" AutomationProperties.AutomationId="OP-Pref-Background" />
+                    <CheckBox x:Name="LoopBox" Content="{x:Static res:DialogText.Pref_LoopAtEnds}" Margin="0,14,0,0" AutomationProperties.AutomationId="OP-Pref-LoopAtEnds" />
+                    <CheckBox x:Name="AutoRotateBox" Content="{x:Static res:DialogText.Pref_AutoRotateByExif}" AutomationProperties.AutomationId="OP-Pref-AutoRotateByExif" />
+                    <CheckBox x:Name="SmoothBox" Content="{x:Static res:DialogText.Pref_SmoothScaling}" AutomationProperties.AutomationId="OP-Pref-SmoothScaling" />
+                    <CheckBox x:Name="NavigatorBox" Content="{x:Static res:DialogText.Pref_ShowNavigator}" AutomationProperties.AutomationId="OP-Pref-ShowNavigator" />
+                    <CheckBox x:Name="TopmostBox" Content="{x:Static res:DialogText.Pref_AlwaysOnTop}" AutomationProperties.AutomationId="OP-Pref-AlwaysOnTop" />
+                </StackPanel>
+
+                <!-- 2 Slideshow -->
+                <StackPanel Visibility="Collapsed">
+                    <TextBlock Style="{StaticResource Pref.Heading}" Text="{x:Static res:DialogText.Pref_Page_Slideshow}" />
+                    <TextBlock x:Name="IntervalLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_IntervalLabel}" Margin="0,0,0,4" />
+                    <StackPanel Orientation="Horizontal">
+                        <Slider x:Name="IntervalSlider" Minimum="1" Maximum="60" AutomationProperties.LabeledBy="{Binding ElementName=IntervalLabel}" AutomationProperties.AutomationId="OP-Pref-Interval" />
+                        <TextBlock x:Name="IntervalValue" Style="{StaticResource Pref.Value}" />
+                    </StackPanel>
+                    <CheckBox x:Name="FadeBox" Content="{x:Static res:DialogText.Pref_SlideFade}" Margin="0,14,0,0" AutomationProperties.AutomationId="OP-Pref-SlideFade" />
+                    <CheckBox x:Name="FileNameBox" Content="{x:Static res:DialogText.Pref_ShowFileNameInFullScreen}" AutomationProperties.AutomationId="OP-Pref-ShowFileName" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_SlideshowNote}" />
+                </StackPanel>
+
+                <!-- 3 Thumbnails -->
+                <StackPanel Visibility="Collapsed">
+                    <TextBlock Style="{StaticResource Pref.Heading}" Text="{x:Static res:DialogText.Pref_Page_Thumbnails}" />
+                    <TextBlock x:Name="ThumbSizeLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_ThumbnailSizeLabel}" Margin="0,0,0,4" />
+                    <StackPanel Orientation="Horizontal">
+                        <Slider x:Name="ThumbSizeSlider" Minimum="64" Maximum="320" TickFrequency="2" AutomationProperties.LabeledBy="{Binding ElementName=ThumbSizeLabel}" AutomationProperties.AutomationId="OP-Pref-ThumbnailSize" />
+                        <TextBlock x:Name="ThumbSizeValue" Style="{StaticResource Pref.Value}" />
+                    </StackPanel>
+                    <CheckBox x:Name="ResolutionBox" Content="{x:Static res:DialogText.Pref_ShowResolution}" Margin="0,14,0,0" AutomationProperties.AutomationId="OP-Pref-ShowResolution" />
+                </StackPanel>
+
+                <!-- 4 File Associations (applied immediately, not by OK) -->
+                <StackPanel Visibility="Collapsed">
+                    <TextBlock Style="{StaticResource Pref.Heading}" Text="{x:Static res:DialogText.Pref_Page_Associations}" AutomationProperties.AutomationId="OP-Pref-Assoc-Heading" />
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static res:DialogText.Pref_Assoc_Intro}" AutomationProperties.AutomationId="OP-Pref-Assoc-Intro" />
+                    <TextBlock x:Name="AssocStatusText" TextWrapping="Wrap" Margin="0,12,0,0" AutomationProperties.AutomationId="OP-Pref-Assoc-Status"
+                               AutomationProperties.LiveSetting="Polite" />
+                    <TextBlock x:Name="AssocListLabel" Style="{StaticResource Pref.Label}" Text="{x:Static res:DialogText.Pref_Assoc_ExtensionsLabel}" AutomationProperties.AutomationId="OP-Pref-Assoc-ListLabel" />
+                    <WrapPanel x:Name="AssocList" ItemWidth="250" AutomationProperties.LabeledBy="{Binding ElementName=AssocListLabel}" AutomationProperties.AutomationId="OP-Pref-Assoc-List" />
+                    <WrapPanel Orientation="Horizontal" Margin="-4,14,0,0">
+                        <Button x:Name="AssocRegisterButton" Content="{x:Static res:DialogText.Pref_Assoc_Register_Button}" Style="{StaticResource Op.Button}" Margin="4,0,4,8"
+                                Click="OnAssocRegister" AutomationProperties.AutomationId="OP-Pref-Assoc-Register" />
+                        <Button x:Name="AssocUnregisterButton" Content="{x:Static res:DialogText.Pref_Assoc_Unregister_Button}" Style="{StaticResource Op.Button}" Margin="4,0,4,8"
+                                Click="OnAssocUnregister" AutomationProperties.AutomationId="OP-Pref-Assoc-Unregister" />
+                        <Button Content="{x:Static res:DialogText.Pref_Assoc_OpenSettings_Button}" Style="{StaticResource Op.Button}" Margin="4,0,4,8"
+                                Click="OnAssocOpenSettings" AutomationProperties.AutomationId="OP-Pref-Assoc-OpenSettings" />
+                    </WrapPanel>
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_ImmediateNote}" AutomationProperties.AutomationId="OP-Pref-Assoc-ImmediateNote" />
+                </StackPanel>
+
+                <!-- 5 File Explorer Menu (applied immediately, not by OK) -->
+                <StackPanel Visibility="Collapsed">
+                    <TextBlock Style="{StaticResource Pref.Heading}" Text="{x:Static res:DialogText.Pref_Page_ShellMenu}" AutomationProperties.AutomationId="OP-Pref-Shell-Heading" />
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static res:DialogText.Pref_Shell_Intro}" AutomationProperties.AutomationId="OP-Pref-Shell-Intro" />
+                    <TextBlock x:Name="ShellStatusText" TextWrapping="Wrap" Margin="0,12,0,0" AutomationProperties.AutomationId="OP-Pref-Shell-Status"
+                               AutomationProperties.LiveSetting="Polite" />
+                    <TextBlock x:Name="ShellItemsText" Style="{StaticResource Pref.Note}" Margin="0,10,0,0" AutomationProperties.AutomationId="OP-Pref-Shell-Items" />
+                    <TextBlock x:Name="ShellExtensionsText" Style="{StaticResource Pref.Note}" AutomationProperties.AutomationId="OP-Pref-Shell-Extensions" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_Shell_Windows11Note}" AutomationProperties.AutomationId="OP-Pref-Shell-Windows11Note" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_Shell_LanguageNote}" AutomationProperties.AutomationId="OP-Pref-Shell-LanguageNote" />
+                    <WrapPanel Orientation="Horizontal" Margin="-4,14,0,0">
+                        <Button x:Name="ShellRegisterButton" Content="{x:Static res:DialogText.Pref_Shell_Register_Button}" Style="{StaticResource Op.Button}" Margin="4,0,4,8"
+                                Click="OnShellRegister" AutomationProperties.AutomationId="OP-Pref-Shell-Register" />
+                        <Button x:Name="ShellUnregisterButton" Content="{x:Static res:DialogText.Pref_Shell_Unregister_Button}" Style="{StaticResource Op.Button}" Margin="4,0,4,8"
+                                Click="OnShellUnregister" AutomationProperties.AutomationId="OP-Pref-Shell-Unregister" />
+                    </WrapPanel>
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_ImmediateNote}" AutomationProperties.AutomationId="OP-Pref-Shell-ImmediateNote" />
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

@@ -1,0 +1,35 @@
+<Window x:Class="OhMyPic.App.SlideshowWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+        Title="{x:Static res:MainText.Slideshow_Title}"
+        WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False" Background="Black"
+        WindowStartupLocation="Manual" FontFamily="{StaticResource Op.Font}" FontSize="{StaticResource Op.BodySize}"
+        UseLayoutRounding="True"
+        AutomationProperties.AutomationId="OP-SlideshowWindow">
+    <Grid x:Name="Root" Background="Black" Focusable="True" FocusVisualStyle="{x:Null}"
+          AutomationProperties.AutomationId="OP-Slideshow-Area">
+        <Grid.ContextMenu>
+            <ContextMenu x:Name="SlideMenu">
+                <MenuItem x:Name="PauseItem" Click="OnPauseClick" AutomationProperties.AutomationId="OP-Slideshow-Pause" />
+                <MenuItem Header="{x:Static res:MainText.Slideshow_Previous}" InputGestureText="Left" Click="OnPreviousClick" AutomationProperties.AutomationId="OP-Slideshow-Previous" />
+                <MenuItem Header="{x:Static res:MainText.Slideshow_Next}" InputGestureText="Right" Click="OnNextClick" AutomationProperties.AutomationId="OP-Slideshow-Next" />
+                <Separator />
+                <MenuItem Header="{x:Static res:MainText.Slideshow_Exit}" InputGestureText="Esc" Click="OnExitClick" AutomationProperties.AutomationId="OP-Slideshow-Exit" />
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <Image x:Name="BackImage" Stretch="Uniform" StretchDirection="DownOnly" Opacity="0" RenderOptions.BitmapScalingMode="HighQuality" />
+        <Image x:Name="FrontImage" Stretch="Uniform" StretchDirection="DownOnly" RenderOptions.BitmapScalingMode="HighQuality" />
+        <TextBlock x:Name="ErrorText" Foreground="White" FontSize="16" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="640"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" AutomationProperties.AutomationId="OP-Slideshow-Error" />
+        <!-- File name overlay (setting "Show file name in full screen"). Opaque label, no translucent material. -->
+        <Border x:Name="NameBorder" Background="#202020" CornerRadius="4" Padding="10,4" Margin="16" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                Visibility="Collapsed">
+            <TextBlock x:Name="NameText" Foreground="#F2F2F5" AutomationProperties.AutomationId="OP-Slideshow-Name" />
+        </Border>
+        <Border x:Name="PausedBorder" Background="#202020" CornerRadius="4" Padding="10,4" Margin="16" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Visibility="Collapsed">
+            <TextBlock Text="{x:Static res:MainText.Slideshow_Paused}" Foreground="#F2F2F5" AutomationProperties.AutomationId="OP-Slideshow-Paused" />
+        </Border>
+    </Grid>
+</Window>

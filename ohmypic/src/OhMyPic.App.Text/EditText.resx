@@ -1,0 +1,534 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="App_Name" xml:space="preserve">
+    <value>ohMypic</value>
+  </data>
+  <data name="Batch_AddFiles" xml:space="preserve">
+    <value>Add…</value>
+  </data>
+  <data name="Batch_AddFilesTitle" xml:space="preserve">
+    <value>Add Images</value>
+  </data>
+  <data name="Batch_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Batch_CancelQuestion" xml:space="preserve">
+    <value>Cancel batch editing?</value>
+  </data>
+  <data name="Batch_FilesLabel" xml:space="preserve">
+    <value>Files ({0})</value>
+  </data>
+  <data name="Batch_FilesName" xml:space="preserve">
+    <value>Files to edit</value>
+  </data>
+  <data name="Batch_ImageFilter" xml:space="preserve">
+    <value>Image files|{0}</value>
+  </data>
+  <data name="Batch_KeepFormatNote" xml:space="preserve">
+    <value>Each file keeps its original format. Choose where to save the edited files.</value>
+  </data>
+  <data name="Batch_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Batch_RemoveFiles" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Batch_SelectIntro1" xml:space="preserve">
+    <value>Select all the tasks you want.</value>
+  </data>
+  <data name="Batch_SelectIntro2" xml:space="preserve">
+    <value>Choose Next to set up each task in order.</value>
+  </data>
+  <data name="Batch_Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Batch_Step1" xml:space="preserve">
+    <value>Select Tasks</value>
+  </data>
+  <data name="Batch_Step2" xml:space="preserve">
+    <value>Resize</value>
+  </data>
+  <data name="Batch_Step3" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="Batch_Step4" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Batch_Step5" xml:space="preserve">
+    <value>Convert and Save</value>
+  </data>
+  <data name="Batch_Step5Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Batch_StepCurrent" xml:space="preserve">
+    <value>current step</value>
+  </data>
+  <data name="Batch_StepIndicator" xml:space="preserve">
+    <value>Step {0} of {1}</value>
+  </data>
+  <data name="Batch_StepSkipped" xml:space="preserve">
+    <value>skipped</value>
+  </data>
+  <data name="Batch_StepState" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Batch_StepsName" xml:space="preserve">
+    <value>Batch edit steps</value>
+  </data>
+  <data name="Batch_TaskConvert" xml:space="preserve">
+    <value>Convert format and save</value>
+  </data>
+  <data name="Batch_TaskConvertDescription" xml:space="preserve">
+    <value>Change the image file format.</value>
+  </data>
+  <data name="Batch_TaskRename" xml:space="preserve">
+    <value>Rename files</value>
+  </data>
+  <data name="Batch_TaskRenameDescription" xml:space="preserve">
+    <value>Rename many files at once.</value>
+  </data>
+  <data name="Batch_TaskResize" xml:space="preserve">
+    <value>Resize images</value>
+  </data>
+  <data name="Batch_TaskResizeDescription" xml:space="preserve">
+    <value>Change the size of the images.</value>
+  </data>
+  <data name="Batch_TaskRotate" xml:space="preserve">
+    <value>Rotate images</value>
+  </data>
+  <data name="Batch_TaskRotateDescription" xml:space="preserve">
+    <value>Rotate or flip the images.</value>
+  </data>
+  <data name="Batch_Title" xml:space="preserve">
+    <value>Batch Edit</value>
+  </data>
+  <data name="Browse_Button" xml:space="preserve">
+    <value>Browse…</value>
+  </data>
+  <data name="Cancel_Button" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Conflict_ApplyAll" xml:space="preserve">
+    <value>Do this for all remaining conflicts</value>
+  </data>
+  <data name="Conflict_Folder" xml:space="preserve">
+    <value>Folder: {0}</value>
+  </data>
+  <data name="Conflict_Heading" xml:space="preserve">
+    <value>A file named "{0}" already exists.</value>
+  </data>
+  <data name="Conflict_KeepBoth" xml:space="preserve">
+    <value>Keep Both</value>
+  </data>
+  <data name="Conflict_Overwrite" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
+  <data name="Conflict_Skip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Conflict_Source" xml:space="preserve">
+    <value>Made from: {0}</value>
+  </data>
+  <data name="Conflict_Title" xml:space="preserve">
+    <value>File Already Exists</value>
+  </data>
+  <data name="Convert_AllFrames" xml:space="preserve">
+    <value>Convert all frames</value>
+  </data>
+  <data name="Convert_BppHelp" xml:space="preserve">
+    <value>Set automatically for the chosen format.</value>
+  </data>
+  <data name="Convert_BppLabel" xml:space="preserve">
+    <value>Bits per pixel</value>
+  </data>
+  <data name="Convert_Button" xml:space="preserve">
+    <value>Convert</value>
+  </data>
+  <data name="Convert_CombineFrames" xml:space="preserve">
+    <value>Combine into one file (TIF and GIF only)</value>
+  </data>
+  <data name="Convert_DefaultSuffix" xml:space="preserve">
+    <value>[converted]</value>
+  </data>
+  <data name="Convert_FilesLabel" xml:space="preserve">
+    <value>Files</value>
+  </data>
+  <data name="Convert_FirstFrame" xml:space="preserve">
+    <value>Convert first frame only</value>
+  </data>
+  <data name="Convert_FormatLabel" xml:space="preserve">
+    <value>Target format</value>
+  </data>
+  <data name="Convert_FramesLabel" xml:space="preserve">
+    <value>Multiple frames</value>
+  </data>
+  <data name="Convert_GroupLabel" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="Convert_QualityLabel" xml:space="preserve">
+    <value>Quality (%)</value>
+  </data>
+  <data name="Convert_QualityNoteJpeg" xml:space="preserve">
+    <value>Higher quality makes larger files.</value>
+  </data>
+  <data name="Convert_QualityNoteOther" xml:space="preserve">
+    <value>Quality applies only to JPG.</value>
+  </data>
+  <data name="Convert_QualityValueName" xml:space="preserve">
+    <value>Quality value</value>
+  </data>
+  <data name="Convert_SourceColumn" xml:space="preserve">
+    <value>Original File</value>
+  </data>
+  <data name="Convert_SplitFrames" xml:space="preserve">
+    <value>Save each frame as a separate file</value>
+  </data>
+  <data name="Convert_TargetColumn" xml:space="preserve">
+    <value>New File</value>
+  </data>
+  <data name="Convert_Title" xml:space="preserve">
+    <value>Convert Format</value>
+  </data>
+  <data name="ErrorCode_Cancelled" xml:space="preserve">
+    <value>Canceled.</value>
+  </data>
+  <data name="ErrorCode_DecodeFailed" xml:space="preserve">
+    <value>The image couldn't be read. The file might be damaged.</value>
+  </data>
+  <data name="ErrorCode_EncodeFailed" xml:space="preserve">
+    <value>The new image couldn't be created.</value>
+  </data>
+  <data name="ErrorCode_IoError" xml:space="preserve">
+    <value>The file couldn't be read or saved. Check that it isn't open in another app and that you can write to the folder.</value>
+  </data>
+  <data name="ErrorCode_None" xml:space="preserve">
+    <value>An unknown problem occurred.</value>
+  </data>
+  <data name="ErrorCode_TargetSizeUnreachable" xml:space="preserve">
+    <value>The file can't be made that small. Enter a larger target size.</value>
+  </data>
+  <data name="ErrorCode_TooLarge" xml:space="preserve">
+    <value>The image is too large to edit.</value>
+  </data>
+  <data name="ErrorCode_UnsupportedFormat" xml:space="preserve">
+    <value>This file format isn't supported.</value>
+  </data>
+  <data name="Error_FolderInvalid" xml:space="preserve">
+    <value>This folder path isn't valid.</value>
+  </data>
+  <data name="Error_FolderNotFull" xml:space="preserve">
+    <value>Enter a full folder path, such as C:\Pictures\Edited.</value>
+  </data>
+  <data name="Error_FolderRequired" xml:space="preserve">
+    <value>Choose a folder.</value>
+  </data>
+  <data name="Error_NameDots" xml:space="preserve">
+    <value>You can't use '.' or '..' as a name.</value>
+  </data>
+  <data name="Error_NameInvalidChars" xml:space="preserve">
+    <value>Remove \ / : * ? " &lt; &gt; | from the text.</value>
+  </data>
+  <data name="Error_NoFiles" xml:space="preserve">
+    <value>Add at least one file.</value>
+  </data>
+  <data name="Error_NoTasks" xml:space="preserve">
+    <value>Select at least one task.</value>
+  </data>
+  <data name="Error_NumberRange" xml:space="preserve">
+    <value>Enter a whole number from {0} to {1}.</value>
+  </data>
+  <data name="Error_SubFolderRequired" xml:space="preserve">
+    <value>Enter a folder name.</value>
+  </data>
+  <data name="Error_TemplateInvalid" xml:space="preserve">
+    <value>This pattern makes a file name Windows can't use. Remove \ / : * ? " &lt; &gt; | and don't end with a dot or a space.</value>
+  </data>
+  <data name="Error_TemplateRequired" xml:space="preserve">
+    <value>Enter a name pattern.</value>
+  </data>
+  <data name="Heading_Files" xml:space="preserve">
+    <value>{0} files selected</value>
+  </data>
+  <data name="Message_KindError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Message_KindQuestion" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Message_ProblemsName" xml:space="preserve">
+    <value>Problem details</value>
+  </data>
+  <data name="No_Button" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Ok_Button" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Output_AddText" xml:space="preserve">
+    <value>Add text to file name</value>
+  </data>
+  <data name="Output_BrowseTitle" xml:space="preserve">
+    <value>Choose a Folder for the New Files</value>
+  </data>
+  <data name="Output_ConflictAsk" xml:space="preserve">
+    <value>Ask</value>
+  </data>
+  <data name="Output_ConflictLabel" xml:space="preserve">
+    <value>If a file with the same name exists:</value>
+  </data>
+  <data name="Output_ConflictOverwrite" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
+  <data name="Output_ConflictSkip" xml:space="preserve">
+    <value>Don't change</value>
+  </data>
+  <data name="Output_DefaultSubFolder" xml:space="preserve">
+    <value>edited</value>
+  </data>
+  <data name="Output_DeleteOriginal" xml:space="preserve">
+    <value>Delete original file after conversion</value>
+  </data>
+  <data name="Output_DeleteWarning" xml:space="preserve">
+    <value>Each original file is deleted after its new file is saved and checked. If Preferences say to use the Recycle Bin, originals go there.</value>
+  </data>
+  <data name="Output_FolderPathName" xml:space="preserve">
+    <value>Folder path</value>
+  </data>
+  <data name="Output_GroupName" xml:space="preserve">
+    <value>Save options</value>
+  </data>
+  <data name="Output_LocationLabel" xml:space="preserve">
+    <value>Save location</value>
+  </data>
+  <data name="Output_PrefixName" xml:space="preserve">
+    <value>Text before the file name</value>
+  </data>
+  <data name="Output_PrefixPlaceholder" xml:space="preserve">
+    <value>prefix_name</value>
+  </data>
+  <data name="Output_SameFolder" xml:space="preserve">
+    <value>Save in the same folder as the original</value>
+  </data>
+  <data name="Output_Specified" xml:space="preserve">
+    <value>Save in this folder:</value>
+  </data>
+  <data name="Output_SubFolder" xml:space="preserve">
+    <value>Save in a subfolder of the original's folder:</value>
+  </data>
+  <data name="Output_SubFolderName" xml:space="preserve">
+    <value>Subfolder name</value>
+  </data>
+  <data name="Output_SuffixName" xml:space="preserve">
+    <value>Text after the file name</value>
+  </data>
+  <data name="Output_SuffixPlaceholder" xml:space="preserve">
+    <value>name_suffix</value>
+  </data>
+  <data name="Preview_Label" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Preview_Loading" xml:space="preserve">
+    <value>Loading preview…</value>
+  </data>
+  <data name="Preview_Unavailable" xml:space="preserve">
+    <value>No preview available.</value>
+  </data>
+  <data name="Progress_BarName" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="Progress_Batch" xml:space="preserve">
+    <value>Editing Images…</value>
+  </data>
+  <data name="Progress_Canceling" xml:space="preserve">
+    <value>Canceling…</value>
+  </data>
+  <data name="Progress_CancelingHeading" xml:space="preserve">
+    <value>{0} (canceling)</value>
+  </data>
+  <data name="Progress_Convert" xml:space="preserve">
+    <value>Converting Images…</value>
+  </data>
+  <data name="Progress_Count" xml:space="preserve">
+    <value>{0} of {1} files</value>
+  </data>
+  <data name="Progress_CountName" xml:space="preserve">
+    <value>Files done</value>
+  </data>
+  <data name="Progress_CurrentName" xml:space="preserve">
+    <value>Current file</value>
+  </data>
+  <data name="Progress_Resize" xml:space="preserve">
+    <value>Resizing Images…</value>
+  </data>
+  <data name="Progress_Rotate" xml:space="preserve">
+    <value>Rotating Images…</value>
+  </data>
+  <data name="Progress_Starting" xml:space="preserve">
+    <value>Starting…</value>
+  </data>
+  <data name="Rename_CaseKeep" xml:space="preserve">
+    <value>Keep as is</value>
+  </data>
+  <data name="Rename_CaseLabel" xml:space="preserve">
+    <value>Letter case</value>
+  </data>
+  <data name="Rename_CaseLower" xml:space="preserve">
+    <value>lowercase</value>
+  </data>
+  <data name="Rename_CaseUpper" xml:space="preserve">
+    <value>UPPERCASE</value>
+  </data>
+  <data name="Rename_DefaultTemplate" xml:space="preserve">
+    <value>batch_[%N]</value>
+  </data>
+  <data name="Rename_DigitsHelp" xml:space="preserve">
+    <value>0 = no leading zeros</value>
+  </data>
+  <data name="Rename_DigitsLabel" xml:space="preserve">
+    <value>Digits</value>
+  </data>
+  <data name="Rename_FindLabel" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="Rename_GroupLabel" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Rename_ReplaceLabel" xml:space="preserve">
+    <value>Replace with</value>
+  </data>
+  <data name="Rename_SampleItem" xml:space="preserve">
+    <value>{0} → {1}</value>
+  </data>
+  <data name="Rename_SampleLabel" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="Rename_StartLabel" xml:space="preserve">
+    <value>Start number</value>
+  </data>
+  <data name="Rename_TemplateLabel" xml:space="preserve">
+    <value>Name pattern</value>
+  </data>
+  <data name="Rename_TokenHelp" xml:space="preserve">
+    <value>[%N] number   [%F] original name   [%D] file date (yyyyMMdd)</value>
+  </data>
+  <data name="Resize_Button" xml:space="preserve">
+    <value>Resize</value>
+  </data>
+  <data name="Resize_ByAxis" xml:space="preserve">
+    <value>By long side</value>
+  </data>
+  <data name="Resize_ByRatio" xml:space="preserve">
+    <value>By percentage</value>
+  </data>
+  <data name="Resize_ByResolution" xml:space="preserve">
+    <value>By width and height</value>
+  </data>
+  <data name="Resize_BySize" xml:space="preserve">
+    <value>By file size</value>
+  </data>
+  <data name="Resize_GroupLabel" xml:space="preserve">
+    <value>Resize method</value>
+  </data>
+  <data name="Resize_HeightName" xml:space="preserve">
+    <value>Height in pixels</value>
+  </data>
+  <data name="Resize_KeepAspect" xml:space="preserve">
+    <value>Keep proportions</value>
+  </data>
+  <data name="Resize_LongSideName" xml:space="preserve">
+    <value>Long side in pixels</value>
+  </data>
+  <data name="Resize_PercentName" xml:space="preserve">
+    <value>Percentage</value>
+  </data>
+  <data name="Resize_PreviewInvalid" xml:space="preserve">
+    <value>{0}: {1} × {2} px. Fix the value above to see the new size.</value>
+  </data>
+  <data name="Resize_PreviewPixels" xml:space="preserve">
+    <value>{0}: {1} × {2} px → {3} × {4} px</value>
+  </data>
+  <data name="Resize_PreviewSize" xml:space="preserve">
+    <value>{0}: {1} × {2} px → {3} KB or smaller</value>
+  </data>
+  <data name="Resize_PreviewUnknown" xml:space="preserve">
+    <value>{0}: size unknown</value>
+  </data>
+  <data name="Resize_TargetSizeName" xml:space="preserve">
+    <value>Target size in KB</value>
+  </data>
+  <data name="Resize_TargetSizeNote" xml:space="preserve">
+    <value>Works best with JPEG: quality is lowered first, then the image is made smaller. Other formats are only made smaller.</value>
+  </data>
+  <data name="Resize_Title" xml:space="preserve">
+    <value>Resize</value>
+  </data>
+  <data name="Resize_WidthName" xml:space="preserve">
+    <value>Width in pixels</value>
+  </data>
+  <data name="Result_Body" xml:space="preserve">
+    <value>Files that were saved are kept. The list shows what went wrong.</value>
+  </data>
+  <data name="Result_FailedHeading" xml:space="preserve">
+    <value>{0} of {1} files couldn't be edited</value>
+  </data>
+  <data name="Result_Item" xml:space="preserve">
+    <value>{0} — {1}</value>
+  </data>
+  <data name="Result_RecycleFailed" xml:space="preserve">
+    <value>{0} — the original couldn't be moved to the Recycle Bin.</value>
+  </data>
+  <data name="Result_RecycleHeading" xml:space="preserve">
+    <value>Some originals couldn't be deleted</value>
+  </data>
+  <data name="Rotate_180" xml:space="preserve">
+    <value>Rotate 180°</value>
+  </data>
+  <data name="Rotate_AutoRotate" xml:space="preserve">
+    <value>Auto-rotate photos using camera orientation</value>
+  </data>
+  <data name="Rotate_Button" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="Rotate_FlipHorizontal" xml:space="preserve">
+    <value>Flip horizontal</value>
+  </data>
+  <data name="Rotate_FlipVertical" xml:space="preserve">
+    <value>Flip vertical</value>
+  </data>
+  <data name="Rotate_GroupLabel" xml:space="preserve">
+    <value>Rotate or flip</value>
+  </data>
+  <data name="Rotate_Left90" xml:space="preserve">
+    <value>Rotate 90° left</value>
+  </data>
+  <data name="Rotate_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Rotate_ResetTip" xml:space="preserve">
+    <value>Go back to 90° right and the default auto-rotate setting.</value>
+  </data>
+  <data name="Rotate_Right90" xml:space="preserve">
+    <value>Rotate 90° right</value>
+  </data>
+  <data name="Rotate_Title" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="Run_FailedHeading" xml:space="preserve">
+    <value>Editing couldn't start</value>
+  </data>
+  <data name="Yes_Button" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+</root>

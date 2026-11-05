@@ -21,6 +21,7 @@ ohmyzip/
 
 ## 규칙
 
+- 공개 저장소(`woori-doweb/ohmyzip`)는 앱별 폴더 구조다(`ohmyzip/`, `ohmypic/`, 루트는 `../public-root/`). 반영은 커밋된 트리만 `python -X utf8 scripts/publish_apps_repo.py --message "..." --push`(REA 루트에서). 워크플로 `.github/workflows/release.yml` 의 파일 이름은 바꾸지 않는다(run_number = patch).
 - 빌드·시험: `dotnet build ohmyzip/OhMyZip.sln`, `dotnet test ohmyzip/tests/OhMyZip.Core.Tests`. 출력은 run `logs/` 에 남긴다.
 - fixtures 는 `../data/ohmyzip/fixtures/` (또는 `OHMYZIP_FIXTURES` 환경 변수)를 읽기 전용 원천으로 시험 임시 폴더에 복사해 쓴다. 원본을 고치지 않는다. fixtures 는 이 폴더(공개 저장소)에 넣지 않는다.
 - 이 폴더의 코드·주석·UI 문구·문서·파일 이름에 다른 압축 프로그램의 제품명·회사명·실행 파일명을 쓰지 않는다(2026-11-03 사용자 지시). 분석 자료는 `../sources/`·`../wiki/`·`../runs/` 에 둔다.

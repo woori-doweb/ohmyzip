@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Address_Name" xml:space="preserve">
+    <value>폴더 경로</value>
+  </data>
+  <data name="Browser_Empty" xml:space="preserve">
+    <value>이 폴더에는 이미지가 없습니다.</value>
+  </data>
+  <data name="Browser_ListName" xml:space="preserve">
+    <value>이미지</value>
+  </data>
+  <data name="Camera_DateTaken" xml:space="preserve">
+    <value>촬영 날짜</value>
+  </data>
+  <data name="Camera_Dimensions" xml:space="preserve">
+    <value>해상도</value>
+  </data>
+  <data name="Camera_Exposure" xml:space="preserve">
+    <value>노출 시간</value>
+  </data>
+  <data name="Camera_FNumber" xml:space="preserve">
+    <value>조리개</value>
+  </data>
+  <data name="Camera_FocalLength" xml:space="preserve">
+    <value>초점 거리</value>
+  </data>
+  <data name="Camera_Format" xml:space="preserve">
+    <value>형식</value>
+  </data>
+  <data name="Camera_Iso" xml:space="preserve">
+    <value>ISO</value>
+  </data>
+  <data name="Camera_Make" xml:space="preserve">
+    <value>제조사</value>
+  </data>
+  <data name="Camera_Model" xml:space="preserve">
+    <value>모델</value>
+  </data>
+  <data name="Clipboard_FailedReason" xml:space="preserve">
+    <value>다른 프로그램이 클립보드를 사용 중일 수 있습니다. 다시 시도하세요.</value>
+  </data>
+  <data name="Clipboard_FailedTitle" xml:space="preserve">
+    <value>클립보드를 사용할 수 없습니다</value>
+  </data>
+  <data name="Column_Dimensions" xml:space="preserve">
+    <value>해상도</value>
+  </data>
+  <data name="Column_Modified" xml:space="preserve">
+    <value>수정한 날짜</value>
+  </data>
+  <data name="Column_Name" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="Column_Size" xml:space="preserve">
+    <value>크기</value>
+  </data>
+  <data name="Column_Type" xml:space="preserve">
+    <value>종류</value>
+  </data>
+  <data name="Conflict_Body" xml:space="preserve">
+    <value>{0}에 같은 이름의 파일이 있습니다.</value>
+  </data>
+  <data name="Conflict_Heading" xml:space="preserve">
+    <value>"{0}"이(가) 이미 있습니다</value>
+  </data>
+  <data name="Conflict_KeepBoth" xml:space="preserve">
+    <value>모두 유지</value>
+  </data>
+  <data name="Conflict_Replace" xml:space="preserve">
+    <value>바꾸기</value>
+  </data>
+  <data name="Conflict_Skip" xml:space="preserve">
+    <value>건너뛰기</value>
+  </data>
+  <data name="CopyImage_Done" xml:space="preserve">
+    <value>"{0}"의 이미지를 클립보드에 복사했습니다.</value>
+  </data>
+  <data name="Copy_Done" xml:space="preserve">
+    <value>파일 {0}개를 클립보드에 복사했습니다.</value>
+  </data>
+  <data name="Cut_Done" xml:space="preserve">
+    <value>파일 {0}개를 잘라냈습니다. 다른 폴더에 붙여넣으면 이동합니다.</value>
+  </data>
+  <data name="Delete_BodyPermanent" xml:space="preserve">
+    <value>파일이 영구히 삭제되며 되살릴 수 없습니다.</value>
+  </data>
+  <data name="Delete_BodyRecycle" xml:space="preserve">
+    <value>파일은 휴지통으로 이동합니다.</value>
+  </data>
+  <data name="Delete_DonePermanent" xml:space="preserve">
+    <value>파일 {0}개를 삭제했습니다.</value>
+  </data>
+  <data name="Delete_DoneRecycle" xml:space="preserve">
+    <value>파일 {0}개를 휴지통으로 옮겼습니다.</value>
+  </data>
+  <data name="Delete_FailedBody" xml:space="preserve">
+    <value>나머지 파일은 삭제했습니다.</value>
+  </data>
+  <data name="Delete_FailedTitle" xml:space="preserve">
+    <value>파일 {0}개를 삭제하지 못했습니다</value>
+  </data>
+  <data name="Delete_HeadingMany" xml:space="preserve">
+    <value>파일 {0}개를 삭제할까요?</value>
+  </data>
+  <data name="Delete_HeadingOne" xml:space="preserve">
+    <value>"{0}"을(를) 삭제할까요?</value>
+  </data>
+  <data name="Delete_Verb" xml:space="preserve">
+    <value>삭제</value>
+  </data>
+  <data name="Dimensions_Format" xml:space="preserve">
+    <value>{0} × {1}</value>
+  </data>
+  <data name="Edit_Cancelled" xml:space="preserve">
+    <value>끝나기 전에 취소했습니다.</value>
+  </data>
+  <data name="Edit_Summary" xml:space="preserve">
+    <value>{0}개 저장, {1}개 건너뜀, {2}개 실패.</value>
+  </data>
+  <data name="Error_AccessDenied" xml:space="preserve">
+    <value>접근이 거부되었습니다. 읽기 전용이거나 보호된 파일일 수 있습니다.</value>
+  </data>
+  <data name="Error_Cancelled" xml:space="preserve">
+    <value>작업이 취소되었습니다.</value>
+  </data>
+  <data name="Error_CannotOpenTitle" xml:space="preserve">
+    <value>"{0}"을(를) 열 수 없습니다</value>
+  </data>
+  <data name="Error_CommandFailedBody" xml:space="preserve">
+    <value>다른 내용은 바뀌지 않았습니다. 자세한 내용: {0}</value>
+  </data>
+  <data name="Error_CommandFailedTitle" xml:space="preserve">
+    <value>명령을 마치지 못했습니다</value>
+  </data>
+  <data name="Error_DecodeFailed" xml:space="preserve">
+    <value>이미지 데이터가 손상되었거나 해석할 수 없습니다.</value>
+  </data>
+  <data name="Error_EncodeFailed" xml:space="preserve">
+    <value>이 형식으로 이미지를 저장하지 못했습니다.</value>
+  </data>
+  <data name="Error_FolderUnreadable" xml:space="preserve">
+    <value>"{0}" 폴더를 읽을 수 없습니다. {1}</value>
+  </data>
+  <data name="Error_Io" xml:space="preserve">
+    <value>파일을 읽거나 쓸 수 없습니다. 다른 프로그램이 사용 중일 수 있습니다.</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>파일이 더 이상 없습니다.</value>
+  </data>
+  <data name="Error_PathNotFound" xml:space="preserve">
+    <value>"{0}"을(를) 찾을 수 없습니다.</value>
+  </data>
+  <data name="Error_ReasonWithDetail" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="Error_TargetSize" xml:space="preserve">
+    <value>요청한 파일 크기로 줄일 수 없습니다.</value>
+  </data>
+  <data name="Error_TooLarge" xml:space="preserve">
+    <value>이미지가 너무 커서 열 수 없습니다.</value>
+  </data>
+  <data name="Error_Unknown" xml:space="preserve">
+    <value>예상하지 못한 문제가 생겼습니다.</value>
+  </data>
+  <data name="Error_Unsupported" xml:space="preserve">
+    <value>지원하지 않는 파일 형식입니다.</value>
+  </data>
+  <data name="Filter_AllFiles" xml:space="preserve">
+    <value>모든 파일</value>
+  </data>
+  <data name="Filter_Images" xml:space="preserve">
+    <value>이미지 파일</value>
+  </data>
+  <data name="Format_Bmp" xml:space="preserve">
+    <value>BMP 이미지</value>
+  </data>
+  <data name="Format_Gif" xml:space="preserve">
+    <value>GIF 이미지</value>
+  </data>
+  <data name="Format_Jpeg" xml:space="preserve">
+    <value>JPEG 이미지</value>
+  </data>
+  <data name="Format_Png" xml:space="preserve">
+    <value>PNG 이미지</value>
+  </data>
+  <data name="Format_Tiff" xml:space="preserve">
+    <value>TIFF 이미지</value>
+  </data>
+  <data name="Help_MissingBody" xml:space="preserve">
+    <value>도움말 파일을 찾을 수 없습니다: {0}</value>
+  </data>
+  <data name="Help_MissingTitle" xml:space="preserve">
+    <value>도움말을 열 수 없습니다</value>
+  </data>
+  <data name="Help_OpenFailed" xml:space="preserve">
+    <value>도움말 파일을 열 프로그램이 없습니다.</value>
+  </data>
+  <data name="Language_NextStart" xml:space="preserve">
+    <value>바뀐 언어는 ohMypic을 다시 시작하면 적용됩니다.</value>
+  </data>
+  <data name="Navigator_Name" xml:space="preserve">
+    <value>내비게이터</value>
+  </data>
+  <data name="Pane_CameraEmpty" xml:space="preserve">
+    <value>카메라 정보가 없습니다.</value>
+  </data>
+  <data name="Pane_CameraHeading" xml:space="preserve">
+    <value>카메라 정보</value>
+  </data>
+  <data name="Pane_ManySelected" xml:space="preserve">
+    <value>이미지 {0}개 선택됨</value>
+  </data>
+  <data name="Pane_PreviewHeading" xml:space="preserve">
+    <value>미리보기</value>
+  </data>
+  <data name="Paste_Done" xml:space="preserve">
+    <value>파일 {0}개를 붙여넣고 {1}개를 건너뛰었습니다.</value>
+  </data>
+  <data name="Paste_FailedBody" xml:space="preserve">
+    <value>나머지 파일은 붙여넣었습니다.</value>
+  </data>
+  <data name="Paste_FailedTitle" xml:space="preserve">
+    <value>파일 {0}개를 붙여넣지 못했습니다</value>
+  </data>
+  <data name="Paste_NothingToPaste" xml:space="preserve">
+    <value>클립보드에 붙여넣을 파일이 없습니다.</value>
+  </data>
+  <data name="Print_FailedReason" xml:space="preserve">
+    <value>프린터에서 문제가 보고되었습니다.</value>
+  </data>
+  <data name="Print_FailedTitle" xml:space="preserve">
+    <value>"{0}"을(를) 인쇄할 수 없습니다</value>
+  </data>
+  <data name="Print_Sent" xml:space="preserve">
+    <value>"{0}"을(를) 프린터로 보냈습니다.</value>
+  </data>
+  <data name="Problem_Line" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Properties_FailedTitle" xml:space="preserve">
+    <value>"{0}"의 속성을 표시할 수 없습니다</value>
+  </data>
+  <data name="Rename_Done" xml:space="preserve">
+    <value>"{0}"(으)로 이름을 바꿨습니다.</value>
+  </data>
+  <data name="Rename_Empty" xml:space="preserve">
+    <value>이름을 입력하세요.</value>
+  </data>
+  <data name="Rename_Exists" xml:space="preserve">
+    <value>이 폴더에 "{0}"이(가) 이미 있습니다.</value>
+  </data>
+  <data name="Rename_FailedTitle" xml:space="preserve">
+    <value>"{0}"의 이름을 바꿀 수 없습니다</value>
+  </data>
+  <data name="Rename_Invalid" xml:space="preserve">
+    <value>파일 이름에는 \ / : * ? " &lt; &gt; | 문자를 쓸 수 없고 마침표로 끝날 수 없습니다.</value>
+  </data>
+  <data name="Rename_Prompt" xml:space="preserve">
+    <value>"{0}"의 새 이름:</value>
+  </data>
+  <data name="Rename_Title" xml:space="preserve">
+    <value>이름 바꾸기</value>
+  </data>
+  <data name="Rename_Verb" xml:space="preserve">
+    <value>이름 바꾸기</value>
+  </data>
+  <data name="Rotate_DontSave" xml:space="preserve">
+    <value>저장 안 함</value>
+  </data>
+  <data name="Rotate_Save" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="Rotate_SaveBody" xml:space="preserve">
+    <value>회전한 이미지로 파일을 덮어씁니다. JPEG 파일은 크기가 맞으면 화질 손실 없이 회전합니다.</value>
+  </data>
+  <data name="Rotate_SaveFailedTitle" xml:space="preserve">
+    <value>"{0}"의 회전을 저장하지 못했습니다</value>
+  </data>
+  <data name="Rotate_SaveHeading" xml:space="preserve">
+    <value>"{0}"의 회전을 저장할까요?</value>
+  </data>
+  <data name="Rotate_Saved" xml:space="preserve">
+    <value>"{0}"에 회전을 저장했습니다.</value>
+  </data>
+  <data name="SaveAs_DefaultName" xml:space="preserve">
+    <value>{0} 사본</value>
+  </data>
+  <data name="SaveAs_Done" xml:space="preserve">
+    <value>"{0}"을(를) 저장했습니다.</value>
+  </data>
+  <data name="SaveAs_FailedTitle" xml:space="preserve">
+    <value>"{0}"을(를) 저장할 수 없습니다</value>
+  </data>
+  <data name="Settings_LoadFailed" xml:space="preserve">
+    <value>설정을 읽지 못해 기본값을 사용합니다. {0}</value>
+  </data>
+  <data name="Settings_SaveFailedTitle" xml:space="preserve">
+    <value>설정을 저장하지 못했습니다</value>
+  </data>
+  <data name="Size_Bytes" xml:space="preserve">
+    <value>{0}바이트</value>
+  </data>
+  <data name="Size_GB" xml:space="preserve">
+    <value>{0}GB</value>
+  </data>
+  <data name="Size_KB" xml:space="preserve">
+    <value>{0}KB</value>
+  </data>
+  <data name="Size_MB" xml:space="preserve">
+    <value>{0}MB</value>
+  </data>
+  <data name="Slideshow_Exit" xml:space="preserve">
+    <value>연속보기 끝내기</value>
+  </data>
+  <data name="Slideshow_Next" xml:space="preserve">
+    <value>다음</value>
+  </data>
+  <data name="Slideshow_Pause" xml:space="preserve">
+    <value>일시 정지</value>
+  </data>
+  <data name="Slideshow_Paused" xml:space="preserve">
+    <value>일시 정지됨</value>
+  </data>
+  <data name="Slideshow_Previous" xml:space="preserve">
+    <value>이전</value>
+  </data>
+  <data name="Slideshow_Resume" xml:space="preserve">
+    <value>계속</value>
+  </data>
+  <data name="Slideshow_Title" xml:space="preserve">
+    <value>연속보기</value>
+  </data>
+  <data name="Status_Count" xml:space="preserve">
+    <value>이미지 {0}개</value>
+  </data>
+  <data name="Status_Selection" xml:space="preserve">
+    <value>{0}개 선택 ({1})</value>
+  </data>
+  <data name="Title_Format" xml:space="preserve">
+    <value>{0} — ohMypic</value>
+  </data>
+  <data name="Token_InvalidHex" xml:space="preserve">
+    <value>"{0}"은(는) #RRGGBB 형식의 색이 아닙니다.</value>
+  </data>
+  <data name="Toolbar_BrowserName" xml:space="preserve">
+    <value>목록보기 도구 모음</value>
+  </data>
+  <data name="Toolbar_ViewerName" xml:space="preserve">
+    <value>크게보기 도구 모음</value>
+  </data>
+  <data name="Tree_Name" xml:space="preserve">
+    <value>폴더</value>
+  </data>
+  <data name="TypeName_Format" xml:space="preserve">
+    <value>{0} 이미지</value>
+  </data>
+  <data name="Unexpected_Body" xml:space="preserve">
+    <value>예상하지 못한 문제가 생겼지만 ohMypic은 계속 실행됩니다. 자세한 내용: {0}</value>
+  </data>
+  <data name="Unexpected_Title" xml:space="preserve">
+    <value>문제가 생겼습니다</value>
+  </data>
+  <data name="Viewer_Position" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="Viewer_Rotated" xml:space="preserve">
+    <value>{0}° 회전됨 (저장 안 됨)</value>
+  </data>
+  <data name="Viewer_Status" xml:space="preserve">
+    <value>{0}   {1}   {2} × {3}   {4}%</value>
+  </data>
+</root>

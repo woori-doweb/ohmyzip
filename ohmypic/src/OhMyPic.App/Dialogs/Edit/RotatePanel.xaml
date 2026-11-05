@@ -1,0 +1,53 @@
+<UserControl x:Class="OhMyPic.App.Dialogs.Edit.RotatePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+             AutomationProperties.Name="{x:Static res:EditText.Rotate_GroupLabel}"
+             AutomationProperties.AutomationId="OP-Edit-Rotate">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="{x:Static res:EditText.Rotate_GroupLabel}" FontWeight="SemiBold" Margin="0,0,0,6" />
+            <RadioButton x:Name="Right90Radio" GroupName="OpEditRotateOperation" Content="{x:Static res:EditText.Rotate_Right90}" Foreground="{DynamicResource Op.Text}"
+                         MinHeight="28" VerticalContentAlignment="Center" Checked="OnOperationChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Rotate_Right90}" AutomationProperties.AutomationId="OP-Edit-Rotate-Right90" />
+            <RadioButton x:Name="Left90Radio" GroupName="OpEditRotateOperation" Content="{x:Static res:EditText.Rotate_Left90}" Foreground="{DynamicResource Op.Text}"
+                         MinHeight="28" VerticalContentAlignment="Center" Checked="OnOperationChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Rotate_Left90}" AutomationProperties.AutomationId="OP-Edit-Rotate-Left90" />
+            <RadioButton x:Name="Rotate180Radio" GroupName="OpEditRotateOperation" Content="{x:Static res:EditText.Rotate_180}" Foreground="{DynamicResource Op.Text}"
+                         MinHeight="28" VerticalContentAlignment="Center" Checked="OnOperationChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Rotate_180}" AutomationProperties.AutomationId="OP-Edit-Rotate-180" />
+            <RadioButton x:Name="FlipHorizontalRadio" GroupName="OpEditRotateOperation" Content="{x:Static res:EditText.Rotate_FlipHorizontal}" Foreground="{DynamicResource Op.Text}"
+                         MinHeight="28" VerticalContentAlignment="Center" Checked="OnOperationChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Rotate_FlipHorizontal}" AutomationProperties.AutomationId="OP-Edit-Rotate-FlipHorizontal" />
+            <RadioButton x:Name="FlipVerticalRadio" GroupName="OpEditRotateOperation" Content="{x:Static res:EditText.Rotate_FlipVertical}" Foreground="{DynamicResource Op.Text}"
+                         MinHeight="28" VerticalContentAlignment="Center" Checked="OnOperationChanged"
+                         AutomationProperties.Name="{x:Static res:EditText.Rotate_FlipVertical}" AutomationProperties.AutomationId="OP-Edit-Rotate-FlipVertical" />
+            <Button x:Name="ResetButton" Content="{x:Static res:EditText.Rotate_Reset}" Style="{StaticResource Op.Button}" HorizontalAlignment="Left" Margin="0,8,0,0" Click="OnReset"
+                    ToolTip="{x:Static res:EditText.Rotate_ResetTip}"
+                    AutomationProperties.Name="{x:Static res:EditText.Rotate_Reset}" AutomationProperties.HelpText="{x:Static res:EditText.Rotate_ResetTip}"
+                    AutomationProperties.AutomationId="OP-Edit-Rotate-Reset" />
+            <CheckBox x:Name="AutoRotateBox" Content="{x:Static res:EditText.Rotate_AutoRotate}" Margin="0,14,0,0" Foreground="{DynamicResource Op.Text}"
+                      MinHeight="24" VerticalContentAlignment="Center" Checked="OnAutoRotateChanged" Unchecked="OnAutoRotateChanged"
+                      AutomationProperties.Name="{x:Static res:EditText.Rotate_AutoRotate}" AutomationProperties.AutomationId="OP-Edit-Rotate-AutoRotate" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Margin="20,0,0,0" Width="200">
+            <TextBlock Text="{x:Static res:EditText.Preview_Label}" FontWeight="SemiBold" Margin="0,0,0,6" />
+            <Border Height="200" BorderBrush="{DynamicResource Op.Border}" BorderThickness="1" Background="{DynamicResource Op.Chrome}" CornerRadius="4">
+                <Grid>
+                    <Image x:Name="PreviewImage" Stretch="Uniform" Margin="6" RenderOptions.BitmapScalingMode="HighQuality"
+                           AutomationProperties.Name="{x:Static res:EditText.Preview_Label}" AutomationProperties.AutomationId="OP-Edit-Rotate-Preview" />
+                    <TextBlock x:Name="PreviewMessage" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="10"
+                               Foreground="{DynamicResource Op.SecondaryText}" FontSize="{StaticResource Op.SecondarySize}" />
+                </Grid>
+            </Border>
+            <TextBlock x:Name="PreviewCaption" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource Op.SecondaryText}"
+                       FontSize="{StaticResource Op.SecondarySize}" AutomationProperties.AutomationId="OP-Edit-Rotate-PreviewCaption" />
+        </StackPanel>
+    </Grid>
+</UserControl>

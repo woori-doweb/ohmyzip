@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    App UI strings. *.resx = English (neutral), *.ko.resx = Korean satellite assembly.
+    The WPF temporary markup compile (_wpftmp) cannot see resx-generated classes, so the strings live in this
+    separate library and the app (including XAML x:Static) references it.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>OhMyPic.App.Text</RootNamespace>
+    <NeutralLanguage>en</NeutralLanguage>
+    <SatelliteResourceLanguages>ko</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- resx files stay at the project root: the manifest name (root namespace + folder + file) must match the generated class name. -->
+    <EmbeddedResource Update="*.resx">
+      <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+      <StronglyTypedNamespace>OhMyPic.App.Text</StronglyTypedNamespace>
+      <StronglyTypedClassName>%(Filename)</StronglyTypedClassName>
+      <StronglyTypedFileName>$(IntermediateOutputPath)%(Filename).Designer.cs</StronglyTypedFileName>
+      <PublicClass>true</PublicClass>
+    </EmbeddedResource>
+    <!-- Translations do not generate a class. -->
+    <EmbeddedResource Update="*.ko.resx">
+      <StronglyTypedLanguage></StronglyTypedLanguage>
+      <StronglyTypedNamespace></StronglyTypedNamespace>
+      <StronglyTypedClassName></StronglyTypedClassName>
+      <StronglyTypedFileName></StronglyTypedFileName>
+      <PublicClass></PublicClass>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

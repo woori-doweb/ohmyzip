@@ -1,0 +1,24 @@
+<Window x:Class="OhMyPic.App.Dialogs.Edit.RotateDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+        xmlns:edit="clr-namespace:OhMyPic.App.Dialogs.Edit"
+        Style="{StaticResource Op.WindowStyle}"
+        Title="{x:Static res:EditText.Rotate_Title}" Width="600" SizeToContent="Height"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        AutomationProperties.Name="{x:Static res:EditText.Rotate_Title}"
+        AutomationProperties.AutomationId="OP-RotateDialog">
+    <StackPanel Margin="20,18,20,16">
+        <TextBlock x:Name="HeadingText" FontSize="15" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Margin="0,0,0,14"
+                   AutomationProperties.AutomationId="OP-Rotate-Heading" />
+        <edit:RotatePanel x:Name="OptionsPanel" />
+        <Border Height="1" Background="{DynamicResource Op.Border}" Margin="0,16" />
+        <edit:OutputOptionsControl x:Name="OutputPanel" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button x:Name="ConfirmButton" Content="{x:Static res:EditText.Rotate_Button}" IsDefault="True" Style="{StaticResource Op.Button}" Click="OnConfirm"
+                    AutomationProperties.Name="{x:Static res:EditText.Rotate_Button}" AutomationProperties.AutomationId="OP-Rotate-Confirm" />
+            <Button Content="{x:Static res:EditText.Cancel_Button}" IsCancel="True" Style="{StaticResource Op.Button}"
+                    AutomationProperties.Name="{x:Static res:EditText.Cancel_Button}" AutomationProperties.AutomationId="OP-Rotate-Cancel" />
+        </StackPanel>
+    </StackPanel>
+</Window>
