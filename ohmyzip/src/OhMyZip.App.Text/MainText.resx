@@ -304,6 +304,9 @@ Check the path, or choose the file again with Open (Ctrl+O).</value>
   <data name="CreateFailed_Title" xml:space="preserve">
     <value>Couldn't Create the Archive</value>
   </data>
+  <data name="CompressToZip_NoTarget" xml:space="preserve">
+    <value>The archive name and location can't be chosen automatically. Select items that are in the same folder (a whole drive can't be used), or use {0} to choose them yourself.</value>
+  </data>
   <data name="PickFilesToAdd_Title" xml:space="preserve">
     <value>Select Files to Add to the Archive</value>
   </data>
@@ -565,6 +568,12 @@ Run ohmyZip as administrator and update again, or move ohmyZip to a folder you c
   </data>
   <data name="FileTypes_UnregisterFailed" xml:space="preserve">
     <value>ohmyZip: couldn't unregister file associations — {0}</value>
+  </data>
+  <data name="ShellMenu_RegisterFailed" xml:space="preserve">
+    <value>ohmyZip: couldn't register the File Explorer menu — {0}</value>
+  </data>
+  <data name="ShellMenu_UnregisterFailed" xml:space="preserve">
+    <value>ohmyZip: couldn't unregister the File Explorer menu — {0}</value>
   </data>
   <data name="Recycle_Failed" xml:space="preserve">
     <value>Couldn't move the file to the Recycle Bin (error code 0x{0:X}).</value>

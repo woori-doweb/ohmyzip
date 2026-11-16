@@ -13,7 +13,7 @@ using OhMyZip.Core;
 
 namespace OhMyZip.App;
 
-/// <summary>압축 파일·항목 명령: 열기(암호)·테스트·풀기·알아서 풀기·새 압축·수정·설명·클립보드·파일 작업·도움말.</summary>
+/// <summary>압축 파일·항목 명령: 열기(암호)·테스트·풀기·알아서 풀기·탐색기 메뉴 풀기·압축·새 압축·수정·설명·클립보드·파일 작업·도움말.</summary>
 public partial class MainWindow
 {
     private string? _clipboardTemp;
@@ -250,6 +250,106 @@ public partial class MainWindow
         await ExtractToAsync(a, destination, null, S.ExtractConflict, S.OpenFolderAfterExtract);
     }
 
+    /// <summary>
+    /// 탐색기 메뉴에서 시작한 명령(열기 제외)을 한 프로세스에서 실행한다.
+    /// 풀기 명령은 고른 압축 파일마다 차례로 실행하고 창을 닫는다.
+    /// 압축하기… 는 만들기 창을 고른 항목으로 열고, 만들면 새 압축 파일을 이 창에 열어 둔다(취소·실패하면 닫는다).
+    /// ZIP으로 압축은 묻지 않고 만든 뒤 끝낸다(종료 코드: 성공 0, 실패·취소 1).
+    /// </summary>
+    private async Task RunShellCommandAsync(ShellMenuCommand command, IReadOnlyList<string> paths)
+    {
+        switch (command)
+        {
+            case ShellMenuCommand.Compress:
+                if (await RunGuardedAsync(() => CreateWithDialogAsync(paths, ArchiveFormat.Zip)))
+                {
+                    StartAutoUpdate();
+                    return;
+                }
+                Close();
+                return;
+            case ShellMenuCommand.CompressToZip:
+                bool created = await RunGuardedAsync(() => CompressToZipAsync(paths));
+                Application.Current.Shutdown(created ? 0 : 1);
+                return;
+            default:
+                foreach (var path in paths) await ExtractFromShellAsync(command, path);
+                Close();
+                return;
+        }
+    }
+
+    /// <summary>탐색기 메뉴 작업을 실행한다. 예상하지 못한 오류는 오류 대화상자로 알리고 false.</summary>
+    private async Task<bool> RunGuardedAsync(Func<Task<bool>> work)
+    {
+        try
+        {
+            return await work();
+        }
+        catch (Exception ex)
+        {
+            MessageDialog.Error(this, MainText.OperationFailed_Title, ex.Message);
+            return false;
+        }
+    }
+
+    /// <summary>열기 여러 개(탐색기 메뉴): 첫 파일 말고는 파일마다 새 프로세스로 연다(인자 배열 "경로").</summary>
+    private void OpenInNewWindows(IEnumerable<string> paths)
+    {
+        var exe = App.ExecutablePath;
+        foreach (var path in paths)
+        {
+            var error = exe is null ? MainText.ExePathUnknown : StartSelf(exe, [path]);
+            if (error is null) continue;
+            MessageDialog.Error(this, MainText.NewWindowFailed_Title, error);
+            return;
+        }
+    }
+
+    /// <summary>
+    /// 탐색기 메뉴의 풀기 명령 하나: 압축 파일을 열고(암호가 필요하면 묻기) 명령을 실행한다.
+    /// 여기에 풀기 = 압축 파일이 있는 폴더, 폴더에 풀기 = 압축 파일 이름 폴더(이미 있으면 그 안에, 새 이름을 만들지 않음).
+    /// 두 경우 모두 충돌 정책·풀고 나서 폴더 열기는 환경 설정 값. 창은 호출한 쪽이 닫는다.
+    /// </summary>
+    private async Task ExtractFromShellAsync(ShellMenuCommand command, string path)
+    {
+        try
+        {
+            // 앞 압축 파일을 닫아, 이 파일을 열지 못했을 때 앞 파일을 다시 풀지 않게 한다.
+            if (_archive is not null) CloseArchive();
+            // 열기 실패는 OpenArchiveAsync 가 알리고, 암호 입력 취소는 조용히 끝난다.
+            await OpenArchiveAsync(path);
+            if (_archive is null) return;
+            var a = _archive;
+            string key = command == ShellMenuCommand.SmartExtract ? "archive.extract.smart" : "archive.extract";
+            if (DisabledReason(key) is { } reason)
+            {
+                MessageDialog.Error(this, MainText.ExtractFailed_Title, reason);
+                return;
+            }
+            var dir = Path.GetDirectoryName(a.FilePath) ?? "";
+            switch (command)
+            {
+                case ShellMenuCommand.Extract:
+                    await ExtractAsync();
+                    break;
+                case ShellMenuCommand.ExtractHere:
+                    await ExtractToAsync(a, dir, null, S.ExtractConflict, S.OpenFolderAfterExtract);
+                    break;
+                case ShellMenuCommand.ExtractToFolder:
+                    await ExtractToAsync(a, Path.Combine(dir, ExtractDialog.ArchiveBaseName(a.FilePath)), null, S.ExtractConflict, S.OpenFolderAfterExtract);
+                    break;
+                case ShellMenuCommand.SmartExtract:
+                    await SmartExtractAsync();
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageDialog.Error(this, MainText.OperationFailed_Title, ex.Message);
+        }
+    }
+
     private static string UniqueFolder(string path)
     {
         if (!Directory.Exists(path) && !File.Exists(path)) return path;
@@ -347,19 +447,52 @@ public partial class MainWindow
             CheckFileExists = true,
         };
         if (pick.ShowDialog(this) != true || pick.FileNames.Length == 0) return;
-        var dlg = CreateArchiveDialog.Ask(this, pick.FileNames, S);
-        if (dlg is null) return;
+        await CreateWithDialogAsync(pick.FileNames, null);
+    }
 
+    /// <summary>
+    /// 새 압축 대화상자를 sources 로 채워 열고, 확인하면 만든 뒤 새 압축 파일을 연다.
+    /// format 이 있으면 환경 설정의 기본 형식 대신 그 형식으로 시작한다. 만들었으면 true.
+    /// </summary>
+    private async Task<bool> CreateWithDialogAsync(IEnumerable<string> sources, ArchiveFormat? format)
+    {
+        var dlg = CreateArchiveDialog.Ask(this, sources, S, format);
+        if (dlg is null) return false;
         var target = dlg.Target;
-        var sources = dlg.Sources.ToList();
-        var options = dlg.Options;
-        var engine = Archives.For(options.Format);
         bool replace = dlg.ReplaceExisting && File.Exists(target);
-        if (replace && options.VolumeSize is not null)
+        if (replace && dlg.Options.VolumeSize is not null)
         {
             MessageDialog.Error(this, MainText.CreateBlocked_Title, MainText.Create_SplitReplace);
-            return;
+            return false;
         }
+        return await CreateArchiveAsync(target, dlg.Sources.ToList(), dlg.Options, replace, openAfter: true);
+    }
+
+    /// <summary>
+    /// ZIP으로 압축(탐색기 메뉴): 묻지 않고 첫 항목의 폴더에 ZIP 을 만든다.
+    /// 이름·위치는 <see cref="SelectionList.CompressTargetPath"/>(같은 이름이 있으면 "이름 (2).zip"…), 압축 수준은 환경 설정 기본값.
+    /// 항목들의 부모 폴더가 다르거나 이름을 정할 수 없으면 오류 대화상자. 만들었으면 true.
+    /// </summary>
+    private async Task<bool> CompressToZipAsync(IReadOnlyList<string> paths)
+    {
+        var sources = paths.Select(Path.GetFullPath).ToList();
+        if (SelectionList.CompressTargetPath(sources) is not { } target)
+        {
+            MessageDialog.Error(this, MainText.CreateFailed_Title,
+                string.Format(MainText.CompressToZip_NoTarget, ShellMenu.Label(ShellMenuCommand.Compress)));
+            return false;
+        }
+        var options = new CreateOptions { Format = ArchiveFormat.Zip, Level = Math.Clamp(S.CreateLevel, 0, 9) };
+        return await CreateArchiveAsync(target, sources, options, replace: false, openAfter: false);
+    }
+
+    /// <summary>
+    /// 새 압축을 만들고 결과를 알린다. replace = 이미 있는 대상을 바꾸기로 동의함.
+    /// openAfter 면 만든 압축 파일을 이 창에 연다. 만들었으면 true.
+    /// </summary>
+    private async Task<bool> CreateArchiveAsync(string target, IReadOnlyList<string> sources, CreateOptions options, bool replace, bool openAfter)
+    {
+        var engine = Archives.For(options.Format);
 
         // 덮어쓰기를 허락받았어도 새 압축이 성공할 때까지 기존 파일을 지우지 않는다.
         var ext = Archives.DefaultExtension(options.Format);
@@ -387,6 +520,7 @@ public partial class MainWindow
         {
             case OperationStatus.Succeeded:
                 if (result.Problems.Count > 0) MessageDialog.Result(this, MainText.CreateProblems_Title, result);
+                if (!openAfter) break;
                 // 7Z 분할은 name.7z.001… 로 만들어진다.
                 var open = !File.Exists(target) && File.Exists(target + ".001") ? target + ".001" : target;
                 await OpenArchiveAsync(open, read: string.IsNullOrEmpty(options.Password) ? null : new ReadOptions { Password = options.Password });
@@ -408,6 +542,7 @@ public partial class MainWindow
                 MessageDialog.Result(this, MainText.CreateFailed_Title, result);
                 break;
         }
+        return result.Succeeded;
     }
 
     // ───────────────────────── 항목 명령(수정) ─────────────────────────

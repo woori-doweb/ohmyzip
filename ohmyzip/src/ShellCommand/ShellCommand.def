@@ -1,0 +1,4 @@
+LIBRARY ShellCommand
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

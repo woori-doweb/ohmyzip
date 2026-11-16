@@ -534,8 +534,61 @@ System.Security.Cryptography.ProtectedData 9.0.10 — MIT License (Copyright (c)
   <data name="Pref_FileAssocImmediateNote" xml:space="preserve">
     <value>이 페이지의 단추는 누르는 즉시 적용됩니다. 아래 확인·취소와는 관계없습니다.</value>
   </data>
-  <data name="Pref_ShellMenuStatus" xml:space="preserve">
-    <value>ⓘ 시스템 등록은 사용자 동의 후 — 준비 중. 지금은 탐색기 오른쪽 클릭 메뉴를 등록하지 않습니다.</value>
+  <data name="Pref_ShellMenuItems" xml:space="preserve">
+    <value>압축 파일의 메뉴 항목(ohmyZip 아래): {0}. 대상 확장자: {1}. 그 밖의 파일·폴더의 메뉴 항목: {2}.</value>
+  </data>
+  <data name="Pref_ShellMenuNote" xml:space="preserve">
+    <value>여러 항목을 골라 실행해도 ohmyZip 은 한 번만 실행됩니다. 압축 파일은 차례로 풀고, '열기'는 압축 파일마다 창을 하나씩 열며, 압축하기 항목은 고른 항목을 모두 압축 파일 하나에 넣습니다. 묻지 않고 푸는 항목은 '압축 풀기' 페이지의 충돌 처리와 '풀고 나서 폴더 열기' 설정을 따릅니다. 'ZIP으로 압축'은 묻지 않고 고른 항목 옆에 '이름.zip'(이미 있으면 '이름 (2).zip')을 '압축하기' 페이지의 기본 압축 수준으로 만들므로, 고른 항목이 같은 폴더에 있어야 합니다. 현재 사용자 범위에만 기록하며 관리자 권한이 필요하지 않고, 파일 연결은 바꾸지 않습니다.</value>
+  </data>
+  <data name="Pref_ShellMenuWindows11Note" xml:space="preserve">
+    <value>Windows 11 에서는 오른쪽 클릭 후 '추가 옵션 표시'(Shift+F10) 아래에 나타납니다.</value>
+  </data>
+  <data name="Pref_ShellMenuLanguageNote" xml:space="preserve">
+    <value>메뉴 문구는 등록할 때의 화면 언어로 기록됩니다. 언어를 바꾼 뒤에는 다시 등록해야 메뉴 문구가 바뀝니다.</value>
+  </data>
+  <data name="Pref_ShellMenuRegister_Button" xml:space="preserve">
+    <value>등록…</value>
+  </data>
+  <data name="Pref_ShellMenuUnregister_Button" xml:space="preserve">
+    <value>등록 해제</value>
+  </data>
+  <data name="Pref_ShellMenuRegistered" xml:space="preserve">
+    <value>ⓘ 등록됨 — 탐색기에서 파일이나 폴더를 오른쪽 클릭하고 ohmyZip 을 고르세요.</value>
+  </data>
+  <data name="Pref_ShellMenuRegisteredElsewhere" xml:space="preserve">
+    <value>ⓘ 일부만 등록됐거나 다른 위치의 ohmyZip 이 등록돼 있음 — 다시 등록하면 이 위치로 바로잡습니다.</value>
+  </data>
+  <data name="Pref_ShellMenuNotRegistered" xml:space="preserve">
+    <value>ⓘ 등록되지 않음 — 탐색기 오른쪽 클릭 메뉴에 ohmyZip 이 없습니다.</value>
+  </data>
+  <data name="Pref_ShellMenuRegister_Title" xml:space="preserve">
+    <value>탐색기 오른쪽 클릭 메뉴에 ohmyZip 을 등록할까요?</value>
+  </data>
+  <data name="Pref_ShellMenuRegisterBody" xml:space="preserve">
+    <value>현재 사용자(HKCU) 범위에만 기록하며 관리자 권한이 필요하지 않습니다. 파일 연결과 기본 프로그램 설정은 바꾸지 않습니다.
+되돌리기: 이 페이지의 '등록 해제' (또는 ohmyZip.exe --unregister-shell-menu).
+
+압축 파일의 메뉴 항목(ohmyZip 아래): {0}
+대상 확장자: {1}
+그 밖의 파일·폴더의 메뉴 항목: {2}
+실행 파일: {3}
+메뉴 명령 처리기: {4}
+기록할 메뉴 키(확장자마다 하나 + 그 밖의 파일·폴더 하나, 그 아래 메뉴 항목 키 포함):
+  {5}
+기록할 명령 처리기 키(메뉴 항목마다 하나):
+  {6}</value>
+  </data>
+  <data name="Pref_ShellMenuRegisterFailed_Title" xml:space="preserve">
+    <value>탐색기 메뉴를 등록하지 못했습니다</value>
+  </data>
+  <data name="Pref_ShellMenuUnregisterFailed_Title" xml:space="preserve">
+    <value>탐색기 메뉴 등록을 해제하지 못했습니다</value>
+  </data>
+  <data name="Pref_ShellMenuRegisterDone" xml:space="preserve">
+    <value>탐색기 메뉴에 추가했습니다.</value>
+  </data>
+  <data name="Pref_ShellMenuUnregisterDone" xml:space="preserve">
+    <value>탐색기 메뉴에서 제거했습니다.</value>
   </data>
   <data name="Pref_DestinationLabel" xml:space="preserve">
     <value>기본 해제 위치:</value>

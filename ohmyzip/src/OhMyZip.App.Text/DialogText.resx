@@ -534,8 +534,61 @@ If the new archive is created successfully, it replaces the existing file. If it
   <data name="Pref_FileAssocImmediateNote" xml:space="preserve">
     <value>Buttons on this page take effect immediately, regardless of OK or Cancel below.</value>
   </data>
-  <data name="Pref_ShellMenuStatus" xml:space="preserve">
-    <value>ⓘ Registering with the system requires your consent — coming soon. ohmyZip doesn't add items to the File Explorer context menu yet.</value>
+  <data name="Pref_ShellMenuItems" xml:space="preserve">
+    <value>Menu items for archives (under ohmyZip): {0}. Extensions: {1}. Menu items for any other file or folder: {2}.</value>
+  </data>
+  <data name="Pref_ShellMenuNote" xml:space="preserve">
+    <value>When you select several items, ohmyZip runs once for the whole selection: archives are extracted one after another, Open opens each archive in its own window, and the compress items put every selected item into one archive. Items that extract without asking follow the conflict handling and the open-folder option on the Extract page. Compress to ZIP doesn't ask: it creates name.zip next to the selected items (name (2).zip if that name is taken) with the default compression level on the Create Archives page, so the selected items must be in the same folder. Only the current user's settings are written, so administrator rights aren't needed, and file associations aren't changed.</value>
+  </data>
+  <data name="Pref_ShellMenuWindows11Note" xml:space="preserve">
+    <value>On Windows 11, the menu appears under Show more options (Shift+F10) after you right-click.</value>
+  </data>
+  <data name="Pref_ShellMenuLanguageNote" xml:space="preserve">
+    <value>Menu text is written in the display language at the time you register. After changing the language, register again to update the menu text.</value>
+  </data>
+  <data name="Pref_ShellMenuRegister_Button" xml:space="preserve">
+    <value>Register…</value>
+  </data>
+  <data name="Pref_ShellMenuUnregister_Button" xml:space="preserve">
+    <value>Unregister</value>
+  </data>
+  <data name="Pref_ShellMenuRegistered" xml:space="preserve">
+    <value>ⓘ Registered — right-click a file or folder in File Explorer and choose ohmyZip.</value>
+  </data>
+  <data name="Pref_ShellMenuRegisteredElsewhere" xml:space="preserve">
+    <value>ⓘ Only partly registered, or registered for ohmyZip in a different location — registering again fixes it for this location.</value>
+  </data>
+  <data name="Pref_ShellMenuNotRegistered" xml:space="preserve">
+    <value>ⓘ Not registered — ohmyZip isn't in the File Explorer right-click menu.</value>
+  </data>
+  <data name="Pref_ShellMenuRegister_Title" xml:space="preserve">
+    <value>Add ohmyZip to the File Explorer Menu?</value>
+  </data>
+  <data name="Pref_ShellMenuRegisterBody" xml:space="preserve">
+    <value>Only the current user (HKCU) scope is written, so administrator rights aren't needed. File associations and default apps aren't changed.
+To undo: Unregister on this page (or ohmyZip.exe --unregister-shell-menu).
+
+Menu items for archives (under ohmyZip): {0}
+Extensions: {1}
+Menu items for any other file or folder: {2}
+Program: {3}
+Menu command handler: {4}
+Menu keys to write (one for each extension and one for other files and folders, with the menu item keys under each):
+  {5}
+Command handler keys to write (one for each menu item):
+  {6}</value>
+  </data>
+  <data name="Pref_ShellMenuRegisterFailed_Title" xml:space="preserve">
+    <value>Couldn't Register the File Explorer Menu</value>
+  </data>
+  <data name="Pref_ShellMenuUnregisterFailed_Title" xml:space="preserve">
+    <value>Couldn't Unregister the File Explorer Menu</value>
+  </data>
+  <data name="Pref_ShellMenuRegisterDone" xml:space="preserve">
+    <value>Added to the File Explorer menu.</value>
+  </data>
+  <data name="Pref_ShellMenuUnregisterDone" xml:space="preserve">
+    <value>Removed from the File Explorer menu.</value>
   </data>
   <data name="Pref_DestinationLabel" xml:space="preserve">
     <value>Default destination:</value>

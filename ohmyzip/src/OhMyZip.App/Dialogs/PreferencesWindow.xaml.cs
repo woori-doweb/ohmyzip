@@ -16,7 +16,7 @@ namespace OhMyZip.App.Dialogs;
 /// <summary>
 /// 환경 설정(F5). 9개 범주를 두고, 동작하는 설정과 '준비 중' 안내를 구분해 보여 준다.
 /// 확인 = 저장 + 적용, 취소 = 아무것도 바꾸지 않음, 초기화 = 확인 후 모든 설정을 기본값으로 저장 + 적용.
-/// 파일 연결 페이지의 단추는 확인·취소와 무관하게 누르는 즉시 현재 사용자(HKCU) 범위에 적용한다.
+/// 파일 연결·탐색기 메뉴 페이지의 단추는 확인·취소와 무관하게 누르는 즉시 현재 사용자(HKCU) 범위에 적용한다.
 /// </summary>
 public partial class PreferencesWindow : Window
 {
@@ -90,6 +90,8 @@ public partial class PreferencesWindow : Window
         SettingsPathText.Text = string.Format(DialogText.Pref_SettingsFile, AppSettings.FilePath);
         FileAssocExtensionsText.Text = string.Format(DialogText.Pref_FileAssocExtensions, ExtensionList);
         RefreshFileAssocStatus();
+        ShellMenuItemsText.Text = string.Format(DialogText.Pref_ShellMenuItems, ShellMenuItemList, JoinList(ShellMenu.Extensions), FileSystemObjectItemList);
+        RefreshShellMenuStatus();
         Load(_working);
         CategoryList.SelectedIndex = 0;
         Loaded += (_, _) => (CategoryList.ItemContainerGenerator.ContainerFromIndex(0) as UIElement)?.Focus();
@@ -178,42 +180,90 @@ public partial class PreferencesWindow : Window
         return answer == 0;
     }
 
-    // ───────────────────────── 파일 연결(즉시 적용) ─────────────────────────
+    // ───────────────────────── 파일 연결·탐색기 메뉴(즉시 적용) ─────────────────────────
 
-    private static string ExtensionList => string.Join(", ", FileAssociations.Extensions);
+    private static string JoinList(IEnumerable<string> items) => string.Join(", ", items);
 
     private static bool IsRegistryError(Exception ex) =>
         ex is UnauthorizedAccessException or SecurityException or IOException or ArgumentException;
 
-    private void RefreshFileAssocStatus()
+    /// <summary>
+    /// 등록 상태 문장과 단추 활성을 맞춘다(파일 연결·탐색기 메뉴 공통). read 는 실행 파일 경로로 상태를 읽어 (문장, 무언가 등록돼 있는지)를 돌려준다.
+    /// 실행 파일 경로를 모르면 등록을 끄고, 등록돼 있지 않으면 해제를 끄며, 상태를 알 수 없으면 해제는 누를 수 있게 둔다.
+    /// </summary>
+    private static void RefreshRegistrationStatus(TextBlock status, Button register, Button unregister, Func<string, (string Text, bool Registered)> read)
     {
         string? exePath = Environment.ProcessPath;
-        FileAssocRegisterButton.IsEnabled = exePath is not null;
+        register.IsEnabled = exePath is not null;
         if (exePath is null)
         {
-            FileAssocStatusText.Text = DialogText.Pref_FileAssocNoExe;
-            FileAssocUnregisterButton.IsEnabled = true;
+            status.Text = DialogText.Pref_FileAssocNoExe;
+            unregister.IsEnabled = true;
             return;
         }
-        FileAssociationStatus status;
         try
         {
-            status = FileAssociations.GetStatus(Registry.CurrentUser, exePath);
+            (status.Text, unregister.IsEnabled) = read(exePath);
         }
         catch (Exception ex) when (IsRegistryError(ex))
         {
-            FileAssocStatusText.Text = string.Format(DialogText.Pref_FileAssocReadFailed, ex.Message);
-            FileAssocUnregisterButton.IsEnabled = true;
-            return;
+            status.Text = string.Format(DialogText.Pref_FileAssocReadFailed, ex.Message);
+            unregister.IsEnabled = true;
         }
-        FileAssocStatusText.Text = status switch
-        {
-            FileAssociationStatus.Registered => DialogText.Pref_FileAssocRegistered,
-            FileAssociationStatus.RegisteredElsewhere => DialogText.Pref_FileAssocRegisteredElsewhere,
-            _ => DialogText.Pref_FileAssocNotRegistered,
-        };
-        FileAssocUnregisterButton.IsEnabled = status != FileAssociationStatus.NotRegistered;
     }
+
+    /// <summary>
+    /// 등록하고 탐색기에 알린다. 실패하면 상태를 다시 읽고, 일부만 기록됐을 수 있으므로 해제는 항상 누를 수 있게 두고 알린 뒤 false.
+    /// </summary>
+    private bool TryRegister(Action register, Action refresh, Button unregister, string failedTitle)
+    {
+        try
+        {
+            register();
+            FileAssociations.NotifyShell();
+            return true;
+        }
+        catch (Exception ex) when (IsRegistryError(ex))
+        {
+            refresh();
+            unregister.IsEnabled = true;
+            MessageDialog.Error(this, failedTitle, string.Format(DialogText.Pref_RegisterPartial, ex.Message));
+            return false;
+        }
+    }
+
+    /// <summary>해제하고 탐색기에 알린다. 실패하면 상태를 다시 읽고 알린 뒤 false.</summary>
+    private bool TryUnregister(Action unregister, Action refresh, string failedTitle)
+    {
+        try
+        {
+            unregister();
+            FileAssociations.NotifyShell();
+            return true;
+        }
+        catch (Exception ex) when (IsRegistryError(ex))
+        {
+            refresh();
+            MessageDialog.Error(this, failedTitle, ex.Message);
+            return false;
+        }
+    }
+
+    /// <summary>알림 창 대신 상태 문장으로 알린 결과를 화면 읽기 프로그램이 읽도록 알린다(LiveSetting=Polite).</summary>
+    private static void Announce(TextBlock status) =>
+        (UIElementAutomationPeer.FromElement(status) ?? UIElementAutomationPeer.CreatePeerForElement(status))
+            ?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
+
+    private static string ExtensionList => JoinList(FileAssociations.Extensions);
+
+    private void RefreshFileAssocStatus() =>
+        RefreshRegistrationStatus(FileAssocStatusText, FileAssocRegisterButton, FileAssocUnregisterButton,
+            exePath => FileAssociations.GetStatus(Registry.CurrentUser, exePath) switch
+            {
+                FileAssociationStatus.Registered => (DialogText.Pref_FileAssocRegistered, true),
+                FileAssociationStatus.RegisteredElsewhere => (DialogText.Pref_FileAssocRegisteredElsewhere, true),
+                _ => (DialogText.Pref_FileAssocNotRegistered, false),
+            });
 
     private void OnFileAssocRegister(object sender, RoutedEventArgs e)
     {
@@ -230,48 +280,24 @@ public partial class PreferencesWindow : Window
                 FileAssociations.ClassesPath, FileAssociations.ProgId),
             null, [DialogText.Pref_Register_Button, DialogText.Cancel_Button], defaultIndex: 0, cancelIndex: 1);
         if (answer != 0) return;
-        try
-        {
-            FileAssociations.Register(Registry.CurrentUser, exePath);
-            FileAssociations.NotifyShell();
-        }
-        catch (Exception ex) when (IsRegistryError(ex))
-        {
-            RefreshFileAssocStatus();
-            // 일부만 기록됐을 수 있으므로 해제는 항상 누를 수 있게 둔다.
-            FileAssocUnregisterButton.IsEnabled = true;
-            MessageDialog.Error(this, DialogText.Pref_RegisterFailed_Title, string.Format(DialogText.Pref_RegisterPartial, ex.Message));
+        if (!TryRegister(() => FileAssociations.Register(Registry.CurrentUser, exePath), RefreshFileAssocStatus,
+                FileAssocUnregisterButton, DialogText.Pref_RegisterFailed_Title))
             return;
-        }
         RefreshFileAssocStatus();
         if (OpenDefaultAppsSettings())
             FileAssocStatusText.Text += " " + DialogText.Pref_RegisterDone;
-        AnnounceFileAssocStatus();
+        Announce(FileAssocStatusText);
     }
 
     private void OnFileAssocUnregister(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            FileAssociations.Unregister(Registry.CurrentUser);
-            FileAssociations.NotifyShell();
-        }
-        catch (Exception ex) when (IsRegistryError(ex))
-        {
-            RefreshFileAssocStatus();
-            MessageDialog.Error(this, DialogText.Pref_UnregisterFailed_Title, ex.Message);
+        if (!TryUnregister(() => FileAssociations.Unregister(Registry.CurrentUser), RefreshFileAssocStatus, DialogText.Pref_UnregisterFailed_Title))
             return;
-        }
         RefreshFileAssocStatus();
         // 상태 문장이 해제 전과 같을 수 있으므로(실행 파일 경로를 모를 때 등) 결과를 덧붙인다.
         FileAssocStatusText.Text += " " + DialogText.Pref_UnregisterDone;
-        AnnounceFileAssocStatus();
+        Announce(FileAssocStatusText);
     }
-
-    /// <summary>알림 창 대신 상태 문장으로 알린 결과를 화면 읽기 프로그램이 읽도록 알린다(LiveSetting=Polite).</summary>
-    private void AnnounceFileAssocStatus() =>
-        (UIElementAutomationPeer.FromElement(FileAssocStatusText) ?? UIElementAutomationPeer.CreatePeerForElement(FileAssocStatusText))
-            ?.RaiseAutomationEvent(AutomationEvents.LiveRegionChanged);
 
     private void OnFileAssocOpenSettings(object sender, RoutedEventArgs e) => OpenDefaultAppsSettings();
 
@@ -288,6 +314,55 @@ public partial class PreferencesWindow : Window
                 string.Format(DialogText.Pref_OpenSettingsFailedBody, ex.Message));
             return false;
         }
+    }
+
+    /// <summary>압축 파일의 탐색기 하위 메뉴에 보일 문구(지금 화면 언어, 표시 순서).</summary>
+    private static string ShellMenuItemList => JoinList(ShellMenu.Commands.Select(ShellMenu.Label));
+
+    /// <summary>그 밖의 파일·폴더의 탐색기 하위 메뉴에 보일 문구.</summary>
+    private static string FileSystemObjectItemList => JoinList(ShellMenu.FileSystemObjectCommands.Select(ShellMenu.Label));
+
+    private void RefreshShellMenuStatus() =>
+        RefreshRegistrationStatus(ShellMenuStatusText, ShellMenuRegisterButton, ShellMenuUnregisterButton,
+            exePath => ShellMenu.GetStatus(Registry.CurrentUser, exePath) switch
+            {
+                ShellMenuStatus.Registered => (DialogText.Pref_ShellMenuRegistered, true),
+                ShellMenuStatus.RegisteredElsewhere => (DialogText.Pref_ShellMenuRegisteredElsewhere, true),
+                _ => (DialogText.Pref_ShellMenuNotRegistered, false),
+            });
+
+    private void OnShellMenuRegister(object sender, RoutedEventArgs e)
+    {
+        string? exePath = Environment.ProcessPath;
+        if (exePath is null)
+        {
+            MessageDialog.Error(this, DialogText.Pref_ShellMenuRegisterFailed_Title, DialogText.Pref_ExePathUnknown);
+            return;
+        }
+        // 동의하기 전에 기록할 키를 빠짐없이 보인다: 메뉴 키(형식마다) + 명령 처리기 CLSID 키(명령마다).
+        string menuKeys = string.Join("\n  ", ShellMenu.MenuPaths.Select(path => @"HKCU\" + path));
+        string classKeys = string.Join("\n  ", ShellMenu.ClassIdPaths.Select(path => @"HKCU\" + path));
+        int answer = MessageDialog.Show(this, DialogKind.Question, DialogText.Pref_ShellMenuRegister_Title,
+            string.Format(DialogText.Pref_ShellMenuRegisterBody, ShellMenuItemList, JoinList(ShellMenu.Extensions), FileSystemObjectItemList,
+                exePath, ShellMenu.HandlerPath(exePath), menuKeys, classKeys),
+            null, [DialogText.Pref_Register_Button, DialogText.Cancel_Button], defaultIndex: 0, cancelIndex: 1);
+        if (answer != 0) return;
+        if (!TryRegister(() => ShellMenu.Register(Registry.CurrentUser, exePath), RefreshShellMenuStatus,
+                ShellMenuUnregisterButton, DialogText.Pref_ShellMenuRegisterFailed_Title))
+            return;
+        RefreshShellMenuStatus();
+        ShellMenuStatusText.Text += " " + DialogText.Pref_ShellMenuRegisterDone;
+        Announce(ShellMenuStatusText);
+    }
+
+    private void OnShellMenuUnregister(object sender, RoutedEventArgs e)
+    {
+        if (!TryUnregister(() => ShellMenu.Unregister(Registry.CurrentUser), RefreshShellMenuStatus, DialogText.Pref_ShellMenuUnregisterFailed_Title))
+            return;
+        RefreshShellMenuStatus();
+        // 상태 문장이 해제 전과 같을 수 있으므로(실행 파일 경로를 모를 때 등) 결과를 덧붙인다.
+        ShellMenuStatusText.Text += " " + DialogText.Pref_ShellMenuUnregisterDone;
+        Announce(ShellMenuStatusText);
     }
 
     /// <summary>apply 는 확인·초기화 때만 불린다(취소하면 아무것도 바꾸지 않음).</summary>

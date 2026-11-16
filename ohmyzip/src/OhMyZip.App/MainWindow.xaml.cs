@@ -26,7 +26,10 @@ public partial class MainWindow : Window
 {
     private const string AppName = "ohmyZip";
 
-    private readonly string? _startupPath;
+    /// <summary>시작할 때 받은 경로(탐색기에서 고른 순서). 없으면 빈 창으로 시작한다.</summary>
+    private readonly IReadOnlyList<string> _startupPaths;
+    /// <summary>탐색기 메뉴에서 시작한 명령(없으면 열기). 열기가 아니면 _startupPaths 로 실행한다(RunShellCommandAsync).</summary>
+    private readonly ShellMenuCommand? _startupCommand;
     /// <summary>상태줄 알림 한 줄(정보만 주는 결과·시작 시 문제). 다음 명령을 실행하면 지운다.</summary>
     private string? _notice;
     private readonly Dictionary<string, List<MenuItem>> _menuItems = new(StringComparer.Ordinal);
@@ -50,9 +53,10 @@ public partial class MainWindow : Window
 
     private static AppSettings S => AppSettings.Current;
 
-    public MainWindow(string? startupPath, string? settingsError)
+    public MainWindow(ShellMenuCommand? startupCommand, IReadOnlyList<string> startupPaths, string? settingsError)
     {
-        _startupPath = startupPath;
+        _startupPaths = startupPaths;
+        _startupCommand = startupCommand;
         // 설정을 못 읽으면 기본값(상태 표시줄 켜짐)으로 시작하므로 알림 창 대신 상태줄에 알린다.
         _notice = settingsError is null ? null : "\u26A0 " + settingsError;
         InitializeComponent();
@@ -74,8 +78,19 @@ public partial class MainWindow : Window
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         if (_notice is not null) AnnounceStatus();
+        if (_startupCommand is { } command && command != ShellMenuCommand.Open && _startupPaths.Count > 0)
+        {
+            // 탐색기 메뉴의 풀기·압축 명령: 실행한 뒤 창을 닫거나 남길지는 RunShellCommandAsync 가 정한다.
+            await RunShellCommandAsync(command, _startupPaths);
+            return;
+        }
         StartAutoUpdate();
-        if (_startupPath is not null) await OpenArchiveAsync(_startupPath);
+        if (_startupPaths.Count > 0)
+        {
+            // 열기 여러 개: 첫 파일은 이 창에, 나머지는 파일마다 새 프로세스로 연다.
+            OpenInNewWindows(_startupPaths.Skip(1));
+            await OpenArchiveAsync(_startupPaths[0]);
+        }
         if (_archive is null) EmptyOpenButton.Focus();
     }
 

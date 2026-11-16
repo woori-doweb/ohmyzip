@@ -46,7 +46,7 @@ public static class FileAssociations
     /// <summary>열기 명령 문자열: "실행 파일" "%1".</summary>
     public static string OpenCommand(string exePath) => $"\"{exePath}\" \"%1\"";
 
-    private static string IconValue(string exePath) => $"\"{exePath}\",0";
+    internal static string IconValue(string exePath) => $"\"{exePath}\",0";
 
     /// <summary>ProgId·Applications·Capabilities·RegisteredApplications·확장자별 OpenWithProgids 를 쓴다. 다시 부르면 경로를 갱신한다.</summary>
     public static void Register(RegistryKey root, string exePath)
@@ -157,7 +157,7 @@ public static class FileAssociations
     [DllImport("shell32.dll", ExactSpelling = true)]
     private static extern void SHChangeNotify(int eventId, uint flags, IntPtr item1, IntPtr item2);
 
-    private static void ValidateExePath(string exePath)
+    internal static void ValidateExePath(string exePath)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(exePath);
         if (!Path.IsPathFullyQualified(exePath))

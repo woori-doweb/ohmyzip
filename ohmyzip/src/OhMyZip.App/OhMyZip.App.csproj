@@ -33,4 +33,20 @@
     <None Include="HELP.en.md" Condition="Exists('HELP.en.md')" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- 탐색기 하위 메뉴 명령 처리기(네이티브 x64). DLL 이 없거나 원본보다 오래되면 build.py 로 다시 만든다. -->
+  <PropertyGroup>
+    <ShellCommandDir>$(MSBuildThisFileDirectory)..\ShellCommand\</ShellCommandDir>
+    <ShellCommandDll>$(ShellCommandDir)bin\x64\ShellCommand.dll</ShellCommandDll>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="$(ShellCommandDll)" Link="ShellCommand.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <Target Name="BuildShellCommand" BeforeTargets="BeforeBuild"
+          Inputs="$(ShellCommandDir)ShellCommand.cpp;$(ShellCommandDir)ShellCommand.def;$(ShellCommandDir)build.py"
+          Outputs="$(ShellCommandDll)">
+    <Exec Command="python -X utf8 &quot;$(ShellCommandDir)build.py&quot;" />
+  </Target>
+
 </Project>

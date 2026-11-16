@@ -45,7 +45,7 @@ public partial class CreateArchiveDialog : Window
     private readonly List<string> _sources = [];
     private ArchiveFormat _format;
 
-    private CreateArchiveDialog(IEnumerable<string> sources, AppSettings settings)
+    private CreateArchiveDialog(IEnumerable<string> sources, AppSettings settings, ArchiveFormat? format)
     {
         InitializeComponent();
         foreach (var s in sources) AddSource(s);
@@ -55,7 +55,8 @@ public partial class CreateArchiveDialog : Window
         SplitBox.ItemsSource = SplitPresets.Select(p => p.Label).ToList();
         SplitBox.SelectedIndex = 0;
 
-        _format = Formats.Any(f => f.Format == settings.CreateFormat) ? settings.CreateFormat : ArchiveFormat.Zip;
+        var initial = format ?? settings.CreateFormat;
+        _format = Formats.Any(f => f.Format == initial) ? initial : ArchiveFormat.Zip;
         TargetBox.Text = SuggestTarget(_format);
         FormatBox.SelectedIndex = IndexOf(_format);
         Loaded += (_, _) => { TargetBox.Focus(); TargetBox.SelectAll(); };
@@ -340,9 +341,10 @@ public partial class CreateArchiveDialog : Window
         DialogResult = true;
     }
 
-    public static CreateArchiveDialog? Ask(Window owner, IEnumerable<string> sources, AppSettings settings)
+    /// <summary>format 이 있으면 환경 설정의 기본 형식 대신 그 형식으로 시작한다(탐색기 메뉴의 압축하기… = ZIP).</summary>
+    public static CreateArchiveDialog? Ask(Window owner, IEnumerable<string> sources, AppSettings settings, ArchiveFormat? format = null)
     {
-        var dlg = new CreateArchiveDialog(sources, settings) { Owner = owner };
+        var dlg = new CreateArchiveDialog(sources, settings, format) { Owner = owner };
         var ok = dlg.ShowDialog() == true;
         if (!ok) dlg.ClearPasswords();
         return ok ? dlg : null;

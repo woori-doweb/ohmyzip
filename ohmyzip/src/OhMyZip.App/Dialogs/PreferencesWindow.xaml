@@ -93,8 +93,23 @@
                 <!-- 2 탐색기 메뉴 -->
                 <StackPanel Visibility="Collapsed">
                     <TextBlock Style="{StaticResource Pref.Heading}" Text="{x:Static res:DialogText.Pref_Category_ShellMenu}" />
-                    <TextBlock TextWrapping="Wrap" AutomationProperties.AutomationId="OZ-Pref-Status-ShellMenu"
-                               Text="{x:Static res:DialogText.Pref_ShellMenuStatus}" />
+                    <TextBlock x:Name="ShellMenuStatusText" TextWrapping="Wrap" AutomationProperties.AutomationId="OZ-Pref-Status-ShellMenu"
+                               AutomationProperties.LiveSetting="Polite" />
+                    <TextBlock x:Name="ShellMenuItemsText" Style="{StaticResource Pref.Note}" Margin="0,10,0,0" AutomationProperties.AutomationId="OZ-Pref-ShellMenu-Items" />
+                    <TextBlock Style="{StaticResource Pref.Note}"
+                               Text="{x:Static res:DialogText.Pref_ShellMenuNote}" />
+                    <TextBlock Style="{StaticResource Pref.Note}"
+                               Text="{x:Static res:DialogText.Pref_ShellMenuWindows11Note}" />
+                    <TextBlock Style="{StaticResource Pref.Note}"
+                               Text="{x:Static res:DialogText.Pref_ShellMenuLanguageNote}" />
+                    <WrapPanel Orientation="Horizontal" Margin="-4,14,0,0">
+                        <Button x:Name="ShellMenuRegisterButton" Content="{x:Static res:DialogText.Pref_ShellMenuRegister_Button}" Style="{StaticResource Oz.Button}" Margin="4,0,4,8"
+                                Click="OnShellMenuRegister" AutomationProperties.AutomationId="OZ-Pref-ShellMenu-Register" />
+                        <Button x:Name="ShellMenuUnregisterButton" Content="{x:Static res:DialogText.Pref_ShellMenuUnregister_Button}" Style="{StaticResource Oz.Button}" Margin="4,0,4,8"
+                                Click="OnShellMenuUnregister" AutomationProperties.AutomationId="OZ-Pref-ShellMenu-Unregister" />
+                    </WrapPanel>
+                    <TextBlock Style="{StaticResource Pref.Note}"
+                               Text="{x:Static res:DialogText.Pref_FileAssocImmediateNote}" />
                 </StackPanel>
 
                 <!-- 3 압축 풀기 -->

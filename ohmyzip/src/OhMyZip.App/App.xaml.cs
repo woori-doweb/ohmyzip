@@ -15,6 +15,8 @@ public partial class App : Application
 {
     private const string RegisterFileTypesArg = "--register-file-types";
     private const string UnregisterFileTypesArg = "--unregister-file-types";
+    private const string RegisterShellMenuArg = "--register-shell-menu";
+    private const string UnregisterShellMenuArg = "--unregister-shell-menu";
 
     private static readonly Lazy<HttpClient> SharedHttp = new(CreateHttp);
 
@@ -48,15 +50,24 @@ public partial class App : Application
         // 읽기 실패 문장은 기본값(Windows 표시 언어)으로 만들어지고, 그때 설정도 기본값이라 언어가 같다.
         var settingsError = AppSettings.Load();
         UiLanguage.Apply(AppSettings.Current.Language);
-        // 파일 연결 명령줄: 창 없이 현재 사용자(HKCU) 범위에 등록/해제하고 끝낸다(성공 0, 실패 1).
-        if (e.Args.Length > 0 && (IsArg(e.Args[0], RegisterFileTypesArg) || IsArg(e.Args[0], UnregisterFileTypesArg)))
+        // 파일 연결·탐색기 메뉴 명령줄: 창 없이 현재 사용자(HKCU) 범위에 등록/해제하고 끝낸다(성공 0, 실패 1).
+        if (e.Args.Length > 0 && RunRegistryCommand(e.Args[0]) is { } exitCode)
         {
-            Shutdown(RunFileTypesCommand(IsArg(e.Args[0], RegisterFileTypesArg)));
+            Shutdown(exitCode);
+            return;
+        }
+        // 탐색기 메뉴 처리기가 남긴 목록 파일 중 하루 넘은 것을 지운다(실패는 무시).
+        SelectionList.CleanupStale(SelectionList.DefaultDirectory, TimeSpan.FromDays(1), DateTime.UtcNow);
+        // 목록 모드에서 남은 경로가 없으면 창 없이 끝낸다.
+        if (!TryParseStartup(e.Args, out var startupCommand, out var startupPaths))
+        {
+            Shutdown(1);
             return;
         }
         _windowMode = true;
         ExecutablePath = Environment.ProcessPath;
-        StartupArgs = e.Args;
+        // 업데이트 뒤 다시 시작할 인자: 이 창에 연 압축 파일만(목록 파일은 이미 지웠고, 메뉴 명령은 다시 실행하지 않는다).
+        StartupArgs = (startupCommand is null or ShellMenuCommand.Open) && startupPaths.Count > 0 ? [startupPaths[0]] : [];
         StartupDirectory = Environment.CurrentDirectory;
         // 지난 업데이트 설치에서 이름을 바꿔 둔 옛 파일을 지운다(아직 쓰는 중이면 다음 실행에서 다시).
         try
@@ -67,8 +78,7 @@ public partial class App : Application
         ThemeManager.Override = AppSettings.Current.Theme;
         ThemeManager.ReduceMotion = AppSettings.Current.ReduceMotion;
         ThemeManager.Initialize(this);
-        // 첫 번째 명령줄 인자 = 열 압축 파일.
-        var window = new MainWindow(e.Args.Length > 0 ? e.Args[0] : null, settingsError);
+        var window = new MainWindow(startupCommand, startupPaths, settingsError);
         MainWindow = window;
         window.Show();
     }
@@ -119,28 +129,84 @@ public partial class App : Application
         return http;
     }
 
-    private static bool IsArg(string arg, string name) => string.Equals(arg, name, StringComparison.OrdinalIgnoreCase);
-
-    private static int RunFileTypesCommand(bool register)
+    /// <summary>
+    /// 등록 명령줄 인자면 실행하고 종료 코드(성공 0, 실패 1 + stderr 문장)를 돌려준다. 등록 명령줄이 아니면 null.
+    /// 인자는 대소문자를 가리지 않는다(상수는 모두 소문자 ASCII).
+    /// </summary>
+    private static int? RunRegistryCommand(string arg)
     {
+        Action run;
+        string failed;
+        switch (arg.ToLowerInvariant())
+        {
+            case RegisterFileTypesArg:
+                run = () => FileAssociations.Register(Registry.CurrentUser, RequireExePath());
+                failed = MainText.FileTypes_RegisterFailed;
+                break;
+            case UnregisterFileTypesArg:
+                run = () => FileAssociations.Unregister(Registry.CurrentUser);
+                failed = MainText.FileTypes_UnregisterFailed;
+                break;
+            case RegisterShellMenuArg:
+                run = () => ShellMenu.Register(Registry.CurrentUser, RequireExePath());
+                failed = MainText.ShellMenu_RegisterFailed;
+                break;
+            case UnregisterShellMenuArg:
+                run = () => ShellMenu.Unregister(Registry.CurrentUser);
+                failed = MainText.ShellMenu_UnregisterFailed;
+                break;
+            default:
+                return null;
+        }
         try
         {
-            if (register)
-            {
-                string exePath = Environment.ProcessPath ?? throw new InvalidOperationException(MainText.ExePathUnknown);
-                FileAssociations.Register(Registry.CurrentUser, exePath);
-            }
-            else
-            {
-                FileAssociations.Unregister(Registry.CurrentUser);
-            }
+            run();
             FileAssociations.NotifyShell();
             return 0;
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine(string.Format(register ? MainText.FileTypes_RegisterFailed : MainText.FileTypes_UnregisterFailed, ex.Message));
+            Console.Error.WriteLine(string.Format(failed, ex.Message));
             return 1;
         }
     }
+
+    /// <summary>
+    /// 시작 인자를 메뉴 명령과 경로로 바꾼다.
+    /// 첫 인자가 메뉴 명령이면 그 뒤는 「--list 목록 파일」 또는 경로 하나 이상이고, 경로 없이 명령만 있으면 평소처럼 시작한다(명령 없음).
+    /// 첫 인자가 명령이 아니면 그 인자가 열 압축 파일이다(명령 없음 = 열기).
+    /// 목록 모드에서 남은 경로가 없으면(목록을 못 읽은 경우 포함) false.
+    /// </summary>
+    private static bool TryParseStartup(string[] args, out ShellMenuCommand? command, out IReadOnlyList<string> paths)
+    {
+        command = null;
+        paths = [];
+        if (args.Length == 0) return true;
+        if (!ShellMenu.TryParseArgument(args[0], out var parsed))
+        {
+            paths = [args[0]];
+            return true;
+        }
+        if (args.Length >= 2 && string.Equals(args[1], ShellMenu.ListArgument, StringComparison.OrdinalIgnoreCase))
+        {
+            IReadOnlyList<string> listed = [];
+            try
+            {
+                if (args.Length == 3) listed = SelectionList.Read(args[2]);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException) { }
+            if (listed.Count == 0) return false;
+            command = parsed;
+            paths = listed;
+            return true;
+        }
+        if (args.Length >= 2)
+        {
+            command = parsed;
+            paths = args[1..];
+        }
+        return true;
+    }
+
+    private static string RequireExePath() => Environment.ProcessPath ?? throw new InvalidOperationException(MainText.ExePathUnknown);
 }
