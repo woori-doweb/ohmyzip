@@ -91,6 +91,9 @@
                     <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_LanguageNote}" />
                     <CheckBox x:Name="CheckUpdatesBox" Content="{x:Static res:UpdateText.Pref_CheckForUpdates}" Margin="0,16,0,0" AutomationProperties.AutomationId="OP-Pref-CheckUpdates" />
                     <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:UpdateText.Pref_CheckForUpdatesNote}" />
+                    <!-- Not an AppSettings value: the HKCU Run entry is the state. Applied by OK when changed; Reset leaves it. -->
+                    <CheckBox x:Name="CaptureBox" Content="{x:Static res:DialogText.Pref_Capture}" Margin="0,16,0,0" AutomationProperties.AutomationId="OP-Settings-Capture" />
+                    <TextBlock Style="{StaticResource Pref.Note}" Text="{x:Static res:DialogText.Pref_CaptureNote}" AutomationProperties.AutomationId="OP-Settings-CaptureNote" />
                 </StackPanel>
 
                 <!-- 1 View -->

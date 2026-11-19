@@ -36,6 +36,21 @@
   <data name="Cancel_Button" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Capture_Failed_Title" xml:space="preserve">
+    <value>Could not capture the screen</value>
+  </data>
+  <data name="Capture_Menu_Capture" xml:space="preserve">
+    <value>Capture screen</value>
+  </data>
+  <data name="Capture_Menu_TurnOff" xml:space="preserve">
+    <value>Turn off Print Screen capture</value>
+  </data>
+  <data name="Capture_StartFailed_Title" xml:space="preserve">
+    <value>Could not start Print Screen capture</value>
+  </data>
+  <data name="Capture_TrayTip" xml:space="preserve">
+    <value>ohMypic capture — press Print Screen</value>
+  </data>
   <data name="Message_KindError" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -125,6 +140,18 @@
   </data>
   <data name="Pref_BackgroundWhite" xml:space="preserve">
     <value>White</value>
+  </data>
+  <data name="Pref_Capture" xml:space="preserve">
+    <value>Capture with the Print Screen key and open the editor</value>
+  </data>
+  <data name="Pref_CaptureNote" xml:space="preserve">
+    <value>ohMypic keeps running in the notification area and starts when you sign in. Alt+Print Screen, Windows+Print Screen and Windows+Shift+S keep their Windows behavior.</value>
+  </data>
+  <data name="Pref_Capture_DisableFailed_Title" xml:space="preserve">
+    <value>Could not turn off Print Screen capture</value>
+  </data>
+  <data name="Pref_Capture_EnableFailed_Title" xml:space="preserve">
+    <value>Could not turn on Print Screen capture</value>
   </data>
   <data name="Pref_CategoriesName" xml:space="preserve">
     <value>Settings categories</value>
@@ -387,6 +414,7 @@ Unregister removes them again.</value>
     <value>Options:
   --register-associations | --unregister-associations
   --register-shell-menu | --unregister-shell-menu
+  --capture-agent
   --slideshow | --rotate | --resize | --convert | --batch &lt;file&gt;</value>
   </data>
 </root>

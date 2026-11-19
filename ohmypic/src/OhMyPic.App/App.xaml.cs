@@ -18,6 +18,9 @@ public partial class App : Application
     private const string RegisterShellMenuArg = "--register-shell-menu";
     private const string UnregisterShellMenuArg = "--unregister-shell-menu";
 
+    /// <summary>Kept for the process lifetime when this process is the Print Screen agent.</summary>
+    private CaptureAgent? _captureAgent;
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -35,6 +38,11 @@ public partial class App : Application
         }
         ThemeManager.Initialize(this);
         DispatcherUnhandledException += OnDispatcherUnhandledException;
+        if (isSwitch && string.Equals(firstArg, CaptureAgentRegistration.Switch, StringComparison.OrdinalIgnoreCase))
+        {
+            RunCaptureAgent();
+            return;
+        }
         if (isSwitch)
         {
             // Explorer menu switches. Exit code null = the main window now runs (--slideshow).
@@ -47,6 +55,25 @@ public partial class App : Application
         var window = new MainWindow(settings, ParseStartupPath(e.Args));
         MainWindow = window;
         window.Show();
+    }
+
+    /// <summary>
+    /// --capture-agent: no main window and no update services; the process lives until the agent quits. Exits at once
+    /// with 0 when an agent already runs in this session, with 1 (and a dialog) when the agent cannot start.
+    /// </summary>
+    private void RunCaptureAgent()
+    {
+        ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        try
+        {
+            _captureAgent = CaptureAgent.TryStart(this);
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            Shutdown(Fail(DialogText.Capture_StartFailed_Title, ex.Message));
+            return;
+        }
+        if (_captureAgent is null) Shutdown(0);
     }
 
     /// <summary>First non-empty argument as a full path (file = open in the viewer, folder = browse). Null when absent or malformed.</summary>

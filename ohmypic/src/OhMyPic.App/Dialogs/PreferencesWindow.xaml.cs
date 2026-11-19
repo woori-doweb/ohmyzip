@@ -14,7 +14,8 @@ namespace OhMyPic.App.Dialogs;
 /// <summary>
 /// Settings: General, View, Slideshow, Thumbnails, File Associations, File Explorer Menu (fixed order). OK writes the
 /// controls of the first four pages into the given <see cref="AppSettings"/>; Cancel leaves it untouched. Reset Page /
-/// Reset All restore engine defaults in the controls only. The last two pages change the current user's registry
+/// Reset All restore engine defaults in the controls only. The Print Screen capture box on the General page is not a
+/// setting: OK turns the agent on or off (HKCU Run value) only when the box changed, and Reset leaves it. The last two pages change the current user's registry
 /// immediately through their own buttons (OK and Cancel do not undo them).
 /// </summary>
 public partial class PreferencesWindow : Window
@@ -57,6 +58,7 @@ public partial class PreferencesWindow : Window
 
         for (int p = 0; p < SettingsPageCount; p++) LoadPage(p, settings);
         InitSystemPages();
+        InitCapture();
         CategoryList.SelectedIndex = Math.Clamp(page, 0, PageCount - 1);
         SourceInitialized += (_, _) => NativeMethods.ApplyDarkTitleBar(this);
         Loaded += (_, _) => (CategoryList.ItemContainerGenerator.ContainerFromIndex(CategoryList.SelectedIndex) as UIElement)?.Focus();
@@ -416,9 +418,61 @@ public partial class PreferencesWindow : Window
         Announce(ShellStatusText);
     }
 
+    // ───────────── Print Screen capture (General page; the HKCU Run value is the state, applied by OK) ─────────────
+
+    private bool _captureWasEnabled;
+
+    private void InitCapture()
+    {
+        try
+        {
+            _captureWasEnabled = SystemIntegration.IsCaptureEnabled;
+        }
+        catch (Exception ex) when (SystemIntegration.IsRegistryError(ex))
+        {
+            // Unknown state is shown as off; turning it on registers again.
+            _captureWasEnabled = false;
+        }
+        CaptureBox.IsChecked = _captureWasEnabled;
+    }
+
+    /// <summary>Turns the Print Screen agent on or off when the box changed. A failure is reported; the other settings still apply.</summary>
+    private void ApplyCapture()
+    {
+        bool enable = CaptureBox.IsChecked == true;
+        if (enable == _captureWasEnabled) return;
+        if (enable)
+        {
+            string? exe = SystemIntegration.ExePath;
+            if (exe is null)
+            {
+                MessageDialog.Error(this, DialogText.Pref_Capture_EnableFailed_Title, DialogText.Sys_ExePathUnknown);
+                return;
+            }
+            try
+            {
+                SystemIntegration.EnableCapture(exe);
+            }
+            catch (Exception ex) when (ex is Win32Exception || SystemIntegration.IsRegistryError(ex))
+            {
+                MessageDialog.Error(this, DialogText.Pref_Capture_EnableFailed_Title, ex.Message);
+            }
+            return;
+        }
+        try
+        {
+            SystemIntegration.DisableCapture();
+        }
+        catch (Exception ex) when (SystemIntegration.IsRegistryError(ex))
+        {
+            MessageDialog.Error(this, DialogText.Pref_Capture_DisableFailed_Title, ex.Message);
+        }
+    }
+
     private void OnOk(object sender, RoutedEventArgs e)
     {
         Store(_settings);
+        ApplyCapture();
         DialogResult = true;
     }
 }

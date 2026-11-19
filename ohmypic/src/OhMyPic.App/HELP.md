@@ -15,11 +15,13 @@ ohMypic browses, views and edits images on Windows. One window has two modes:
 
 ## Viewing
 
-- Next / previous image: Right / Left, Page Down / Page Up, Space, or the mouse wheel. First / last: Home / End.
-- Zoom: + and -, or Ctrl + mouse wheel. 0 shows the actual size (one image pixel per screen pixel). * fits the image to the window.
+- Next / previous image: Right / Left, Page Down / Page Up, Space. First / last: Home / End.
+- Mouse wheel: zooms in and out at the pointer. Ctrl + mouse wheel goes to the next / previous image. **Tools > Settings > View > Mouse wheel** swaps the two.
+- Zoom: + and -. 0 shows the actual size (one image pixel per screen pixel). * fits the image to the window.
 - Drag a large image to move it. The navigator in the corner shows which part is visible.
 - Full screen: F11 or Enter, or double-click the image. Esc leaves full screen, then returns to the browser.
 - Rotate the view: Ctrl+] (right) and Ctrl+[ (left). When you move to another image or close the window, ohMypic asks whether to save the rotation (or saves it automatically, see Settings). JPEG files are rotated without quality loss when their size allows it.
+- Right-click the image for a menu with Full Screen, Slideshow, Smooth Image, Image Placement (the same choices as **When an image opens** in **Tools > Settings > View**), Copy Image, Save As, Rotate / Resize / Convert Format, Print and Properties.
 
 ## Slideshow
 
@@ -37,6 +39,28 @@ The **Image** menu (also the **Edit** button on the viewer toolbar) works on the
 | Batch Edit… (resize, rotate, rename and convert in one run) | Ctrl+M |
 
 The result is shown in the status bar. A message appears only when some files failed.
+
+## Editor
+
+**Image > Open in Editor** (Ctrl+Shift+E, also in the right-click menus) opens one image in a separate editor window. Everything stays on this computer.
+
+- **Crop**: Free, 1:1, 4:3, 16:9, 9:16 or 4:5; drag the frame, then **Apply** (Enter) or **Cancel** (Esc).
+- **Rotate and flip**: 90° right (Ctrl+]) and left (Ctrl+[), 180°, horizontal and vertical flip.
+- **Adjust**: brightness, contrast, saturation, warmth, hue, sharpen, vignette, black & white and sepia; **Reset** sets them all to 0. Eight presets apply a set of values at once.
+- **Draw**: Pen, Rectangle or Arrow in six colors and three widths; drag on the picture. Click the selected tool again to stop drawing.
+- **Copy image** (Ctrl+C) puts the edited picture on the clipboard, ready to paste into a chat or document. **Copy as file path** (Ctrl+Shift+C) saves it as a PNG in Pictures\Screenshots and copies the file path instead (an unchanged file copies its own path).
+- **Undo** Ctrl+Z, **Redo** Ctrl+Y or Ctrl+Shift+Z.
+- **Export…** (Ctrl+Shift+S): PNG or JPG, JPG quality, scale 0.5×–3×, with the final size and the estimated file size before saving. Choosing the original file asks before replacing it.
+
+Closing the editor asks only when there are changes that were not exported. Layers, text, brushes and the other tools marked "(Coming soon)" are not available yet.
+
+## Print Screen capture
+
+Turn on **Tools > Settings… > General > Capture with the Print Screen key and open the editor**. ohMypic then keeps running in the notification area and starts when you sign in. Print Screen captures the monitor under the mouse pointer and opens it in the editor with the red pen ready: mark it up, press Ctrl+C, paste. Esc closes the capture window (it asks only when there are changes you did not copy or export). Alt+Print Screen, Windows+Print Screen and Windows+Shift+S keep their Windows behavior. The notification area icon has **Capture screen** and **Turn off Print Screen capture**.
+
+## Fonts
+
+**Tools > Fonts…** lists the fonts installed on this computer with a preview sentence and size. Search by name, show only fonts that include Korean (Hangul) characters, or only favorites. Click the star or press Space to mark a favorite; favorites are kept after restarting. Ctrl+C copies the font name.
 
 ## Files
 

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using Microsoft.Win32;
 using OhMyPic.App.Text;
@@ -6,8 +7,8 @@ using OhMyPic.Core;
 namespace OhMyPic.App;
 
 /// <summary>
-/// App side of the current-user file associations and Explorer menu: localized texts, the real HKCU root and the
-/// shell notification. Shared by the Settings pages and the command-line switches.
+/// App side of the current-user file associations, Explorer menu and Print Screen agent: localized texts, the real
+/// HKCU root and the shell notification. Shared by the Settings pages, the command-line switches and the agent.
 /// </summary>
 internal static class SystemIntegration
 {
@@ -51,6 +52,28 @@ internal static class SystemIntegration
     {
         ShellMenu.Unregister(Registry.CurrentUser);
         FileAssociations.NotifyShell();
+    }
+
+    /// <summary>True when this copy of ohMypic starts the Print Screen agent at sign-in (the HKCU Run value is the only state).</summary>
+    public static bool IsCaptureEnabled => ExePath is { } exe && CaptureAgentRegistration.IsRegistered(Registry.CurrentUser, exe);
+
+    /// <summary>
+    /// Registers the agent for sign-in and starts it now. Starting it while one already runs is harmless: the new process
+    /// finds the single-instance mutex taken and exits. Throws the registry errors, or Win32Exception when the start fails.
+    /// </summary>
+    public static void EnableCapture(string exePath)
+    {
+        CaptureAgentRegistration.Register(Registry.CurrentUser, exePath);
+        var start = new ProcessStartInfo(exePath) { UseShellExecute = false };
+        start.ArgumentList.Add(CaptureAgentRegistration.Switch);
+        using var _ = Process.Start(start);
+    }
+
+    /// <summary>Removes the sign-in entry, then asks a running agent to exit.</summary>
+    public static void DisableCapture()
+    {
+        CaptureAgentRegistration.Unregister(Registry.CurrentUser);
+        CaptureAgent.SignalQuit();
     }
 
     /// <summary>Exceptions a registry write or read can raise (shown to the user, never fatal).</summary>

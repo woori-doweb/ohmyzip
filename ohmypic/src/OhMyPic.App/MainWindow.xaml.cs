@@ -179,6 +179,17 @@ public partial class MainWindow : Window
         foreach (var key in keys)
         {
             if (key is null) menu.Items.Add(new Separator());
+            else if (CommandCatalog.ContextSubmenus.TryGetValue(key, out var submenu))
+            {
+                var parent = new MenuItem { Header = submenu.Label };
+                AutomationProperties.SetAutomationId(parent, idPrefix + key);
+                foreach (var childKey in submenu.Items)
+                {
+                    if (childKey is null) parent.Items.Add(new Separator());
+                    else parent.Items.Add(CreateMenuItem(childKey, idPrefix + key + "."));
+                }
+                menu.Items.Add(parent);
+            }
             else menu.Items.Add(CreateMenuItem(key, idPrefix));
         }
         return menu;
@@ -302,6 +313,11 @@ public partial class MainWindow : Window
             await SetSortAsync(key);
             return;
         }
+        if (FitKeys.TryGetValue(key, out var fit))
+        {
+            SetFitMode(fit);
+            return;
+        }
         switch (key)
         {
             case "file.openFile": await OpenFileAsync(); break;
@@ -341,6 +357,7 @@ public partial class MainWindow : Window
             case "nav.last": await GoToAsync(_viewList.Count - 1); break;
             case "view.fullScreen": SetFullScreen(!_fullScreen); break;
             case "view.alwaysOnTop": S.AlwaysOnTop = !S.AlwaysOnTop; Topmost = S.AlwaysOnTop; SaveSettings(showError: false); break;
+            case "view.smoothScaling": S.SmoothScaling = !S.SmoothScaling; ApplyViewerSettings(); SaveSettings(showError: false); break;
 
             case "image.rotateRight": RotateView(90); break;
             case "image.rotateLeft": RotateView(-90); break;
@@ -350,6 +367,7 @@ public partial class MainWindow : Window
             case "image.batchDialog":
                 await RunEditDialogAsync(key);
                 break;
+            case "image.editor": await OpenInEditorAsync(); break;
 
             case "slideshow.start": await StartSlideshowAsync(); break;
 
@@ -358,6 +376,7 @@ public partial class MainWindow : Window
             case "settings.language": await OpenPreferencesAsync(PreferencesWindow.GeneralPage); break;
             case "settings.associations": await OpenPreferencesAsync(PreferencesWindow.AssociationsPage); break;
             case "settings.shellMenu": await OpenPreferencesAsync(PreferencesWindow.ShellMenuPage); break;
+            case "tools.fonts": OpenFontList(); break;
 
             case "help.contents": OpenHelp(); break;
             case "help.update": await CheckForUpdatesAsync(); break;
@@ -383,6 +402,16 @@ public partial class MainWindow : Window
         ["view.sort.date"] = SortKey.Date,
     };
 
+    private static readonly Dictionary<string, FitMode> FitKeys = new(StringComparer.Ordinal)
+    {
+        ["view.fit.shrinkLarge"] = FitMode.ShrinkLargeOnly,
+        ["view.fit.window"] = FitMode.FitWindow,
+        ["view.fit.width"] = FitMode.FitWidth,
+        ["view.fit.height"] = FitMode.FitHeight,
+        ["view.fit.actual"] = FitMode.ActualSize,
+        ["view.fit.keepZoom"] = FitMode.KeepZoom,
+    };
+
     private bool InBrowser => _mode == Mode.Browser;
     private bool InViewer => _mode == Mode.Viewer;
 
@@ -391,7 +420,8 @@ public partial class MainWindow : Window
     /// </summary>
     private bool CanRun(string key)
     {
-        if (key is "file.exit" or "help.about" or "help.contents") return true;
+        // tools.fonts opens a separate non-modal window that does not touch the folder or the current image.
+        if (key is "file.exit" or "help.about" or "help.contents" or "tools.fonts") return true;
         if (_busy) return false;
         int selected = InBrowser ? SelectedCount : 0;
         bool hasCurrent = InViewer && CurrentPath is not null;
@@ -400,7 +430,9 @@ public partial class MainWindow : Window
             return InBrowser;
         return key switch
         {
-            "file.openFile" or "file.openFolder" or "tools.settings" or "settings.view.fitMode" or "settings.language" or "settings.associations" or "settings.shellMenu" or "view.alwaysOnTop" => true,
+            "file.openFile" or "file.openFolder" or "tools.settings" or "settings.view.fitMode" or "settings.language" or "settings.associations" or "settings.shellMenu" or "view.alwaysOnTop" or "view.smoothScaling" => true,
+            // Setting changes are valid without an image; ApplyFitMode returns when nothing is shown.
+            _ when FitKeys.ContainsKey(key) => true,
             "help.update" => !_updating,
             "file.saveAs" or "file.print" or "edit.copyImage" => InViewer ? hasImage : selected == 1,
             "file.saveRotation" => hasImage && _rotation != 0,
@@ -408,6 +440,7 @@ public partial class MainWindow : Window
             "edit.copy" or "edit.cut" or "edit.delete" => InViewer ? hasCurrent : selected > 0,
             "image.rotateDialog" or "image.resizeDialog" or "image.convertDialog" => InViewer ? hasCurrent : selected > 0,
             "image.batchDialog" => InViewer ? hasCurrent : _folder is not null,
+            "image.editor" => InViewer ? hasCurrent : selected == 1,
             "edit.paste" => CurrentFolder is not null && ClipboardHasFiles(),
             "edit.selectAll" => InBrowser && _items.Count > 0 && !AddressBox.IsKeyboardFocusWithin,
             "view.browser" => InViewer,
@@ -446,6 +479,8 @@ public partial class MainWindow : Window
                 "view.folderTree" => _ui.ShowFolderTree,
                 "view.fullScreen" => _fullScreen,
                 "view.alwaysOnTop" => S.AlwaysOnTop,
+                "view.smoothScaling" => S.SmoothScaling,
+                _ when FitKeys.TryGetValue(key, out var fit) => S.FitMode == fit,
                 _ => null,
             };
             if (check is null) continue;
@@ -635,6 +670,8 @@ public partial class MainWindow : Window
     private async void OnClosing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
         if (_closeConfirmed) return;
+        // Editor windows close with the app: each asks about its unsaved changes first; Cancel there keeps everything open.
+        if (!Editor.EditorWindow.CloseAll()) { e.Cancel = true; return; }
         if (InViewer && _rotation != 0)
         {
             // Ask about the rotated image first; close again once it is resolved.

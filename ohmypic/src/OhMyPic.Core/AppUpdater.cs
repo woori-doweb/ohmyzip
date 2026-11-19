@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -261,7 +262,7 @@ public sealed class AppUpdater
     /// <summary>
     /// Replaces the install folder's files with the staged files (subfolders included). Each existing file is kept as
     /// "&lt;name&gt;.ohmypic-old". When anything fails, every replaced file and created folder is put back and an
-    /// <see cref="UpdateException"/> is thrown.
+    /// <see cref="UpdateException"/> is thrown. On success Explorer is told that the main executable changed.
     /// </summary>
     public void Apply(string stagedDir)
     {
@@ -308,6 +309,7 @@ public sealed class AppUpdater
                 throw new UpdateException(UpdateError.AccessDenied, ex.Message, ex);
             throw new UpdateException(UpdateError.InstallFailed, ex.Message, ex);
         }
+        NotifyIconChanged(Path.Join(installRoot, MainExecutable));
     }
 
     /// <summary>Deletes only "*.ohmypic-old*" leftovers below the install folder. Files still in use are skipped quietly.</summary>
@@ -785,6 +787,38 @@ public sealed class AppUpdater
         }
         return ok;
     }
+
+    /// <summary>
+    /// A pinned taskbar item keeps the icon Explorer cached for the executable (after an exe swap that can be the
+    /// generic file icon or the previous version's icon). Measured on Windows 11 (runs/2026-11-08-ohmypic-icon): the
+    /// pin re-reads the icon only after an update notice for the exe and for the pinned shortcuts plus an association
+    /// change; the exe notice with the association change alone does not refresh it. Never throws.
+    /// </summary>
+    private static void NotifyIconChanged(string exePath)
+    {
+        try
+        {
+            SHChangeNotify(ShcneUpdateItem, ShcnfPathW | ShcnfFlush, exePath, IntPtr.Zero);
+            string pins = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                @"Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar");
+            if (Directory.Exists(pins))
+            {
+                foreach (var shortcut in Directory.EnumerateFiles(pins, "*.lnk"))
+                    SHChangeNotify(ShcneUpdateItem, ShcnfPathW | ShcnfFlush, shortcut, IntPtr.Zero);
+            }
+            FileAssociations.NotifyShell();
+        }
+        catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or IOException or UnauthorizedAccessException)
+        {
+        }
+    }
+
+    private const int ShcneUpdateItem = 0x00002000;
+    private const uint ShcnfPathW = 0x0005;
+    private const uint ShcnfFlush = 0x1000;
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+    private static extern void SHChangeNotify(int eventId, uint flags, string item1, IntPtr item2);
 
     private static void TryDeleteFile(string path)
     {

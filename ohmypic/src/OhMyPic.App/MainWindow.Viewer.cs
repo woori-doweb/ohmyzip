@@ -51,6 +51,8 @@ public partial class MainWindow
         PrevEdgeButton.CommandTarget = this;
         NextEdgeButton.Command = CommandCatalog.Command("nav.next");
         NextEdgeButton.CommandTarget = this;
+        // Checked states follow the settings through UpdateUi (items are registered by CreateMenuItem).
+        ViewerRoot.ContextMenu = CreateContextMenu(CommandCatalog.ViewerContextMenu, "context.viewer.");
         ViewerRoot.PreviewMouseWheel += OnViewerWheel;
         ViewerRoot.MouseLeftButtonDown += OnViewerMouseDown;
         ViewerRoot.MouseMove += OnViewerMouseMove;
@@ -324,6 +326,14 @@ public partial class MainWindow
         if (_bitmap is null) return;
         if (S.FitMode == FitMode.KeepZoom) ApplyImageSize();
         else ApplyFit(S.FitMode);
+    }
+
+    /// <summary>Stores the fit rule (also used for the next images) and re-lays out the current image with it.</summary>
+    private void SetFitMode(FitMode mode)
+    {
+        S.FitMode = mode;
+        SaveSettings(showError: false);
+        ApplyFitMode();
     }
 
     private void FitToWindow() => ApplyFit(FitMode.FitWindow);

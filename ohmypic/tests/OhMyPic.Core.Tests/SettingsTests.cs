@@ -9,7 +9,7 @@ public sealed class SettingsTests : TestBase
         Assert.False(s.DeleteWithoutAsking);
         Assert.False(s.ShowHiddenFiles);
         Assert.True(s.UseRecycleBin);
-        Assert.Equal(WheelAction.NextPrevious, s.WheelAction);
+        Assert.Equal(WheelAction.Zoom, s.WheelAction);
         Assert.Equal(RotateAutoSaveMode.Ask, s.RotateAutoSave);
         Assert.False(s.ApplyLastSaveQuality);
         Assert.True(s.LoopAtEnds);
@@ -43,7 +43,7 @@ public sealed class SettingsTests : TestBase
             DeleteWithoutAsking = true,
             ShowHiddenFiles = true,
             UseRecycleBin = false,
-            WheelAction = WheelAction.Zoom,
+            WheelAction = WheelAction.NextPrevious,
             RotateAutoSave = RotateAutoSaveMode.Overwrite,
             ApplyLastSaveQuality = true,
             LoopAtEnds = false,
@@ -103,7 +103,7 @@ public sealed class SettingsTests : TestBase
     public void OP_E19_Out_Of_Range_Values_Normalised()
     {
         string path = Temp.Combine("range.json");
-        File.WriteAllText(path, "{ \"ThumbnailSize\": 9999, \"SlideIntervalSeconds\": 0, \"JpegQuality\": 300, \"Language\": \"fr\", \"BackgroundColor\": \"red\", \"FitMode\": 42 }");
+        File.WriteAllText(path, "{ \"ThumbnailSize\": 9999, \"SlideIntervalSeconds\": 0, \"JpegQuality\": 300, \"Language\": \"fr\", \"BackgroundColor\": \"red\", \"FitMode\": 42, \"WheelAction\": 42 }");
         var s = AppSettings.Load(path);
         Assert.Null(s.LoadError);
         Assert.Equal(320, s.ThumbnailSize);
@@ -112,6 +112,7 @@ public sealed class SettingsTests : TestBase
         Assert.Equal("system", s.Language);
         Assert.Equal("System", s.BackgroundColor);
         Assert.Equal(FitMode.ShrinkLargeOnly, s.FitMode);
+        Assert.Equal(WheelAction.Zoom, s.WheelAction);
 
         s.ThumbnailSize = 10;
         s.Save(path);

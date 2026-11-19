@@ -509,6 +509,24 @@ public partial class MainWindow
         await LoadFolderAsync(here.Count > 0 ? here : SelectedPaths(), forceReload: true);
     }
 
+    /// <summary>Opens the viewed image or the single selected tile in its own editor window (design P15).</summary>
+    private async Task OpenInEditorAsync()
+    {
+        if (InViewer && !await ResolvePendingRotationAsync()) return;
+        var files = TargetPaths();
+        if (files.Count != 1) return;
+        _busy = true;
+        UpdateUi();
+        try
+        {
+            await Editor.EditorWindow.OpenAsync(this, files[0]);
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
     // ───────────── help ─────────────
 
     private void OpenHelp()

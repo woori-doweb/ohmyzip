@@ -53,7 +53,7 @@ public sealed partial class AppSettings
     public bool DeleteWithoutAsking { get; set; }
     public bool ShowHiddenFiles { get; set; }
     public bool UseRecycleBin { get; set; } = true;
-    public WheelAction WheelAction { get; set; } = WheelAction.NextPrevious;
+    public WheelAction WheelAction { get; set; } = WheelAction.Zoom;
     public RotateAutoSaveMode RotateAutoSave { get; set; } = RotateAutoSaveMode.Ask;
     public bool ApplyLastSaveQuality { get; set; }
 
@@ -144,7 +144,7 @@ public sealed partial class AppSettings
         else if (string.Equals(BackgroundColor, SystemColor, StringComparison.OrdinalIgnoreCase))
             BackgroundColor = SystemColor;
         if (!Enum.IsDefined(WheelAction))
-            WheelAction = WheelAction.NextPrevious;
+            WheelAction = WheelAction.Zoom;
         if (!Enum.IsDefined(RotateAutoSave))
             RotateAutoSave = RotateAutoSaveMode.Ask;
         if (!Enum.IsDefined(FitMode))

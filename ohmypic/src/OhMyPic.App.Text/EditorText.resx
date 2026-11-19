@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Adjust_Brightness" xml:space="preserve">
+    <value>Brightness</value>
+  </data>
+  <data name="Adjust_Contrast" xml:space="preserve">
+    <value>Contrast</value>
+  </data>
+  <data name="Adjust_Grayscale" xml:space="preserve">
+    <value>Black and White</value>
+  </data>
+  <data name="Adjust_Hue" xml:space="preserve">
+    <value>Hue</value>
+  </data>
+  <data name="Adjust_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Adjust_ResetName" xml:space="preserve">
+    <value>Reset adjustments</value>
+  </data>
+  <data name="Adjust_Saturation" xml:space="preserve">
+    <value>Saturation</value>
+  </data>
+  <data name="Adjust_Sepia" xml:space="preserve">
+    <value>Sepia</value>
+  </data>
+  <data name="Adjust_Sharpen" xml:space="preserve">
+    <value>Sharpness</value>
+  </data>
+  <data name="Adjust_ValueName" xml:space="preserve">
+    <value>{0} value</value>
+  </data>
+  <data name="Adjust_Vignette" xml:space="preserve">
+    <value>Vignette</value>
+  </data>
+  <data name="Adjust_Warmth" xml:space="preserve">
+    <value>Warmth</value>
+  </data>
+  <data name="Canvas_Name" xml:space="preserve">
+    <value>Image being edited</value>
+  </data>
+  <data name="Close_Body" xml:space="preserve">
+    <value>Save opens Export so you can choose where to save. If you don't save, your changes are lost.</value>
+  </data>
+  <data name="Close_DontSave" xml:space="preserve">
+    <value>Don't Save</value>
+  </data>
+  <data name="Close_Heading" xml:space="preserve">
+    <value>Save the changes to "{0}"?</value>
+  </data>
+  <data name="Close_Save" xml:space="preserve">
+    <value>Save…</value>
+  </data>
+  <data name="Cmd_BackgroundEraser" xml:space="preserve">
+    <value>Background Eraser</value>
+  </data>
+  <data name="Cmd_Brush" xml:space="preserve">
+    <value>Brush</value>
+  </data>
+  <data name="Cmd_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Cmd_Crop" xml:space="preserve">
+    <value>Crop…</value>
+  </data>
+  <data name="Cmd_Export" xml:space="preserve">
+    <value>Export…</value>
+  </data>
+  <data name="Cmd_FlipHorizontal" xml:space="preserve">
+    <value>Flip Horizontal</value>
+  </data>
+  <data name="Cmd_FlipVertical" xml:space="preserve">
+    <value>Flip Vertical</value>
+  </data>
+  <data name="Cmd_HealingBrush" xml:space="preserve">
+    <value>Healing Brush</value>
+  </data>
+  <data name="Cmd_Layers" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="Cmd_MosaicBlur" xml:space="preserve">
+    <value>Mosaic/Blur</value>
+  </data>
+  <data name="Cmd_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="Cmd_RemoveBackground" xml:space="preserve">
+    <value>Remove Background (AI)</value>
+  </data>
+  <data name="Cmd_Rotate180" xml:space="preserve">
+    <value>Rotate 180°</value>
+  </data>
+  <data name="Cmd_RotateLeft" xml:space="preserve">
+    <value>Rotate Left 90°</value>
+  </data>
+  <data name="Cmd_RotateRight" xml:space="preserve">
+    <value>Rotate Right 90°</value>
+  </data>
+  <data name="Cmd_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="Cmd_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="Crop_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Crop_ApplyName" xml:space="preserve">
+    <value>Apply crop</value>
+  </data>
+  <data name="Crop_AspectFree" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="Crop_AspectLabel" xml:space="preserve">
+    <value>Aspect ratio</value>
+  </data>
+  <data name="Crop_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Crop_CancelName" xml:space="preserve">
+    <value>Cancel crop</value>
+  </data>
+  <data name="Crop_FrameName" xml:space="preserve">
+    <value>Crop frame</value>
+  </data>
+  <data name="Crop_FrameHelp" xml:space="preserve">
+    <value>Crop size {0} × {1} pixels</value>
+  </data>
+  <data name="Crop_Hint" xml:space="preserve">
+    <value>Drag inside the frame to move it, or drag its edges and corners. Enter applies, Esc cancels.</value>
+  </data>
+  <data name="Crop_SizeName" xml:space="preserve">
+    <value>Crop size</value>
+  </data>
+  <data name="Crop_Start" xml:space="preserve">
+    <value>Crop…</value>
+  </data>
+  <data name="Inspector_Name" xml:space="preserve">
+    <value>Edit options</value>
+  </data>
+  <data name="Menu_OpenInEditor" xml:space="preserve">
+    <value>Open in Editor</value>
+  </data>
+  <data name="Open_FailedTitle" xml:space="preserve">
+    <value>Cannot open "{0}" in the editor</value>
+  </data>
+  <data name="Open_TooLarge" xml:space="preserve">
+    <value>The image is {0} × {1} pixels. Editing it needs about {2} of memory; the editor allows up to {3}. Make the image smaller first (Image › Resize).</value>
+  </data>
+  <data name="Preset_Cool" xml:space="preserve">
+    <value>Cool</value>
+  </data>
+  <data name="Preset_Dramatic" xml:space="preserve">
+    <value>Dramatic</value>
+  </data>
+  <data name="Preset_Faded" xml:space="preserve">
+    <value>Faded</value>
+  </data>
+  <data name="Preset_Mono" xml:space="preserve">
+    <value>Mono</value>
+  </data>
+  <data name="Preset_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Preset_Soft" xml:space="preserve">
+    <value>Soft</value>
+  </data>
+  <data name="Preset_Vivid" xml:space="preserve">
+    <value>Vivid</value>
+  </data>
+  <data name="Preset_Warm" xml:space="preserve">
+    <value>Warm</value>
+  </data>
+  <data name="Section_Adjust" xml:space="preserve">
+    <value>Adjust</value>
+  </data>
+  <data name="Section_Crop" xml:space="preserve">
+    <value>Crop</value>
+  </data>
+  <data name="Section_Presets" xml:space="preserve">
+    <value>Presets</value>
+  </data>
+  <data name="Section_Rotate" xml:space="preserve">
+    <value>Rotate and Flip</value>
+  </data>
+  <data name="Size_Bytes" xml:space="preserve">
+    <value>{0} KB</value>
+  </data>
+  <data name="Size_Megabytes" xml:space="preserve">
+    <value>{0} MB</value>
+  </data>
+  <data name="Size_Pixels" xml:space="preserve">
+    <value>{0} × {1}</value>
+  </data>
+  <data name="Status_Exported" xml:space="preserve">
+    <value>Exported "{0}".</value>
+  </data>
+  <data name="Status_HistoryDropped" xml:space="preserve">
+    <value>The oldest undo steps were dropped to save memory.</value>
+  </data>
+  <data name="Status_PreviewFailed" xml:space="preserve">
+    <value>The preview could not be updated: {0}</value>
+  </data>
+  <data name="Status_SizeName" xml:space="preserve">
+    <value>Image size</value>
+  </data>
+  <data name="Status_Unsaved" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="Status_Working" xml:space="preserve">
+    <value>Working…</value>
+  </data>
+  <data name="Status_Zoom" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="Status_ZoomName" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="Toolbar_Name" xml:space="preserve">
+    <value>Editor toolbar</value>
+  </data>
+  <data name="Window_Title" xml:space="preserve">
+    <value>{0} — Editor — ohMypic</value>
+  </data>
+  <data name="Export_Calculating" xml:space="preserve">
+    <value>Calculating…</value>
+  </data>
+  <data name="Export_DefaultName" xml:space="preserve">
+    <value>{0} edited</value>
+  </data>
+  <data name="Export_EstimateLabel" xml:space="preserve">
+    <value>Estimated size</value>
+  </data>
+  <data name="Export_EstimateUnavailable" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+  <data name="Export_FailedTitle" xml:space="preserve">
+    <value>Could not save "{0}"</value>
+  </data>
+  <data name="Export_FileDialogTitle" xml:space="preserve">
+    <value>Export Image</value>
+  </data>
+  <data name="Export_FilterJpeg" xml:space="preserve">
+    <value>JPG image</value>
+  </data>
+  <data name="Export_FilterPng" xml:space="preserve">
+    <value>PNG image</value>
+  </data>
+  <data name="Export_FinalSizeLabel" xml:space="preserve">
+    <value>Final size</value>
+  </data>
+  <data name="Export_FinalSizeValue" xml:space="preserve">
+    <value>{0} × {1} pixels</value>
+  </data>
+  <data name="Export_FormatJpeg" xml:space="preserve">
+    <value>JPG</value>
+  </data>
+  <data name="Export_FormatLabel" xml:space="preserve">
+    <value>Format</value>
+  </data>
+  <data name="Export_FormatPng" xml:space="preserve">
+    <value>PNG</value>
+  </data>
+  <data name="Export_OverwriteBody" xml:space="preserve">
+    <value>The existing file will be replaced.</value>
+  </data>
+  <data name="Export_OverwriteHeading" xml:space="preserve">
+    <value>"{0}" already exists. Replace it?</value>
+  </data>
+  <data name="Export_OverwriteOriginalBody" xml:space="preserve">
+    <value>This is the file you opened. The original picture will be replaced by the edited one and cannot be restored.</value>
+  </data>
+  <data name="Export_OverwriteOriginalHeading" xml:space="preserve">
+    <value>Replace the original file "{0}"?</value>
+  </data>
+  <data name="Export_QualityLabel" xml:space="preserve">
+    <value>JPG quality</value>
+  </data>
+  <data name="Export_QualityValueName" xml:space="preserve">
+    <value>JPG quality value</value>
+  </data>
+  <data name="Export_Replace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="Export_Save" xml:space="preserve">
+    <value>Save…</value>
+  </data>
+  <data name="Export_Saving" xml:space="preserve">
+    <value>Saving…</value>
+  </data>
+  <data name="Export_ScaleLabel" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="Export_ScaleValue" xml:space="preserve">
+    <value>{0}×</value>
+  </data>
+  <data name="Export_Title" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Export_TooLarge" xml:space="preserve">
+    <value>Too large to export at this scale</value>
+  </data>
+  <data name="Capture_Name" xml:space="preserve">
+    <value>Screenshot {0:yyyy-MM-dd HH:mm:ss}</value>
+  </data>
+  <data name="Cmd_Copy" xml:space="preserve">
+    <value>Copy image</value>
+  </data>
+  <data name="Cmd_CopyPath" xml:space="preserve">
+    <value>Copy as file path</value>
+  </data>
+  <data name="Draw_Arrow" xml:space="preserve">
+    <value>Arrow</value>
+  </data>
+  <data name="Draw_ColorBlack" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="Draw_ColorBlue" xml:space="preserve">
+    <value>Blue</value>
+  </data>
+  <data name="Draw_ColorGreen" xml:space="preserve">
+    <value>Green</value>
+  </data>
+  <data name="Draw_ColorLabel" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="Draw_ColorRed" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="Draw_ColorWhite" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="Draw_ColorYellow" xml:space="preserve">
+    <value>Yellow</value>
+  </data>
+  <data name="Draw_Header" xml:space="preserve">
+    <value>Draw</value>
+  </data>
+  <data name="Draw_Hint" xml:space="preserve">
+    <value>Drag on the picture to draw. Click the selected tool again to stop drawing. Esc cancels a stroke in progress.</value>
+  </data>
+  <data name="Draw_LayerHelp" xml:space="preserve">
+    <value>Tool {0}, color {1}, width {2}</value>
+  </data>
+  <data name="Draw_LayerName" xml:space="preserve">
+    <value>Drawing area</value>
+  </data>
+  <data name="Draw_Pen" xml:space="preserve">
+    <value>Pen</value>
+  </data>
+  <data name="Draw_Rectangle" xml:space="preserve">
+    <value>Rectangle</value>
+  </data>
+  <data name="Draw_WidthLabel" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="Draw_WidthMedium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Draw_WidthThick" xml:space="preserve">
+    <value>Thick</value>
+  </data>
+  <data name="Draw_WidthThin" xml:space="preserve">
+    <value>Thin</value>
+  </data>
+  <data name="Status_CopiedImage" xml:space="preserve">
+    <value>Copied the image ({0} × {1}) to the clipboard</value>
+  </data>
+  <data name="Status_CopiedPath" xml:space="preserve">
+    <value>Copied the path: {0}</value>
+  </data>
+</root>

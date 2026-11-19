@@ -36,6 +36,21 @@
   <data name="Cancel_Button" xml:space="preserve">
     <value>취소</value>
   </data>
+  <data name="Capture_Failed_Title" xml:space="preserve">
+    <value>화면을 캡처하지 못했습니다</value>
+  </data>
+  <data name="Capture_Menu_Capture" xml:space="preserve">
+    <value>화면 캡처</value>
+  </data>
+  <data name="Capture_Menu_TurnOff" xml:space="preserve">
+    <value>Print Screen 캡처 끄기</value>
+  </data>
+  <data name="Capture_StartFailed_Title" xml:space="preserve">
+    <value>Print Screen 캡처를 시작하지 못했습니다</value>
+  </data>
+  <data name="Capture_TrayTip" xml:space="preserve">
+    <value>ohMypic 캡처 — Print Screen 키</value>
+  </data>
   <data name="Message_KindError" xml:space="preserve">
     <value>오류</value>
   </data>
@@ -125,6 +140,18 @@
   </data>
   <data name="Pref_BackgroundWhite" xml:space="preserve">
     <value>흰색</value>
+  </data>
+  <data name="Pref_Capture" xml:space="preserve">
+    <value>Print Screen 키로 캡처해 편집기에서 열기</value>
+  </data>
+  <data name="Pref_CaptureNote" xml:space="preserve">
+    <value>ohMypic 이 알림 영역에서 계속 실행되고 로그인할 때 시작됩니다. Alt+Print Screen, Windows+Print Screen, Windows+Shift+S 는 Windows 기능 그대로입니다.</value>
+  </data>
+  <data name="Pref_Capture_DisableFailed_Title" xml:space="preserve">
+    <value>Print Screen 캡처를 끄지 못했습니다</value>
+  </data>
+  <data name="Pref_Capture_EnableFailed_Title" xml:space="preserve">
+    <value>Print Screen 캡처를 켜지 못했습니다</value>
   </data>
   <data name="Pref_CategoriesName" xml:space="preserve">
     <value>설정 범주</value>
@@ -387,6 +414,7 @@
     <value>사용할 수 있는 옵션:
   --register-associations | --unregister-associations
   --register-shell-menu | --unregister-shell-menu
+  --capture-agent
   --slideshow | --rotate | --resize | --convert | --batch &lt;파일&gt;</value>
   </data>
 </root>

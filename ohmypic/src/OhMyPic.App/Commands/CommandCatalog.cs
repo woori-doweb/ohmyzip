@@ -23,7 +23,7 @@ public sealed record CommandSpec(
 public sealed record ToolbarSpec(string Key, string Label, string Glyph, IReadOnlyList<string?>? DropDown = null);
 
 /// <summary>
-/// The single command table. Menus, toolbars, the tile context menu and key bindings are all generated from it
+/// The single command table. Menus, toolbars, the context menus and key bindings are all generated from it
 /// (OP-A04/OP-A05: every toolbar item is also a menu command). Enable rules live in MainWindow.CanRun.
 /// </summary>
 public static class CommandCatalog
@@ -39,6 +39,8 @@ public static class CommandCatalog
         public const string Slideshow = "slideshow";
         public const string Tools = "tools";
         public const string Help = "help";
+        /// <summary>Not in <see cref="Menus"/>: these rows appear only in context menus.</summary>
+        public const string Context = "context";
     }
 
     /// <summary>The seven top-level menus in display order (design P02).</summary>
@@ -104,6 +106,7 @@ public static class CommandCatalog
         new("nav.last", M.View, MenuText.Label_Last, "End"),
         new("view.fullScreen", M.View, MenuText.Label_FullScreen, "F11", Keys: ["F11", "Enter"], SeparatorBefore: true, Checkable: true),
         new("view.alwaysOnTop", M.View, MenuText.Label_AlwaysOnTop, Checkable: true),
+        new("view.smoothScaling", M.View, MenuText.Label_SmoothScaling, Checkable: true),
 
         // Image (edit submenu raised to top level, design P12)
         new("image.rotateRight", M.Image, MenuText.Label_RotateRight, "Ctrl+]", Keys: ["Ctrl+OemCloseBrackets"]),
@@ -111,6 +114,7 @@ public static class CommandCatalog
         new("image.rotateDialog", M.Image, MenuText.Label_RotateDialog, "Ctrl+T", SeparatorBefore: true),
         new("image.resizeDialog", M.Image, MenuText.Label_ResizeDialog, "Ctrl+R"),
         new("image.convertDialog", M.Image, MenuText.Label_ConvertDialog, "Ctrl+E"),
+        new("image.editor", M.Image, EditorText.Menu_OpenInEditor, "Ctrl+Shift+E"),
         new("image.batchDialog", M.Image, MenuText.Label_BatchDialog, "Ctrl+M"),
 
         // Slideshow
@@ -122,11 +126,25 @@ public static class CommandCatalog
         new("settings.language", M.Tools, MenuText.Label_Language),
         new("settings.associations", M.Tools, MenuText.Label_Associations, SeparatorBefore: true),
         new("settings.shellMenu", M.Tools, MenuText.Label_ShellMenu),
+        new("tools.fonts", M.Tools, MenuText.Label_Fonts, SeparatorBefore: true),
+        new("tools.findFont", M.Tools, MenuText.Label_FindFont, Implemented: false),
 
         // Help
         new("help.contents", M.Help, MenuText.Label_HelpContents, "F1"),
         new("help.update", M.Help, UpdateText.Menu_CheckForUpdates, SeparatorBefore: true),
         new("help.about", M.Help, MenuText.Label_About),
+
+        // Context menus only (labels shared with the Preferences view page)
+        new("view.fit.shrinkLarge", M.Context, DialogText.Pref_FitShrinkLargeOnly, Checkable: true),
+        new("view.fit.window", M.Context, DialogText.Pref_FitWindow, Checkable: true),
+        new("view.fit.width", M.Context, DialogText.Pref_FitWidth, Checkable: true),
+        new("view.fit.height", M.Context, DialogText.Pref_FitHeight, Checkable: true),
+        new("view.fit.actual", M.Context, DialogText.Pref_FitActualSize, Checkable: true),
+        new("view.fit.keepZoom", M.Context, DialogText.Pref_FitKeepZoom, Checkable: true),
+        new("view.pages.two", M.Context, MenuText.Label_PagesTwo, Implemented: false),
+        new("view.pages.four", M.Context, MenuText.Label_PagesFour, Implemented: false),
+        new("view.pixelInfo", M.Context, MenuText.Label_PixelInfo, Implemented: false),
+        new("view.cameraInfo", M.Context, MenuText.Label_CameraInfo, Implemented: false),
     ];
 
     /// <summary>Browser toolbar, three groups (design P03): view/slideshow, file operations, view format/sort.</summary>
@@ -169,8 +187,27 @@ public static class CommandCatalog
     [
         "view.viewer", "slideshow.start", null,
         "edit.copy", "edit.copyImage", "edit.cut", "edit.delete", "edit.rename", null,
-        "image.rotateDialog", "image.resizeDialog", "image.convertDialog", null,
+        "image.rotateDialog", "image.resizeDialog", "image.convertDialog", "image.editor", null,
         "file.print", "file.properties",
+    ];
+
+    /// <summary>Submenus by key, one level deep, used only in context menus (null = separator).</summary>
+    public static readonly IReadOnlyDictionary<string, (string Label, IReadOnlyList<string?> Items)> ContextSubmenus =
+        new Dictionary<string, (string Label, IReadOnlyList<string?> Items)>(StringComparer.Ordinal)
+        {
+            ["viewer.placement"] = (MenuText.Label_Placement,
+                ["view.fit.shrinkLarge", "view.fit.window", "view.fit.width", "view.fit.height", "view.fit.actual", "view.fit.keepZoom", null,
+                 "view.pages.two", "view.pages.four"]),
+        };
+
+    /// <summary>Viewer (single image) context menu in the observed order (null = separator).</summary>
+    public static readonly IReadOnlyList<string?> ViewerContextMenu =
+    [
+        "view.fullScreen", "slideshow.start", null,
+        "view.smoothScaling", "viewer.placement", null,
+        "edit.copyImage", "file.saveAs", null,
+        "image.rotateDialog", "image.resizeDialog", "image.convertDialog", "image.editor", null,
+        "file.print", "view.pixelInfo", "view.cameraInfo", "file.properties",
     ];
 
     private static readonly Dictionary<string, CommandSpec> ByKey = Items.ToDictionary(i => i.Key, StringComparer.Ordinal);

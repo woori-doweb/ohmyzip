@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Count_Many" xml:space="preserve">
+    <value>글꼴 {0}개</value>
+  </data>
+  <data name="Count_One" xml:space="preserve">
+    <value>글꼴 1개</value>
+  </data>
+  <data name="Empty" xml:space="preserve">
+    <value>검색어와 필터에 맞는 글꼴이 없습니다.</value>
+  </data>
+  <data name="FavoritesOnly" xml:space="preserve">
+    <value>즐겨찾기만</value>
+  </data>
+  <data name="Favorite_AddToolTip" xml:space="preserve">
+    <value>즐겨찾기에 추가 (Space)</value>
+  </data>
+  <data name="Favorite_Name" xml:space="preserve">
+    <value>즐겨찾기: {0}</value>
+  </data>
+  <data name="Favorite_RemoveToolTip" xml:space="preserve">
+    <value>즐겨찾기에서 제거 (Space)</value>
+  </data>
+  <data name="Favorite_Status" xml:space="preserve">
+    <value>즐겨찾기</value>
+  </data>
+  <data name="FavoritesSaveFailed_Body" xml:space="preserve">
+    <value>{0}
+변경을 되돌렸습니다.</value>
+  </data>
+  <data name="FavoritesSaveFailed_Title" xml:space="preserve">
+    <value>즐겨찾기를 저장하지 못했습니다</value>
+  </data>
+  <data name="HangulOnly" xml:space="preserve">
+    <value>한글 지원만</value>
+  </data>
+  <data name="KeysHint" xml:space="preserve">
+    <value>Space: 즐겨찾기 · Ctrl+C: 글꼴 이름 복사</value>
+  </data>
+  <data name="List_Name" xml:space="preserve">
+    <value>설치된 글꼴</value>
+  </data>
+  <data name="LoadFailed" xml:space="preserve">
+    <value>설치된 글꼴을 읽지 못했습니다({0}).</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>글꼴을 불러오는 중…</value>
+  </data>
+  <data name="Sample_Default" xml:space="preserve">
+    <value>다람쥐 헌 쳇바퀴에 타고파 ABC abc 0123456789</value>
+  </data>
+  <data name="Sample_Label" xml:space="preserve">
+    <value>미리보기 문장</value>
+  </data>
+  <data name="Search_Label" xml:space="preserve">
+    <value>검색</value>
+  </data>
+  <data name="Search_Name" xml:space="preserve">
+    <value>글꼴 검색</value>
+  </data>
+  <data name="Size_Label" xml:space="preserve">
+    <value>크기</value>
+  </data>
+  <data name="Size_Name" xml:space="preserve">
+    <value>미리보기 크기</value>
+  </data>
+  <data name="Window_Title" xml:space="preserve">
+    <value>글꼴 목록 — ohMypic</value>
+  </data>
+</root>

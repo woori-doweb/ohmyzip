@@ -1,0 +1,173 @@
+<Window x:Class="OhMyPic.App.Editor.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+        xmlns:local="clr-namespace:OhMyPic.App.Editor"
+        Style="{StaticResource Op.WindowStyle}"
+        Width="1200" Height="800" MinWidth="760" MinHeight="480"
+        WindowStartupLocation="CenterScreen"
+        AutomationProperties.AutomationId="OP-EditorWindow">
+    <Window.Resources>
+        <Style x:Key="Ed.Section" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,16,0,8" />
+        </Style>
+        <Style x:Key="Ed.Note" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource Op.SecondaryText}" />
+            <Setter Property="FontSize" Value="{StaticResource Op.SecondarySize}" />
+            <Setter Property="Margin" Value="0,6,0,0" />
+        </Style>
+        <Style x:Key="Ed.PanelButton" TargetType="Button" BasedOn="{StaticResource Op.Button}">
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="Margin" Value="0,0,6,6" />
+        </Style>
+        <!-- Inspector toggle (drawing tool, color, width): Ed.PanelButton look, checked = selection colours + accent border. -->
+        <Style x:Key="Ed.PanelToggle" TargetType="ToggleButton">
+            <Setter Property="Foreground" Value="{DynamicResource Op.Text}" />
+            <Setter Property="Background" Value="{DynamicResource Op.Chrome}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Op.Border}" />
+            <Setter Property="MinWidth" Value="32" />
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="Padding" Value="10,4" />
+            <Setter Property="Margin" Value="0,0,6,6" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource Op.FocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Op.Hover}" />
+                                <Setter Property="Foreground" Value="{DynamicResource Op.OnHover}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Op.Selection}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Op.Accent}" />
+                                <Setter Property="Foreground" Value="{DynamicResource Op.OnSelection}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource Op.DisabledText}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="Maximum" Value="100" />
+            <Setter Property="SmallChange" Value="1" />
+            <Setter Property="LargeChange" Value="10" />
+            <Setter Property="IsSnapToTickEnabled" Value="True" />
+            <Setter Property="TickFrequency" Value="1" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
+    <DockPanel>
+        <Menu x:Name="EditorMenu" DockPanel.Dock="Top" Style="{StaticResource Op.Menu}" AutomationProperties.AutomationId="OP-Editor-Menu" />
+
+        <!-- Toolbar: a subset of the menu commands (design P15). -->
+        <Border DockPanel.Dock="Top" Background="{DynamicResource Op.Chrome}" BorderBrush="{DynamicResource Op.Border}" BorderThickness="0,0,0,1" Padding="6,4">
+            <StackPanel x:Name="ToolbarPanel" Orientation="Horizontal"
+                        AutomationProperties.Name="{x:Static res:EditorText.Toolbar_Name}" AutomationProperties.AutomationId="OP-Editor-Toolbar" />
+        </Border>
+
+        <StatusBar DockPanel.Dock="Bottom" Style="{StaticResource Op.StatusBar}" AutomationProperties.AutomationId="OP-Editor-StatusBar">
+            <StatusBarItem HorizontalContentAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="StatusText" TextTrimming="CharacterEllipsis" AutomationProperties.LiveSetting="Polite"
+                               AutomationProperties.AutomationId="OP-Editor-Status-Text" />
+                    <TextBlock x:Name="UnsavedText" Grid.Column="1" Margin="16,0,0,0" Text="{x:Static res:EditorText.Status_Unsaved}" Visibility="Collapsed"
+                               AutomationProperties.AutomationId="OP-Editor-Status-Unsaved" />
+                    <TextBlock x:Name="SizeText" Grid.Column="2" Margin="16,0,0,0"
+                               AutomationProperties.HelpText="{x:Static res:EditorText.Status_SizeName}" AutomationProperties.AutomationId="OP-Editor-Status-Size" />
+                    <TextBlock x:Name="ZoomText" Grid.Column="3" Margin="16,0,0,0" MinWidth="48" TextAlignment="Right"
+                               AutomationProperties.HelpText="{x:Static res:EditorText.Status_ZoomName}" AutomationProperties.AutomationId="OP-Editor-Status-Zoom" />
+                </Grid>
+            </StatusBarItem>
+        </StatusBar>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="300" />
+                <ColumnDefinition Width="320" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Canvas: the preview render, scaled to the zoom. The crop layer sits exactly on top of the image. -->
+            <ScrollViewer x:Name="CanvasScroll" Background="{DynamicResource Op.Background}" Focusable="False"
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                <Grid x:Name="CanvasHost" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="16">
+                    <Image x:Name="CanvasImage" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"
+                           AutomationProperties.Name="{x:Static res:EditorText.Canvas_Name}" AutomationProperties.AutomationId="OP-Editor-Canvas" />
+                    <local:CropOverlayCanvas x:Name="CropLayer" Background="Transparent" Visibility="Collapsed" ClipToBounds="True"
+                            AutomationProperties.Name="{x:Static res:EditorText.Crop_FrameName}" AutomationProperties.AutomationId="OP-Editor-CropOverlay">
+                        <Path x:Name="CropShade" Fill="{DynamicResource Op.Background}" Opacity="0.6" IsHitTestVisible="False" />
+                        <Rectangle x:Name="CropFrame" Stroke="{DynamicResource Op.Accent}" StrokeThickness="2" IsHitTestVisible="False" />
+                    </local:CropOverlayCanvas>
+                    <!-- Draw layer: takes the pointer while a drawing tool is on and holds the stroke preview. -->
+                    <local:CropOverlayCanvas x:Name="DrawLayer" Background="Transparent" Visibility="Collapsed" ClipToBounds="True" Cursor="Cross"
+                            AutomationProperties.Name="{x:Static res:EditorText.Draw_LayerName}" AutomationProperties.AutomationId="OP-Editor-DrawLayer" />
+                </Grid>
+            </ScrollViewer>
+
+            <!-- Inspector (design P15, P17): draw, crop, rotate/flip, adjustments, presets. -->
+            <Border Grid.Column="1" Background="{DynamicResource Op.Sidebar}" BorderBrush="{DynamicResource Op.Border}" BorderThickness="1,0,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
+                    <StackPanel x:Name="InspectorPanel" Margin="14,0,14,16"
+                                AutomationProperties.Name="{x:Static res:EditorText.Inspector_Name}" AutomationProperties.AutomationId="OP-Editor-Inspector">
+                        <TextBlock Text="{x:Static res:EditorText.Draw_Header}" Style="{StaticResource Ed.Section}" />
+                        <WrapPanel x:Name="DrawToolPanel" />
+                        <TextBlock Text="{x:Static res:EditorText.Draw_ColorLabel}" Margin="0,4,0,6" />
+                        <WrapPanel x:Name="DrawColorPanel" />
+                        <TextBlock Text="{x:Static res:EditorText.Draw_WidthLabel}" Margin="0,4,0,6" />
+                        <WrapPanel x:Name="DrawWidthPanel" />
+                        <TextBlock Text="{x:Static res:EditorText.Draw_Hint}" Style="{StaticResource Ed.Note}" />
+
+                        <TextBlock Text="{x:Static res:EditorText.Section_Crop}" Style="{StaticResource Ed.Section}" />
+                        <DockPanel>
+                            <TextBlock Text="{x:Static res:EditorText.Crop_AspectLabel}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                            <ComboBox x:Name="AspectBox" MinHeight="32" SelectionChanged="OnAspectChanged"
+                                      AutomationProperties.Name="{x:Static res:EditorText.Crop_AspectLabel}" AutomationProperties.AutomationId="OP-Editor-Crop-Aspect" />
+                        </DockPanel>
+                        <WrapPanel Margin="0,8,0,0">
+                            <Button x:Name="CropStartButton" Content="{x:Static res:EditorText.Crop_Start}" Style="{StaticResource Ed.PanelButton}"
+                                    AutomationProperties.Name="{x:Static res:EditorText.Cmd_Crop}" AutomationProperties.AutomationId="OP-Editor-Crop-Start" />
+                            <Button x:Name="CropApplyButton" Content="{x:Static res:EditorText.Crop_Apply}" Style="{StaticResource Ed.PanelButton}" Click="OnCropApply" IsEnabled="False"
+                                    AutomationProperties.Name="{x:Static res:EditorText.Crop_ApplyName}" AutomationProperties.AutomationId="OP-Editor-Crop-Apply" />
+                            <Button x:Name="CropCancelButton" Content="{x:Static res:EditorText.Crop_Cancel}" Style="{StaticResource Ed.PanelButton}" Click="OnCropCancel" IsEnabled="False"
+                                    AutomationProperties.Name="{x:Static res:EditorText.Crop_CancelName}" AutomationProperties.AutomationId="OP-Editor-Crop-Cancel" />
+                        </WrapPanel>
+                        <TextBlock x:Name="CropSizeText" Visibility="Collapsed"
+                                   AutomationProperties.HelpText="{x:Static res:EditorText.Crop_SizeName}" AutomationProperties.AutomationId="OP-Editor-Crop-Size" />
+                        <TextBlock x:Name="CropHint" Text="{x:Static res:EditorText.Crop_Hint}" Style="{StaticResource Ed.Note}" Visibility="Collapsed" />
+
+                        <TextBlock Text="{x:Static res:EditorText.Section_Rotate}" Style="{StaticResource Ed.Section}" />
+                        <WrapPanel x:Name="RotatePanel" />
+
+                        <DockPanel Margin="0,16,0,8">
+                            <Button x:Name="ResetButton" DockPanel.Dock="Right" Content="{x:Static res:EditorText.Adjust_Reset}" Style="{StaticResource Ed.PanelButton}" Margin="0"
+                                    Click="OnResetAdjustments"
+                                    AutomationProperties.Name="{x:Static res:EditorText.Adjust_ResetName}" AutomationProperties.AutomationId="OP-Editor-Adjust-Reset" />
+                            <TextBlock Text="{x:Static res:EditorText.Section_Adjust}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <StackPanel x:Name="AdjustPanel" />
+
+                        <TextBlock Text="{x:Static res:EditorText.Section_Presets}" Style="{StaticResource Ed.Section}" />
+                        <WrapPanel x:Name="PresetPanel" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>
