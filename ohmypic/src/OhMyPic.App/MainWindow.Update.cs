@@ -1,7 +1,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Windows.Input;
+using System.Windows.Threading;
 using OhMyPic.App.Dialogs;
 using OhMyPic.App.Settings;
 using OhMyPic.App.Text;
@@ -12,7 +14,8 @@ namespace OhMyPic.App;
 /// <summary>
 /// Updates. After the window has loaded (when Settings allow it, at most once a day) a quiet background check downloads
 /// a new version, which App.OnExit installs. Help &gt; Check for Updates… opens the update window, which can install
-/// right away; the app then restarts on the same image or folder.
+/// right away; the app then restarts on the same image or folder. The first start of a new version shows its release
+/// notes ("What's new") once.
 /// </summary>
 public partial class MainWindow
 {
@@ -33,6 +36,37 @@ public partial class MainWindow
         }
         Closed += (_, _) => _autoUpdateCts?.Cancel();
         _ = AutoUpdateAsync();
+    }
+
+    /// <summary>
+    /// Once per version: the release notes beside the executable (packaged builds only) in the UI language. The version is
+    /// recorded before the window opens, so a failure there never repeats it on every start. Not in a --slideshow run
+    /// (nothing is recorded; the next normal start shows it).
+    /// </summary>
+    private void ShowWhatsNewOnce()
+    {
+        if (_startSlideshow) return;
+        var file = Path.Combine(AppContext.BaseDirectory, ReleaseNotes.FileName);
+        if (!File.Exists(file) || !ReleaseNotes.ShouldShowWhatsNew(_ui.LastSeenVersion, App.CurrentVersion)) return;
+        var version = ReleaseNotes.VersionKey(App.CurrentVersion);
+        _ui.LastSeenVersion = version;
+        _ui.Save(UiState.DefaultPath);
+        string text;
+        try
+        {
+            text = File.ReadAllText(file, Encoding.UTF8);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return;
+        }
+        var notes = ReleaseNotes.Section(text, UiLanguage.Current);
+        if (notes.Length == 0) return;
+        // After the first layout pass, so the folder or image keeps loading behind the dialog.
+        Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+        {
+            if (IsLoaded) new WhatsNewWindow(version, notes) { Owner = this }.ShowDialog();
+        });
     }
 
     /// <summary>Never interrupts: only a finished download is announced in the status bar; failures stay silent.</summary>

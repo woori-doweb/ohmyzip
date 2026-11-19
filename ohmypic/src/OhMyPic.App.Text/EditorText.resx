@@ -132,6 +132,9 @@
   <data name="Crop_CancelName" xml:space="preserve">
     <value>Cancel crop</value>
   </data>
+  <data name="Crop_DragHint" xml:space="preserve">
+    <value>Drag to select an area. Enter or double-click crops.</value>
+  </data>
   <data name="Crop_FrameName" xml:space="preserve">
     <value>Crop frame</value>
   </data>

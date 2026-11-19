@@ -2,14 +2,16 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using OhMyPic.App.Models;
+using OhMyPic.App.Settings;
 using OhMyPic.App.Text;
 using OhMyPic.Core;
 
 namespace OhMyPic.App.Dialogs;
 
 /// <summary>
-/// Help &gt; Check for Updates…: checks GitHub, shows the current and the new version with the release notes and, on
-/// [Update and Restart], downloads (progress, cancellable by closing), verifies and installs the new files.
+/// Help &gt; Check for Updates…: checks GitHub, shows the current and the new version with the release notes (the UI
+/// language section) and, on [Update and Restart], downloads (progress, cancellable by closing), verifies and installs
+/// the new files.
 /// DialogResult true = the new version is installed; the caller restarts the app.
 /// </summary>
 public partial class UpdateWindow : Window
@@ -66,7 +68,7 @@ public partial class UpdateWindow : Window
                 HeadingText.Text = string.Format(UpdateText.Available_Heading, VersionText(release.Version));
                 NewVersionText.Text = string.Format(UpdateText.NewVersion, VersionText(release.Version));
                 NewVersionText.Visibility = Visibility.Visible;
-                var notes = release.Notes.Replace("\r\n", "\n").Trim();
+                var notes = ReleaseNotes.Section(release.Notes, UiLanguage.Current);
                 NotesText.Text = notes.Length > 0 ? notes : string.Format(UpdateText.NotesNone, release.PageUrl);
                 NotesPanel.Visibility = Visibility.Visible;
                 InstallButton.Visibility = Visibility.Visible;

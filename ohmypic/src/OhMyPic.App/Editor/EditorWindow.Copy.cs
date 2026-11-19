@@ -27,7 +27,8 @@ public partial class EditorWindow
     /// <summary>
     /// Opens a capture-mode editor (no source file) for a screenshot taken at <paramref name="capturedAt"/>, shows it
     /// maximized on the monitor that contains the mouse cursor, activates it and returns it. Must be called on the UI thread.
-    /// The Pen tool starts selected so the user can mark the picture up at once.
+    /// The window starts in crop (area select): a drag anywhere selects the area to keep. Once the crop is applied or
+    /// cancelled the Pen tool is selected so the user can mark the picture up at once.
     /// </summary>
     /// <exception cref="ImageOperationException">
     /// <see cref="EditErrorCode.TooLarge"/> when the image is too large to edit; the error dialog has already been shown.

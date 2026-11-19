@@ -23,6 +23,12 @@ public sealed class UiState
     /// <summary>When the automatic update check last finished without finding a new version (checks run at most once a day).</summary>
     public DateTimeOffset? LastUpdateCheck { get; set; }
 
+    /// <summary>
+    /// Version key (major.minor.patch) of the release whose "What's new" window was shown or skipped; a different running
+    /// version shows it once.
+    /// </summary>
+    public string? LastSeenVersion { get; set; }
+
     // Left/Top are NaN until the window was placed once; NaN is not plain JSON, so allow the named literals.
     private static readonly JsonSerializerOptions Json = new()
     {

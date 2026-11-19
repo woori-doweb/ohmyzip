@@ -150,6 +150,8 @@
                         </WrapPanel>
                         <TextBlock x:Name="CropSizeText" Visibility="Collapsed"
                                    AutomationProperties.HelpText="{x:Static res:EditorText.Crop_SizeName}" AutomationProperties.AutomationId="OP-Editor-Crop-Size" />
+                        <TextBlock x:Name="CropDragHint" Text="{x:Static res:EditorText.Crop_DragHint}" Style="{StaticResource Ed.Note}" Visibility="Collapsed"
+                                   AutomationProperties.AutomationId="OP-Editor-Crop-Hint" />
                         <TextBlock x:Name="CropHint" Text="{x:Static res:EditorText.Crop_Hint}" Style="{StaticResource Ed.Note}" Visibility="Collapsed" />
 
                         <TextBlock Text="{x:Static res:EditorText.Section_Rotate}" Style="{StaticResource Ed.Section}" />

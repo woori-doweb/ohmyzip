@@ -1,0 +1,23 @@
+<Window x:Class="OhMyPic.App.Dialogs.WhatsNewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:OhMyPic.App.Text;assembly=OhMyPic.App.Text"
+        Style="{StaticResource Op.WindowStyle}"
+        Width="480" SizeToContent="Height"
+        ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        AutomationProperties.AutomationId="OP-WhatsNewWindow">
+    <StackPanel Margin="20,18,20,16">
+        <TextBlock x:Name="HeadingText" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"
+                   AutomationProperties.AutomationId="OP-WhatsNew-Heading" />
+        <Border Margin="0,12,0,0" BorderBrush="{DynamicResource Op.Border}" BorderThickness="1" CornerRadius="4">
+            <ScrollViewer MaxHeight="320" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="8,6">
+                <TextBlock x:Name="NotesText" TextWrapping="Wrap" AutomationProperties.Name="{x:Static res:UpdateText.WhatsNew_NotesName}"
+                           AutomationProperties.AutomationId="OP-WhatsNew-Notes" />
+            </ScrollViewer>
+        </Border>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+            <Button Content="{x:Static res:UpdateText.WhatsNew_Ok}" IsDefault="True" IsCancel="True" Style="{StaticResource Op.Button}"
+                    AutomationProperties.AutomationId="OP-WhatsNew-Ok" />
+        </StackPanel>
+    </StackPanel>
+</Window>

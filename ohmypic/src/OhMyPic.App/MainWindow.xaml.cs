@@ -89,6 +89,7 @@ public partial class MainWindow : Window
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         StartAutoUpdate();
+        ShowWhatsNewOnce();
         await LoadFolderTreeAsync();
         var path = _startupPath;
         if (path is not null && File.Exists(path))

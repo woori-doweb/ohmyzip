@@ -156,7 +156,12 @@ public partial class EditorWindow : Window
         CanvasScroll.PreviewMouseWheel += OnCanvasWheel;
         KeyDown += OnWindowKeyDown;
         SourceInitialized += (_, _) => NativeMethods.ApplyDarkTitleBar(this);
-        Loaded += (_, _) => SyncFromSession();
+        Loaded += (_, _) =>
+        {
+            SyncFromSession();
+            // Capture mode starts by choosing the area: the crop layer has its size by now.
+            if (_capturedAt is not null) Run("Crop");
+        };
         Closing += OnClosing;
         Closed += OnClosed;
     }
@@ -406,7 +411,7 @@ public partial class EditorWindow : Window
                 StartCrop();
                 break;
             case "CropApply": await ApplyCropAsync(); break;
-            case "CropCancel": EndCrop(); break;
+            case "CropCancel": CancelCrop(); break;
             case "Fit":
                 _fit = true;
                 ApplyZoom();
@@ -445,8 +450,8 @@ public partial class EditorWindow : Window
     }
 
     /// <summary>
-    /// Esc cancels a stroke being drawn first, then an active crop. In capture mode an Esc with neither closes the window
-    /// (asking only when there are changes that were not copied or exported).
+    /// Esc cancels a stroke being drawn first, then an active crop (in capture mode the Pen comes on). In capture mode an
+    /// Esc with neither closes the window (asking only when there are changes that were not copied or exported).
     /// </summary>
     private void OnWindowKeyDown(object sender, KeyEventArgs e)
     {
@@ -537,6 +542,7 @@ public partial class EditorWindow : Window
         CropCancelButton.IsEnabled = _cropping && !_busy;
         var cropping = _cropping ? Visibility.Visible : Visibility.Collapsed;
         CropSizeText.Visibility = cropping;
+        CropDragHint.Visibility = cropping;
         CropHint.Visibility = cropping;
         CommandManager.InvalidateRequerySuggested();
     }

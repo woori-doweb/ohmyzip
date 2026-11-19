@@ -12,8 +12,11 @@ namespace OhMyPic.App.Editor;
 
 /// <summary>
 /// Crop mode: an aspect choice and a frame over the canvas. Inside the frame drags move it; edges and corners resize it
-/// (fixed aspects keep the ratio, anchored at the opposite side); outside starts a new frame. Every rectangle is snapped
-/// with <see cref="Crop.Constrain"/>, so the applied size is exact.
+/// (fixed aspects keep the ratio, anchored at the opposite side); outside starts a new frame, and so does inside a frame
+/// that covers the whole image (there is nothing to move), so a drag anywhere selects an area. A new frame narrower or
+/// lower than <see cref="MinNewFrame"/> (a click) brings the previous frame back. A double-click inside the frame applies.
+/// Every rectangle is snapped with <see cref="Crop.Constrain"/>, so the applied size is exact. In capture mode the crop
+/// starts with the window, and applying or cancelling it turns the Pen on.
 /// </summary>
 public partial class EditorWindow
 {
@@ -21,6 +24,9 @@ public partial class EditorWindow
     private const double HandleReach = 16;
 
     private const double HandleSize = 10;
+
+    /// <summary>A new frame smaller than this (image pixels) in either direction counts as a click and is dropped.</summary>
+    private const int MinNewFrame = 2;
 
     private enum CropHandle { None, Move, N, S, E, W, NE, NW, SE, SW }
 
@@ -31,6 +37,12 @@ public partial class EditorWindow
     private CropHandle _drag;
     private Point _dragStart;
     private Int32Rect _dragStartRect;
+
+    /// <summary>True while the drag grows a new frame from the pointer.</summary>
+    private bool _newFrame;
+
+    /// <summary>The frame before the current drag; a new frame that stays a click restores it.</summary>
+    private Int32Rect _frameBeforeDrag;
 
     private void InitCrop()
     {
@@ -54,7 +66,7 @@ public partial class EditorWindow
         CropLayer.MouseLeftButtonDown += OnCropMouseDown;
         CropLayer.MouseMove += OnCropMouseMove;
         CropLayer.MouseLeftButtonUp += OnCropMouseUp;
-        CropLayer.LostMouseCapture += (_, _) => _drag = CropHandle.None;
+        CropLayer.LostMouseCapture += (_, _) => EndCropDrag();
     }
 
     private static string AspectLabel(CropAspect aspect)
@@ -104,10 +116,27 @@ public partial class EditorWindow
     {
         if (!_cropping) return;
         var rect = _cropRect;
-        var b = _session.Base;
         EndCrop();
-        if (rect.X == 0 && rect.Y == 0 && rect.Width == b.Width && rect.Height == b.Height) return;
-        await EditAsync(s => s.Crop(rect));
+        if (!CoversImage(rect)) await EditAsync(s => s.Crop(rect));
+        DrawAfterCrop();
+    }
+
+    private void CancelCrop()
+    {
+        EndCrop();
+        DrawAfterCrop();
+    }
+
+    /// <summary>Capture mode: once the area is chosen (crop applied or cancelled) the Pen is on, so marking up can start.</summary>
+    private void DrawAfterCrop()
+    {
+        if (_capturedAt is not null) SelectTool(AnnotationKind.Pen);
+    }
+
+    private bool CoversImage(Int32Rect rect)
+    {
+        var b = _session.Base;
+        return rect.X == 0 && rect.Y == 0 && rect.Width == b.Width && rect.Height == b.Height;
     }
 
     private void OnCropApply(object sender, RoutedEventArgs e) => Run("CropApply");
@@ -166,6 +195,9 @@ public partial class EditorWindow
         return r.Contains(p) ? CropHandle.Move : CropHandle.None;
     }
 
+    /// <summary>What a press on <paramref name="hit"/> drags: inside a frame that covers the whole image, a new frame (None).</summary>
+    private CropHandle DragFor(CropHandle hit) => hit == CropHandle.Move && CoversImage(_cropRect) ? CropHandle.None : hit;
+
     private static Cursor CursorFor(CropHandle handle) => handle switch
     {
         CropHandle.Move => Cursors.SizeAll,
@@ -180,12 +212,21 @@ public partial class EditorWindow
     {
         if (!_cropping || _busy) return;
         var p = e.GetPosition(CropLayer);
-        _drag = HitTest(p);
+        var hit = HitTest(p);
+        if (e.ClickCount == 2 && hit == CropHandle.Move)
+        {
+            e.Handled = true;
+            Run("CropApply");
+            return;
+        }
+        _drag = DragFor(hit);
         _dragStart = p;
         _dragStartRect = _cropRect;
-        if (_drag == CropHandle.None)
+        _frameBeforeDrag = _cropRect;
+        _newFrame = _drag == CropHandle.None;
+        if (_newFrame)
         {
-            // Outside the frame: a new frame grows from the pointer.
+            // Outside the frame (or inside a whole-image frame): a new frame grows from the pointer.
             var b = _session.Base;
             int x = Math.Clamp((int)Math.Floor(p.X / _zoom), 0, b.Width - 1);
             int y = Math.Clamp((int)Math.Floor(p.Y / _zoom), 0, b.Height - 1);
@@ -202,7 +243,7 @@ public partial class EditorWindow
         var p = e.GetPosition(CropLayer);
         if (_drag == CropHandle.None)
         {
-            CropLayer.Cursor = CursorFor(HitTest(p));
+            CropLayer.Cursor = CursorFor(DragFor(HitTest(p)));
             return;
         }
         _cropRect = DragRect(p);
@@ -211,8 +252,20 @@ public partial class EditorWindow
 
     private void OnCropMouseUp(object sender, MouseButtonEventArgs e)
     {
-        _drag = CropHandle.None;
+        EndCropDrag();
         if (CropLayer.IsMouseCaptured) CropLayer.ReleaseMouseCapture();
+    }
+
+    /// <summary>Ends a drag (mouse up or lost capture); a new frame that stayed a click restores the previous frame.</summary>
+    private void EndCropDrag()
+    {
+        if (_drag == CropHandle.None) return;
+        _drag = CropHandle.None;
+        if (!_newFrame) return;
+        _newFrame = false;
+        if (_cropRect.Width >= MinNewFrame && _cropRect.Height >= MinNewFrame) return;
+        _cropRect = _frameBeforeDrag;
+        UpdateCropVisuals();
     }
 
     /// <summary>Frame for the current drag, in image pixels, snapped by <see cref="Crop.Constrain"/>.</summary>

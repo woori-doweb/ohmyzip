@@ -44,7 +44,7 @@ The result is shown in the status bar. A message appears only when some files fa
 
 **Image > Open in Editor** (Ctrl+Shift+E, also in the right-click menus) opens one image in a separate editor window. Everything stays on this computer.
 
-- **Crop**: Free, 1:1, 4:3, 16:9, 9:16 or 4:5; drag the frame, then **Apply** (Enter) or **Cancel** (Esc).
+- **Crop**: Free, 1:1, 4:3, 16:9, 9:16 or 4:5; drag the frame or its edges, or drag outside it (or anywhere while it covers the whole picture) to draw a new one, then **Apply** (Enter, or double-click inside the frame) or **Cancel** (Esc).
 - **Rotate and flip**: 90° right (Ctrl+]) and left (Ctrl+[), 180°, horizontal and vertical flip.
 - **Adjust**: brightness, contrast, saturation, warmth, hue, sharpen, vignette, black & white and sepia; **Reset** sets them all to 0. Eight presets apply a set of values at once.
 - **Draw**: Pen, Rectangle or Arrow in six colors and three widths; drag on the picture. Click the selected tool again to stop drawing.
@@ -56,7 +56,7 @@ Closing the editor asks only when there are changes that were not exported. Laye
 
 ## Print Screen capture
 
-Turn on **Tools > Settings… > General > Capture with the Print Screen key and open the editor**. ohMypic then keeps running in the notification area and starts when you sign in. Print Screen captures the monitor under the mouse pointer and opens it in the editor with the red pen ready: mark it up, press Ctrl+C, paste. Esc closes the capture window (it asks only when there are changes you did not copy or export). Alt+Print Screen, Windows+Print Screen and Windows+Shift+S keep their Windows behavior. The notification area icon has **Capture screen** and **Turn off Print Screen capture**.
+Turn on **Tools > Settings… > General > Capture with the Print Screen key and open the editor**. ohMypic then keeps running in the notification area and starts when you sign in. Print Screen captures the monitor under the mouse pointer and opens it in the editor ready to select an area: drag over the part you need and press Enter (or double-click inside the frame) to crop, or press Esc to keep the whole screen. Then the red pen is on: mark it up, press Ctrl+C, paste. Esc again closes the capture window (it asks only when there are changes you did not copy or export). Alt+Print Screen, Windows+Print Screen and Windows+Shift+S keep their Windows behavior. The notification area icon has **Capture screen** and **Turn off Print Screen capture**.
 
 ## Fonts
 

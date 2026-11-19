@@ -184,6 +184,15 @@
   <data name="UpToDate_Heading" xml:space="preserve">
     <value>최신 버전을 사용하고 있습니다</value>
   </data>
+  <data name="WhatsNew_NotesName" xml:space="preserve">
+    <value>릴리스 노트</value>
+  </data>
+  <data name="WhatsNew_Ok" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="WhatsNew_Title" xml:space="preserve">
+    <value>ohMypic {0}의 새 기능</value>
+  </data>
   <data name="Window_Title" xml:space="preserve">
     <value>업데이트 확인</value>
   </data>

@@ -2,7 +2,8 @@
 
 1. dotnet publish (Release, win-x64, framework-dependent, no debug symbols) -> releases/ohMypic-<version>/
    Version, AssemblyVersion, FileVersion and InformationalVersion are all set to <version>.
-2. Add README.txt (version filled in).
+2. Add README.txt (version filled in) and WHATSNEW.md (a copy of packaging/release-notes.md; the app shows it once
+   after an update). release-notes.md must have a "## English" and a Korean "## " heading, checked before publishing.
 3. Write SHA256SUMS.txt, releases/ohMypic-<version>-win-x64.zip and releases/ohMypic-<version>-win-x64.zip.sha256.
    The zip holds one top folder, ohMypic-<version>/ (the auto-updater relies on this layout).
 Fails instead of overwriting when the release folder, zip or sha256 already exists.
@@ -23,15 +24,31 @@ ROOT = HERE.parent
 DOTNET = shutil.which("dotnet") or r"C:\Program Files\dotnet\dotnet.exe"
 VERSION_RE = re.compile(r"\d+\.\d+\.\d+")
 NAME = "ohMypic"
+RELEASE_NOTES = HERE / "release-notes.md"
+# Section headings the app picks by UI language (OhMyPic.Core ReleaseNotes); the Korean one is escaped on purpose.
+NOTES_HEADINGS = ("English", "\ud55c\uad6d\uc5b4")
 
 
 def sha(p):
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
+def release_notes():
+    """release-notes.md text; exits when it is missing or lacks one of the language headings."""
+    if not RELEASE_NOTES.is_file():
+        raise SystemExit(f"missing release notes: {RELEASE_NOTES}")
+    text = RELEASE_NOTES.read_text(encoding="utf-8-sig")
+    headings = {line[3:].strip() for line in text.splitlines() if line.startswith("## ")}
+    missing = [h for h in NOTES_HEADINGS if h not in headings]
+    if missing:
+        raise SystemExit(f"{RELEASE_NOTES} needs the headings {', '.join('## ' + h for h in missing)}")
+    return text
+
+
 def main(version):
     if not VERSION_RE.fullmatch(version):
         raise SystemExit(f"not a version: {version!r} (example: 0.1.3)")
+    notes = release_notes()
     out = ROOT / "releases" / f"{NAME}-{version}"
     pkg = ROOT / "releases" / f"{NAME}-{version}-win-x64.zip"
     pkg_sha = pkg.with_name(pkg.name + ".sha256")
@@ -48,6 +65,7 @@ def main(version):
         raise SystemExit(f"publish rc={rc}")
     readme = (HERE / "README.txt").read_text(encoding="utf-8").replace("{VERSION}", version)
     (out / "README.txt").write_text(readme, encoding="utf-8")
+    (out / "WHATSNEW.md").write_text(notes, encoding="utf-8")
     leftovers = sorted(p.name for p in out.rglob("*.pdb"))
     if leftovers:
         raise SystemExit(f"debug symbols left: {leftovers}")

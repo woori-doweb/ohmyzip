@@ -80,19 +80,20 @@ jobs:
 
       - name: Release notes
         if: steps.version.outputs.skip != 'true'
+        # Notes = the hand-written user-facing file ("## English" / Korean sections; the app shows the UI-language
+        # section). It must change since the previous ohmypic-v* tag: commit subjects are not user-facing notes.
         run: |
+          $file = "packaging/release-notes.md"
+          if (-not (Test-Path $file)) { throw "$file is missing" }
           $prev = git tag --list "ohmypic-v*" --merged HEAD --sort=-v:refname | Select-Object -First 1
           if ($prev) {
             Write-Host "Previous tag: $prev"
-            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md "$prev..HEAD" -- .
-          } else {
-            Write-Host "No previous tag: full history"
-            git log --no-merges --pretty=format:"- %s (%h)" --output=notes.md HEAD -- .
+            git diff --quiet $prev HEAD -- $file
+            if ($LASTEXITCODE -eq 0) { throw "$file has not changed since ${prev}: write the notes for this release" }
+            if ($LASTEXITCODE -ne 1) { throw "git diff failed (rc=$LASTEXITCODE)" }
+            $global:LASTEXITCODE = 0
           }
-          if ($LASTEXITCODE -ne 0) { throw "git log failed (rc=$LASTEXITCODE)" }
-          if ((Get-Item notes.md).Length -eq 0) {
-            Set-Content -Path notes.md -Value "- No new commits since the previous release." -Encoding utf8NoBOM
-          }
+          Copy-Item $file notes.md
           Get-Content notes.md -Encoding utf8
 
       - name: Create release

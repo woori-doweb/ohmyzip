@@ -129,7 +129,8 @@ public partial class EditorWindow
         DrawLayer.MouseMove += OnDrawMouseMove;
         DrawLayer.MouseLeftButtonUp += OnDrawMouseUp;
         DrawLayer.LostMouseCapture += (_, _) => CancelStroke();
-        SelectTool(_capturedAt is null ? null : AnnotationKind.Pen);
+        // Drawing starts off; capture mode turns the Pen on once its opening crop is applied or cancelled.
+        SyncDrawButtons();
     }
 
     /// <summary>Turns a tool on (cancelling an active crop) or drawing off (null).</summary>

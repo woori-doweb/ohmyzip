@@ -184,6 +184,15 @@ Check your internet connection and try again. You can also download the new vers
   <data name="UpToDate_Heading" xml:space="preserve">
     <value>ohMypic is up to date</value>
   </data>
+  <data name="WhatsNew_NotesName" xml:space="preserve">
+    <value>Release notes</value>
+  </data>
+  <data name="WhatsNew_Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="WhatsNew_Title" xml:space="preserve">
+    <value>What's new in ohMypic {0}</value>
+  </data>
   <data name="Window_Title" xml:space="preserve">
     <value>Check for Updates</value>
   </data>

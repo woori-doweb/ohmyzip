@@ -132,6 +132,9 @@
   <data name="Crop_CancelName" xml:space="preserve">
     <value>자르기 취소</value>
   </data>
+  <data name="Crop_DragHint" xml:space="preserve">
+    <value>영역을 끌어서 선택하세요. Enter 또는 두 번 클릭하면 자릅니다.</value>
+  </data>
   <data name="Crop_FrameName" xml:space="preserve">
     <value>자르기 틀</value>
   </data>
